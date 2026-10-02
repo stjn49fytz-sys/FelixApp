@@ -3,6 +3,16 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.0.0 vom 2.10.2026
+Neues Design für die ganze App, gebaut für ruhiges Arbeiten mit ADHS.
+- Neue Startseite "Heute": ein nächster Schritt mit großem Abhaken-Knopf, was heute gegessen wird und wie weit der Einkauf ist.
+- Feste Leiste unten mit 5 Punkten statt 9 Reitern: Heute, Essen, Einkauf, Aufgaben, Mehr. Auswahl, Rezepte, Kochbuch, Kosten, Geschenke und Freizeit liegen unter Mehr, mit Zurück-Knopf.
+- Das Belohnungs-Design gilt jetzt überall. Vier Stile zur Wahl unter Mehr, Aussehen: Standard, Punk, Rock, Gothic. Der Stil bleibt gespeichert.
+- Einkauf: Fortschrittsbalken und eine kleine Meldung, wenn alles abgehakt ist.
+- Größere Tippflächen (mindestens 44 Pixel), größere Kästchen zum Abhaken, kürzerer Seitenkopf.
+- Wer Bewegung im System reduziert hat, bekommt keine Animationen.
+- Alle Daten und Funktionen bleiben unverändert.
+
 ## 1.5.0 vom 2.10.2026
 Neuer Reiter Aufgaben mit Tagesziel und Belohnungen.
 - Aufgaben mit oder ohne Datum. Schnellwahl: Heute, Morgen, In 1 Woche, Irgendwann. Das Datum lässt sich später ändern oder entfernen.
