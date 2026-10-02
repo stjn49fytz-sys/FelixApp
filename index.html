@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.2.0">
+<meta name="version" content="2.2.1">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -696,7 +696,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.2.0 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 2.2.1 vom 2.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -1250,7 +1250,7 @@ function showDay(d){
   if(window.PTS&&d===DAYNAMES_[new Date().getDay()])mealsEl.querySelectorAll(".meal .mt").forEach((mt,i)=>{
     const k=PTS.mealKey(i),on=PTS.has(k),b=document.createElement("button");
     b.type="button";b.className="fav sm"+(on?" on":"");b.textContent=on?"✓ Gegessen":"Gegessen +2";
-    b.onclick=()=>{PTS.toggle(k,2,"Mahlzeit");showDay(d)};mt.appendChild(b);
+    b.onclick=()=>{eatMeal(d,i);showDay(d)};mt.appendChild(b);
   });
 }
 const DAYNAMES_=["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
@@ -2257,6 +2257,19 @@ const PTS=(function(){
   return api;
 })();
 window.PTS=PTS;
+/* Gegessen: Zutaten des Gerichts verschwinden von der Einkaufsliste, Haken weg bringt sie zurück */
+function eatMeal(dn,i){
+  const k=PTS.mealKey(i),was=PTS.has(k),base=PLAN[dn]&&PLAN[dn][i];
+  const sl=base&&slotOf("p|"+dn+"|"+i,{text:base[0],rid:base[1]}),rid=sl&&sl.rid&&RECIPES[sl.rid]?sl.rid:null;
+  PTS.toggle(k,2,rid?"Gegessen, Zutaten von der Einkaufsliste genommen":"Mahlzeit");
+  if(rid){
+    let mem={};try{mem=JSON.parse(localStorage.getItem("gegessen-rez")||"{}")}catch(e){}
+    if(!was){if(!recOff.includes(rid)){recOff.push(rid);mem[rid]=1;saveRec()}}
+    else if(mem[rid]){recOff=recOff.filter(x=>x!==rid);delete mem[rid];saveRec()}
+    try{localStorage.setItem("gegessen-rez",JSON.stringify(mem))}catch(e){}
+    render();
+  }
+}
 /* Einkauf: 1 Punkt je abgehakter Zutat (Vorrat zählt nicht) */
 document.addEventListener("change",e=>{
   const c=e.target;if(!c.matches||!c.matches('input[type=checkbox]'))return;
@@ -2294,7 +2307,7 @@ function renderToday(){
 }
 document.getElementById("todayBody").addEventListener("click",e=>{
   const m=e.target.closest("[data-mealdone]");
-  if(m){PTS.toggle(PTS.mealKey(+m.dataset.mealdone),2,"Mahlzeit");renderToday();return}
+  if(m){eatMeal(DAYNAMES[new Date().getDay()],+m.dataset.mealdone);renderToday();return}
   const b=e.target.closest("[data-tkdone]");if(!b)return;
   TK.toggle(b.dataset.tkdone);renderToday();
 });

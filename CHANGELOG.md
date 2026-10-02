@@ -3,6 +3,12 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.2.1 vom 2.10.2026
+Gegessen abhaken nimmt die Zutaten von der Einkaufsliste.
+- Hakst du ein Essen auf Heute oder im Plan als "Gegessen" an, verschwinden die Zutaten dieses Gerichts aus der Einkaufsliste. Das Gericht steht dann unter "Gerichte der Woche" ohne Haken.
+- Nimmst du den Haken bei "Gegessen" wieder weg, kommen die Zutaten zurück (außer du hattest das Gericht selbst abgewählt).
+- Kommt dasselbe Gericht in der Woche mehrmals vor, entfallen die Zutaten für alle Termine.
+
 ## 2.2.0 vom 2.10.2026
 Aufgaben mit klarem Kalendertag.
 - Jede Aufgabe zeigt ihren Tag mit Wochentag und Datum, zum Beispiel "Morgen, Sa, 3. Okt".
