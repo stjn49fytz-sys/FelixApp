@@ -3,6 +3,13 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 1.1.0 vom 2.10.2026
+Die Einkaufsliste richtet sich jetzt nach den Gerichten der Woche.
+- Alle gewählten Wochengerichte sind angehakt, ihre Zutaten stehen in der Liste.
+- Nimmst du bei einem Gericht den Haken raus, verschwinden seine Zutaten. Mit dem Haken kommen sie zurück. Neu: "Alle anhaken" und "Alle abwählen".
+- Gerichte aus einem gewählten Auswahl-Plan kommen automatisch dazu.
+- Die Gerichte stehen jetzt oben, die Einkaufsliste darunter. Die feste Grundliste enthält nur noch Frühstück und Snacks, damit nichts doppelt steht.
+
 ## 1.0.1 vom 2.10.2026
 Fehlerkorrekturen nach einer Gesamtprüfung.
 - Geschenke: Preise mit Tausenderpunkt (z. B. 1.299,00) werden jetzt richtig gelesen, negative Eingaben zählen nicht mehr.

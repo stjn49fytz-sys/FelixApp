@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="1.0.1">
+<meta name="version" content="1.1.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -195,14 +195,15 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
   <section id="list">
     <div class="bar"><span id="count"></span><button id="reset">Zurücksetzen</button></div>
     <form id="addItem" class="addrow"><input id="newItem" class="search" placeholder="Eigenen Eintrag hinzufügen, z. B. Zimt" maxlength="60" aria-label="Eigener Einkaufseintrag"><button type="submit" class="fav on">Hinzufügen</button></form>
-    <div id="groups"></div>
+    <h2 class="dayh sub">Gerichte der Woche</h2>
+    <p class="note" style="margin-top:-6px">Alle Gerichte deiner Woche sind angehakt, ihre Zutaten stehen weiter unten. Nimmst du bei einem Gericht den Haken raus, verschwinden seine Zutaten aus der Liste. Mit dem Haken kommen sie zurück.</p>
+    <div class="bar"><span id="recCount"></span><span class="bgrp"><button type="button" id="recAll" hidden>Alle anhaken</button><button type="button" id="recClear" hidden>Alle abwählen</button></span></div>
+    <div id="recipePicker"></div>
+    <h2 class="dayh sub">Einkaufsliste</h2>
     <div id="giftGroup"></div>
     <div id="recipeGroups"></div>
-    <h2 class="dayh sub">Gerichte der Woche</h2>
-    <p class="note" style="margin-top:-6px">Hier stehen die Gerichte deiner Wochenliste. Wähle ein Gericht an, dann erscheinen seine Zutaten oben in der Liste. Wähle es ab, um es wieder zu entfernen.</p>
-    <div class="bar"><span id="recCount"></span><button type="button" id="recClear" hidden>Alle abwählen</button></div>
-    <div id="recipePicker"></div>
-    <p class="note">Mengen mit etwas Puffer. Grundvorräte wie Öl, Mehl, Honig, Marmelade, Sojasauce und Brühe bitte vorher prüfen. Die Liste gilt für den Plan von Freitag bis Dienstag. Für geänderte Gerichte kannst du oben eigene Einträge ergänzen.</p>
+    <div id="groups"></div>
+    <p class="note">Mengen mit etwas Puffer. Öl, Salz, Pfeffer, Gewürze und Brühe werden als vorhanden angenommen, bitte vorher prüfen. Frühstück und Snacks gelten für die Woche von Freitag bis Dienstag. Für alles andere kannst du oben eigene Einträge ergänzen.</p>
   </section>
   <section id="cost">
     <table>
@@ -231,7 +232,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     <p class="note">Tippe bei einer Idee auf 🛒, 📦 oder 🎁, um den Stand zu markieren. Die Ideen werden nur in diesem Browser gespeichert.</p>
   </section>
 </main>
-<footer class="ver">Felix App, Version 1.0.1 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 1.1.0 vom 2.10.2026</footer>
 <script>
 
 
@@ -315,11 +316,8 @@ const PLAN = {
 const LABELS = ["Frühstück","Mittagessen","Snack","Abendessen"];
 
 const LIST = {
-  "Obst und Gemüse":["Bananen: 8","Äpfel: 4","Weintrauben: 400 g","Gurken: 3","Paprika: 3","Tomaten / Cherrytomaten: 500 g","Karotten: 800 g","Kohlrabi: 1","Salat: 1 Kopf (optional)","Kartoffeln, mehligkochend: 6 Stück","Zwiebeln: 4","Knoblauch: 1 Knolle","Kräuter (Schnittlauch, Petersilie): je 1 Bund"],
-  "Milchprodukte und Eier":["Milch: 3 l","Naturjoghurt: 1 kg","Quark: 500 g","Frischkäse: 400 g","Geriebener Käse / Gouda: 800 g","Feta: 200 g","Eier: 16","Butter: 1 Packung"],
-  "Trockenwaren und Brot":["Spaghetti: 500 g","Nudeln für den Auflauf: 500 g","Gnocchi: 500 g","Couscous: 250 g","Basmatireis: 400 g","Knuspermüsli: 1 Packung","Reiswaffeln: 1 Packung","Tortillas: 1 Packung (8 Stück)","Toastbrot: 1 Packung","Brötchen: 6","Passata / stückige Tomaten: 3 × 500 g","Mais (Dose): 2","Apfelmus: 1 Glas"],
-  "Kühlregal":["Hummus: 200–250 g"],
-  "Tiefkühl":["Erbsen: 450 g","Gemüsemischung: 1,2 kg"]
+  "Obst, Gemüse und Snacks":["Bananen: 8","Äpfel: 4","Weintrauben: 400 g","Karotten: 500 g (Sticks und Frühstück)","Kohlrabi: 1","Gurke: 1 (Gemüsesticks)","Reiswaffeln: 1 Packung","Hummus: 200–250 g"],
+  "Frühstück":["Milch: 1 l","Naturjoghurt: 500 g","Frischkäse: 200 g","Butter: 1 Packung","Toastbrot: 1 Packung","Knuspermüsli: 1 Packung","Honig und Marmelade (Vorrat prüfen)"]
 };
 
 
@@ -1062,9 +1060,10 @@ const priceOf=g=>{
 const eur=n=>n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
 
 /* ---------- Rezepte zum Einkaufen (an und ab wählbar) ---------- */
-let recSel=[];
-try{recSel=JSON.parse(localStorage.getItem("einkauf-rezepte")||"[]")}catch(e){}
-const saveRec=()=>{try{localStorage.setItem("einkauf-rezepte",JSON.stringify(recSel))}catch(e){}};
+let recOff=[];
+try{recOff=JSON.parse(localStorage.getItem("einkauf-rezepte-aus")||"[]");if(!Array.isArray(recOff))recOff=[]}catch(e){}
+const saveRec=()=>{try{localStorage.setItem("einkauf-rezepte-aus",JSON.stringify(recOff))}catch(e){}};
+const weekIds=()=>weekGroups().flatMap(g=>g.items.map(x=>x.id));
 const giftGroupEl=document.getElementById("giftGroup"),recGroupsEl=document.getElementById("recipeGroups"),recPickEl=document.getElementById("recipePicker");
 function mergeWhen(list){
   const m=new Map();
@@ -1091,7 +1090,7 @@ function weekGroups(){
   return groups.map(g=>({title:g.title,items:g.items.filter(x=>!seen.has(x.id)&&seen.add(x.id))})).filter(g=>g.items.length);
 }
 function renderRecipes(){
-  const ids=recSel.filter(id=>RECIPES[id]);
+  const wg=weekGroups(),allIds=wg.flatMap(g=>g.items.map(x=>x.id)),ids=allIds.filter(id=>!recOff.includes(id));
   recGroupsEl.innerHTML=ids.map(id=>{
     const r=RECIPES[id];
     return `<div class="group"><h3 class="rh"><span>${r.ico||"🍴"} ${r.title}</span><button type="button" class="x" data-rdel="${id}" aria-label="Gericht von der Liste entfernen">✕</button></h3><p class="gsub">${r.portions}</p>${r.ingredients.map((ing,k)=>{
@@ -1099,9 +1098,8 @@ function renderRecipes(){
       return `<label class="${state[key]?"done":""}"><input type="checkbox" data-rk="${key}" ${state[key]?"checked":""}><span>${ing}</span></label>`;
     }).join("")}</div>`;
   }).join("");
-  const wg=weekGroups();
-  recPickEl.innerHTML=wg.length?wg.map(g=>`<div class="group"><h3>${g.title}</h3>${g.title.startsWith("Diese Woche")?`<p class="gsub">Die Grundliste oben enthält diese Gerichte schon. Wähle hier nur Gerichte, die du im Plan geändert hast, sonst stehen Zutaten doppelt.</p>`:""}${g.items.map(x=>{
-    const r=RECIPES[x.id],on=recSel.includes(x.id);
+  recPickEl.innerHTML=wg.length?wg.map(g=>`<div class="group"><h3>${g.title}</h3>${g.items.map(x=>{
+    const r=RECIPES[x.id],on=!recOff.includes(x.id);
     return `<label class="${on?"sel":""}"><input type="checkbox" data-rp="${x.id}" ${on?"checked":""}><span>${r.ico||"🍴"} ${r.title}<small class="meta">${x.when}, ${r.portions}</small></span></label>`;
   }).join("")}</div>`).join(""):`<div class="group"><p class="gsub">Auf deiner Wochenliste steht gerade kein Gericht mit Rezept. Im Tab Plan kannst du Gerichte ändern.</p></div>`;
   const gl=gifts.filter(g=>g.onList);
@@ -1110,8 +1108,9 @@ function renderRecipes(){
     return `<label class="${state[key]?"done":""}"><input type="checkbox" data-gk="${key}" ${state[key]?"checked":""}><span>${escE(g.idea)}<small class="meta">für ${escE(g.who)}${p?", "+eur(p):""}${g.shop?", "+escE(g.shop):""}</small></span><button type="button" class="x" data-goff="${g.id}" aria-label="Von der Einkaufsliste entfernen">✕</button></label>`;
   }).join("")}</div>`:"";
   const nSel=ids.length;
-  document.getElementById("recCount").textContent=nSel?`${nSel} Rezept${nSel===1?"":"e"} gewählt`:"Noch kein Rezept gewählt";
+  document.getElementById("recCount").textContent=allIds.length?`${nSel} von ${allIds.length} Gerichten auf der Liste`:"";
   document.getElementById("recClear").hidden=!nSel;
+  document.getElementById("recAll").hidden=!allIds.some(id=>recOff.includes(id));
   // Gesamtzähler: Grundliste plus Rezeptzutaten
   const base=Object.values(allList()).flat();
   const recItems=ids.flatMap(id=>RECIPES[id].ingredients.map((_,k)=>"r:"+id+":"+k));
@@ -1138,17 +1137,18 @@ recGroupsEl.addEventListener("change",e=>{
 recPickEl.addEventListener("change",e=>{
   const c=e.target.closest("input[data-rp]");if(!c)return;
   const id=c.dataset.rp,top=c.getBoundingClientRect().top;
-  if(c.checked){if(!recSel.includes(id))recSel.push(id)}else recSel=recSel.filter(x=>x!==id);
+  if(c.checked)recOff=recOff.filter(x=>x!==id);else if(!recOff.includes(id))recOff.push(id);
   saveRec();render();
   const again=recPickEl.querySelector(`input[data-rp="${id}"]`);
   if(again)window.scrollBy(0,again.getBoundingClientRect().top-top);
 });
 recGroupsEl.addEventListener("click",e=>{
   const x=e.target.closest("[data-rdel]");if(!x)return;
-  recSel=recSel.filter(id=>id!==x.dataset.rdel);saveRec();render();
+  if(!recOff.includes(x.dataset.rdel))recOff.push(x.dataset.rdel);saveRec();render();
 });
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.tab==="list")render()}));
-document.getElementById("recClear").onclick=()=>{recSel=[];saveRec();render()};
+document.getElementById("recClear").onclick=()=>{recOff=[...new Set([...recOff,...weekIds()])];saveRec();render()};
+document.getElementById("recAll").onclick=()=>{recOff=[];saveRec();render()};
 render();
 
 /* ---------- Geschenkideen ---------- */
