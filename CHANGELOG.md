@@ -3,6 +3,13 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 1.4.0 vom 2.10.2026
+Eigene Einträge in der Einkaufsliste werden automatisch einsortiert.
+- Ein eigener Eintrag landet selbst in der passenden Abteilung, zum Beispiel Bananen bei Obst und Gemüse oder Zahnpasta bei Haushalt und Sonstiges.
+- Neue Abteilungen: Getränke und Süßes, Backen, Gewürze und Öl, Haushalt und Sonstiges.
+- Die Gruppe "Eigene Einträge" gibt es nicht mehr. Eigene Einträge behalten ihr ✕ zum Löschen.
+- Auch Bastelmaterial aus dem Reiter Freizeit wird so einsortiert.
+
 ## 1.3.0 vom 2.10.2026
 Neuer Reiter Freizeit mit Basteln und Unternehmungen.
 - 26 Ideen für Kinder von etwa 4 bis 9 Jahren, passend zu Herbst und November (12 zum Basteln, 14 Unternehmungen).

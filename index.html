@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="1.3.0">
+<meta name="version" content="1.4.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -205,7 +205,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     <p class="note" style="margin-top:-6px">Alle Gerichte deiner Woche sind angehakt. Ihre Zutaten stehen oben in der Liste, nach Abteilung sortiert und zusammengerechnet. Nimmst du bei einem Gericht den Haken raus, verschwinden seine Zutaten aus der Liste. Mit dem Haken kommen sie zurück.</p>
     <div class="bar"><span id="recCount"></span><span class="bgrp"><button type="button" id="recAll" hidden>Alle anhaken</button><button type="button" id="recClear" hidden>Alle abwählen</button></span></div>
     <div id="recipePicker"></div>
-    <p class="note">Gleiche Zutaten aus verschiedenen Gerichten sind zusammengerechnet, die Mengen haben etwas Puffer. Was meist zum Vorrat gehört, steht unter „Vorrat prüfen“. Frühstück und Snacks gelten für die Woche von Freitag bis Dienstag. Für alles andere kannst du oben eigene Einträge ergänzen.</p>
+    <p class="note">Gleiche Zutaten aus verschiedenen Gerichten sind zusammengerechnet, die Mengen haben etwas Puffer. Was meist zum Vorrat gehört, steht unter „Vorrat prüfen“. Frühstück und Snacks gelten für die Woche von Freitag bis Dienstag. Eigene Einträge sortiert die App selbst in die passende Abteilung.</p>
   </section>
   <section id="cost">
     <table>
@@ -252,7 +252,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     <p class="note">Tippe bei einer Idee auf 🛒, 📦 oder 🎁, um den Stand zu markieren. Die Ideen werden nur in diesem Browser gespeichert.</p>
   </section>
 </main>
-<footer class="ver">Felix App, Version 1.3.0 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 1.4.0 vom 2.10.2026</footer>
 <script>
 
 
@@ -1149,13 +1149,33 @@ function buildList(){
   Object.values(cats).forEach(l=>l.sort((x,y)=>x.name.localeCompare(y.name,"de")));
   return cats;
 }
+/* Eigene Einträge werden anhand von Stichwörtern automatisch einer Abteilung zugeordnet */
+const CAT_EXTRA=["Getränke und Süßes","Backen, Gewürze und Öl","Haushalt und Sonstiges"];
+const OWN_RULES=[
+ [/tk-|tiefkühl|\beis\b|eiscreme|pommes|tiefgekühlt/,"Tiefkühl"],
+ [/zahn|shampoo|seife|duschgel|toilettenpapier|klopapier|küchenpapier|taschentuch|spülmittel|waschmittel|müllbeutel|müllsack|windel|feuchttuch|batterie|glühbirne|kerze|folie|backpapier|schwamm|reiniger|deo\b|pflaster|geschenk|papier|karton|kleber|farbe|stift|schere|filz|wolle|knete|wackelaug|schnur|draht|laterne|\bled\b|teelicht|\bband\b|glas\b/,"Haushalt und Sonstiges"],
+ [/saft|limo|cola|sprudel|wasser|\btee\b|kaffee|kakao|\bbier|wein\b|sekt|getränk|schokolade|keks|gummibär|bonbon|chips|süßigkeit|nutella|riegel|lakritz|popcorn|cracker/,"Getränke und Süßes"],
+ [/mehl|zucker|salz|pfeffer|gewürz|\böl\b|olivenöl|essig|backpulver|hefe|vanille|zimt|brühe|honig|marmelade|sirup|stärke|natron|paprikapulver|curry|senf|ketchup|mayo|sauce|soße|kokosfett|\bfett\b|backzutat/,"Backen, Gewürze und Öl"],
+ [/brot|brötchen|toast|brezel|croissant|kuchen|torte|tortilla|wrap|knäcke|baguette|laugen|semmel|fladen|naan|zwieback/,"Brot und Backwaren"],
+ [/nudel|spaghetti|pasta|penne|\breis\b|couscous|linsen|bohnen|kichererbsen|\bmais\b|dose|konserve|passata|tomatenmark|müsli|haferflocken|cornflakes|polenta|grieß|nüsse|nuss|mandel|walnuss|rosinen|apfelmus|oliven|suppe|kokosmilch/,"Nudeln, Reis und Konserven"],
+ [/milch|joghurt|jogurt|quark|käse|butter|sahne|\bei\b|eier|skyr|mozzarella|feta|schmand|margarine|pudding|kefir/,"Milch, Käse und Eier"],
+ [/hummus|tofu|aufstrich|teig|tortellini|gnocchi|antipasti/,"Kühlregal"],
+ [/obst|gemüse|apfel|äpfel|birne|banane|traube|orange|mandarine|clementine|zitrone|limette|beere|melone|kiwi|mango|ananas|pfirsich|pflaume|zwetschge|kirsche|zucchini|aubergine|pilz|champignon|salat|gurke|tomate|möhre|karotte|kartoffel|zwiebel|knoblauch|kohl|spinat|brokkoli|paprika|lauch|sellerie|radieschen|rucola|avocado|ingwer|kräuter|basilikum|petersilie|schnittlauch|dill|erbse|kürbis/,"Obst und Gemüse"]
+];
+function ownCategory(v){
+  const t=String(v).toLowerCase();
+  for(const [rx,c] of OWN_RULES)if(rx.test(t))return c;
+  return "Haushalt und Sonstiges";
+}
 function renderRecipes(){
   const wg=weekGroups(),allIds=wg.flatMap(g=>g.items.map(x=>x.id)),ids=activeIds();
   const cats=buildList();
   const row=(it,x)=>`<label class="${state[it.key]?"done":""}"><input type="checkbox" data-i="${escE(it.key)}" ${state[it.key]?"checked":""}><span>${escE(it.label)}</span>${x||""}</label>`;
   const grp=(t,items,sub)=>items.length?`<div class="group"><h3>${t}</h3>${sub?`<p class="gsub">${sub}</p>`:""}${items.join("")}</div>`:"";
-  const own=extra.map(v=>row({key:v,label:v},`<button type="button" class="x" data-xdel="${escE(v)}" aria-label="Eintrag löschen">✕</button>`));
-  const main=ING_ORDER.filter(c=>c!=="Vorrat prüfen").map(c=>grp(c,cats[c].map(it=>row(it)))).join("")+grp("Eigene Einträge",own);
+  extra.forEach(v=>{const c=ownCategory(v);(cats[c]=cats[c]||[]).push({key:v,label:v,name:v,own:true})});
+  Object.values(cats).forEach(l=>l.sort((x,y)=>x.name.localeCompare(y.name,"de")));
+  const ORDER=[...ING_ORDER.filter(c=>c!=="Vorrat prüfen"),...CAT_EXTRA];
+  const main=ORDER.map(c=>grp(c,(cats[c]||[]).map(it=>row(it,it.own?`<button type="button" class="x" data-xdel="${escE(it.key)}" aria-label="Eintrag löschen">✕</button>`:"")))).join("");
   groupsEl.innerHTML=main||`<div class="group"><p class="gsub">Die Liste ist leer. Hake unten Gerichte an.</p></div>`;
   pantryEl.innerHTML=grp("Vorrat prüfen",cats["Vorrat prüfen"].map(it=>row(it)),"Das gehört meist zum Vorrat. Hake an, was du noch kaufen musst.");
   recPickEl.innerHTML=wg.length?wg.map(g=>`<div class="group"><h3>${g.title}</h3>${g.items.map(x=>{
@@ -1171,7 +1191,7 @@ function renderRecipes(){
   document.getElementById("recClear").hidden=!ids.length;
   document.getElementById("recAll").hidden=!allIds.some(id=>recOff.includes(id));
   // Zähler: ohne "Vorrat prüfen"
-  const keys=[...ING_ORDER.filter(c=>c!=="Vorrat prüfen").flatMap(c=>cats[c].map(i=>i.key)),...extra,...gl.map(g=>"g:"+g.id)];
+  const keys=[...ORDER.flatMap(c=>(cats[c]||[]).map(i=>i.key)),...gl.map(g=>"g:"+g.id)];
   const done=keys.filter(k=>state[k]).length;
   document.getElementById("count").textContent=`${done} von ${keys.length} erledigt`;
 }
