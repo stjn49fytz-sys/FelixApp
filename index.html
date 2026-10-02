@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="1.0.0">
+<meta name="version" content="1.0.1">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -168,7 +168,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     <div class="days" id="days"></div>
     <h2 class="dayh" id="dayTitle"></h2>
     <div id="meals"></div>
-    <p class="note">Tipp: Der Nudelauflauf am Sonntag wird doppelt gekocht und deckt den Montagmittag ab.</p>
+    <p class="note" id="planNote">Tipp: Der Nudelauflauf am Sonntag wird doppelt gekocht und deckt den Montagmittag ab.</p>
   </section>
   <section id="choose">
     <div id="chooseBody"></div>
@@ -176,7 +176,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
   <section id="recipes">
     <input id="rsearch" class="search" type="search" placeholder="Rezept oder Zutat suchen" aria-label="Rezept oder Zutat suchen">
     <div id="recipeList"></div>
-    <p class="note">Alle Rezepte sind für 3 Personen berechnet und für 2 Herdplatten, einen Backofen und einen Airfryer geplant. Öl, Salz, Pfeffer und Gewürze werden als vorhanden angenommen.</p>
+    <p class="note">Rezepte für die ganze Familie sind für 3 Personen berechnet, Rezepte für Dienstag bis Donnerstag für 2 Personen. Alle sind für 2 Herdplatten, einen Backofen und einen Airfryer geplant. Öl, Salz, Pfeffer und Gewürze werden als vorhanden angenommen.</p>
   </section>
   <section id="book">
     <div class="bar"><span id="bookCount"></span></div>
@@ -212,7 +212,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
       <tr><td>Rewe</td><td>ca. 82 €</td><td>74–90 €</td></tr>
       <tr><td>Lidl</td><td>ca. 68 €</td><td>61–75 €</td></tr>
     </table>
-    <p class="note">Grobe Schätzwerte, keine tagesaktuellen Preise. Mit Eigenmarken und Wochenangeboten lässt sich bei Rewe in Richtung 80 € sparen.</p>
+    <p class="note">Grobe Schätzwerte, keine tagesaktuellen Preise. Mit Eigenmarken und Wochenangeboten lässt sich bei Rewe etwas sparen. Die Schätzung gilt für den ursprünglichen Plan von Freitag bis Dienstag. Änderungen und Gerichte aus der Auswahl sind nicht eingerechnet.</p>
     <p class="note"><b>Lidl</b> ist unsere Ergänzung: Preislich meist nah an Aldi, mit großer Obst- und Gemüseauswahl und frischem Brot aus der Backstation.</p>
   </section>
   <section id="gifts">
@@ -231,7 +231,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     <p class="note">Tippe bei einer Idee auf 🛒, 📦 oder 🎁, um den Stand zu markieren. Die Ideen werden nur in diesem Browser gespeichert.</p>
   </section>
 </main>
-<footer class="ver">Felix App, Version 1.0.0 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 1.0.1 vom 2.10.2026</footer>
 <script>
 
 
@@ -315,8 +315,8 @@ const PLAN = {
 const LABELS = ["Frühstück","Mittagessen","Snack","Abendessen"];
 
 const LIST = {
-  "Obst und Gemüse":["Bananen: 8","Äpfel: 4","Weintrauben: 400 g","Gurken: 3","Paprika: 3","Tomaten / Cherrytomaten: 500 g","Karotten: 800 g","Kohlrabi: 1","Salat: 1 Kopf (optional)","Kartoffeln, mehligkochend: 6 Stück","Zwiebeln: 3","Knoblauch: 1 Knolle","Kräuter (Schnittlauch, Petersilie): je 1 Bund"],
-  "Milchprodukte und Eier":["Milch: 3 l","Naturjoghurt: 1 kg","Quark: 500 g","Frischkäse: 400 g","Geriebener Käse / Gouda: 600 g","Feta: 200 g","Eier: 16","Butter: 1 Packung"],
+  "Obst und Gemüse":["Bananen: 8","Äpfel: 4","Weintrauben: 400 g","Gurken: 3","Paprika: 3","Tomaten / Cherrytomaten: 500 g","Karotten: 800 g","Kohlrabi: 1","Salat: 1 Kopf (optional)","Kartoffeln, mehligkochend: 6 Stück","Zwiebeln: 4","Knoblauch: 1 Knolle","Kräuter (Schnittlauch, Petersilie): je 1 Bund"],
+  "Milchprodukte und Eier":["Milch: 3 l","Naturjoghurt: 1 kg","Quark: 500 g","Frischkäse: 400 g","Geriebener Käse / Gouda: 800 g","Feta: 200 g","Eier: 16","Butter: 1 Packung"],
   "Trockenwaren und Brot":["Spaghetti: 500 g","Nudeln für den Auflauf: 500 g","Gnocchi: 500 g","Couscous: 250 g","Basmatireis: 400 g","Knuspermüsli: 1 Packung","Reiswaffeln: 1 Packung","Tortillas: 1 Packung (8 Stück)","Toastbrot: 1 Packung","Brötchen: 6","Passata / stückige Tomaten: 3 × 500 g","Mais (Dose): 2","Apfelmus: 1 Glas"],
   "Kühlregal":["Hummus: 200–250 g"],
   "Tiefkühl":["Erbsen: 450 g","Gemüsemischung: 1,2 kg"]
@@ -366,7 +366,7 @@ kaesespaetzle:{ico:"🧀",title:"Käsespätzle mit Röstzwiebeln und Apfelmus",t
  steps:["Zwiebeln in Ringe schneiden und in Butter 10 Minuten goldbraun braten.","Spätzle in einer großen Pfanne mit etwas Wasser erhitzen.","Käse in Lagen unterheben und schmelzen lassen, mit Pfeffer würzen.","Mit den Röstzwiebeln bestreuen und das Apfelmus dazu reichen."],
  tip:"Das Apfelmus dazu ist ein klassischer Begleiter und bringt Fruchtigkeit."},
 rote_bete_risotto:{ico:"🍚",title:"Rote-Bete-Risotto mit Parmesan",time:"35 Min.",portions:"3 Personen",
- ingredients:["250 g Risottoreis","250 g vorgegarte Rote Bete","1 Zwiebel","1 EL Butter","800 ml heiße Gemüsebrühe","40 g Parmesan","2 EL Frischkäse","Salz, Pfeffer"],
+ ingredients:["250 g Risottoreis","250 g vorgegarte Rote Bete","1 Zwiebel","1 EL Butter","800 ml heiße Gemüsebrühe","40 g Parmesan (vegetarisch, ohne tierisches Lab)","2 EL Frischkäse","Salz, Pfeffer"],
  steps:["Zwiebel würfeln und in Butter glasig dünsten, den Reis kurz mitbraten.","Heiße Brühe kellenweise zugeben (in einem Topf auf der zweiten Platte heiß halten) und unter Rühren etwa 18 Minuten garen.","Rote Bete fein pürieren und in den letzten 5 Minuten unterrühren.","Parmesan und Frischkäse einrühren und abschmecken."],
  tip:"Das Risotto wird knallpink, was Kinder oft begeistert. Rote Bete färbt beim Schneiden ab, am besten Handschuhe tragen."},
 karotten_bratlinge:{ico:"🥕",title:"Karotten-Käse-Bratlinge mit Kräuterquark",time:"30 Min.",portions:"3 Personen",
@@ -382,7 +382,7 @@ gnocchi_pilz:{ico:"🍄",title:"Gnocchi mit Pilz-Rahmsauce und Erbsen",time:"20 
  steps:["Gnocchi nach Packungsanleitung in Salzwasser garen, abgießen.","Zwiebel und in Scheiben geschnittene Pilze in Butter 6 Minuten kräftig anbraten.","Frischkäse, Milch und Erbsen zugeben und 3 Minuten köcheln.","Gnocchi unterheben, mit Salz und Pfeffer würzen und mit Petersilie servieren."],
  tip:"Alternativ die Gnocchi extra in der Pfanne anbraten, dann werden sie außen knusprig."},
 pilz_risotto:{ico:"🍄",title:"Champignon-Risotto mit Erbsen",time:"35 Min.",portions:"3 Personen",
- ingredients:["250 g Risottoreis","250 g Champignons","1 Zwiebel","1 EL Butter","800 ml heiße Gemüsebrühe","100 g TK-Erbsen","40 g Parmesan","Salz, Pfeffer"],
+ ingredients:["250 g Risottoreis","250 g Champignons","1 Zwiebel","1 EL Butter","800 ml heiße Gemüsebrühe","100 g TK-Erbsen","40 g Parmesan (vegetarisch, ohne tierisches Lab)","Salz, Pfeffer"],
  steps:["Pilze in Scheiben schneiden und in Butter kräftig anbraten, herausnehmen.","Zwiebel würfeln, andünsten, Reis kurz mitbraten und mit heißer Brühe kellenweise 18 Minuten garen (die Brühe in einem Topf auf der zweiten Platte heiß halten).","Pilze und Erbsen in den letzten 5 Minuten unterrühren.","Parmesan einrühren und mit Salz und Pfeffer abschmecken."],
  tip:"Mit kleinen Pilzwürfeln statt Scheiben fällt der Pilzgeschmack milder aus."},
 pilz_pasta:{ico:"🍝",title:"Spaghetti mit Pilz-Tomatensauce",time:"25 Min.",portions:"3 Personen",
@@ -426,7 +426,7 @@ dal:{ico:"🍛",title:"Rote-Linsen-Dal mit Reis",time:"30 Min.",portions:"3 Pers
  steps:["Reis kochen.","Zwiebel, Knoblauch und geraspelte Karotte im Öl anbraten, Curry und Tomatenmark kurz mitrösten.","Linsen und Brühe zugeben und 15 Minuten köcheln, bis ein cremiger Brei entsteht.","Mit Salz abschmecken und mit Reis servieren."],
  tip:"Etwas Joghurt obendrauf macht das Dal milder."},
 tortellini:{ico:"🍝",title:"Käse-Tortellini mit Brokkoli-Sauce",time:"20 Min.",portions:"3 Personen",
- ingredients:["500 g Käse-Tortellini (Kühlregal)","1 Brokkoli (300 g)","1 Zwiebel","1 EL Butter","150 g Frischkäse","Salz, Pfeffer, Parmesan"],
+ ingredients:["500 g Käse-Tortellini (Kühlregal)","1 Brokkoli (300 g)","1 Zwiebel","1 EL Butter","150 g Frischkäse","Salz, Pfeffer, Parmesan (vegetarisch, ohne tierisches Lab)"],
  steps:["Brokkoli in kleine Röschen teilen und in einem Topf mit Salzwasser 4 Minuten kochen, dann herausnehmen.","Im selben Wasser die Tortellini nach Packungsanleitung garen.","Zwiebel in Butter andünsten, Frischkäse und 4 EL Kochwasser einrühren, Brokkoli zugeben.","Tortellini mit der Sauce mischen und mit Parmesan servieren."],
  tip:"Brokkoli mit dem Stabmixer kurz pürieren, falls die Kinder die Röschen nicht mögen."},
 flammkuchen:{ico:"🧅",title:"Flammkuchen mit Lauch und Käse",time:"25 Min.",portions:"3 Personen",
@@ -489,11 +489,11 @@ e_kichererbsen_curry:{ico:"🍛",title:"Kichererbsen-Spinat-Curry mit Reis",time
  steps:["Reis nach Packungsanleitung kochen (Herdplatte 1).","Zwiebel, Knoblauch und Ingwer fein hacken und im Öl 4 Minuten anbraten, Curry kurz mitrösten (Herdplatte 2).","Tomaten, Kokosmilch, abgespülte Kichererbsen und den Spinat dazugeben und 12 Minuten köcheln lassen.","Mit Salz und Chili abschmecken und mit dem Reis servieren."],
  tip:"Ein Spritzer Zitronensaft am Ende macht das Curry frischer."},
 e_aglio:{ico:"🍝",title:"Spaghetti Aglio e Olio mit Chili und Spinat",time:"20 Min.",portions:"2 Personen",eq:"2 Herdplatten (Topf und Pfanne)",
- ingredients:["200 g Spaghetti","4 Knoblauchzehen","4 EL Olivenöl","1/2 TL Chiliflocken","150 g Blattspinat (frisch oder TK)","1/2 Zitrone (Abrieb und Saft)","40 g Parmesan","Salz"],
+ ingredients:["200 g Spaghetti","4 Knoblauchzehen","4 EL Olivenöl","1/2 TL Chiliflocken","150 g Blattspinat (frisch oder TK)","1/2 Zitrone (Abrieb und Saft)","40 g Parmesan (vegetarisch, ohne tierisches Lab)","Salz"],
  steps:["Spaghetti in Salzwasser kochen, vor dem Abgießen 100 ml Kochwasser abschöpfen.","Knoblauch in dünne Scheiben schneiden und im Olivenöl bei niedriger Hitze 3 Minuten goldgelb werden lassen, Chili dazugeben.","Spinat in die Pfanne geben und zusammenfallen lassen.","Spaghetti mit etwas Kochwasser in der Pfanne schwenken, Zitrone und Parmesan untermischen."],
  tip:"Der Knoblauch darf nicht braun werden, sonst wird er bitter."},
 e_tortelloni:{ico:"🥟",title:"Ravioli mit Salbeibutter und Walnüssen",time:"15 Min.",portions:"2 Personen",eq:"2 Herdplatten (Topf und Pfanne)",
- ingredients:["250 g gefüllte Ravioli oder Tortelloni (Kühlregal, z. B. Ricotta-Spinat)","40 g Butter","8 Salbeiblätter","30 g Walnüsse","Parmesan","Salz, Pfeffer"],
+ ingredients:["250 g gefüllte Ravioli oder Tortelloni (Kühlregal, z. B. Ricotta-Spinat)","40 g Butter","8 Salbeiblätter","30 g Walnüsse","Parmesan (vegetarisch, ohne tierisches Lab)","Salz, Pfeffer"],
  steps:["Ravioli nach Packungsanleitung in Salzwasser garen.","Butter in einer Pfanne schmelzen, Salbei und grob gehackte Walnüsse 2 Minuten darin schwenken, bis die Butter nussig duftet.","Ravioli abgießen, in der Salbeibutter wenden und mit Parmesan und Pfeffer servieren."],
  tip:"Die Butter nur leicht bräunen lassen, nicht dunkel werden lassen."},
 e_flammkuchen_birne:{ico:"🍐",title:"Flammkuchen mit Birne, Walnüssen und Ziegenkäse",time:"20 Min.",portions:"2 Personen",eq:"Backofen oder Airfryer",
@@ -534,10 +534,10 @@ e_aloo_gobi:{ico:"🍛",title:"Kartoffel-Blumenkohl-Curry (Aloo Gobi)",time:"35 
  steps:["Kartoffeln in 2 cm große Würfel schneiden, Blumenkohl in kleine Röschen teilen.","Zwiebel, Knoblauch und Ingwer fein hacken und im Öl 4 Minuten anbraten, Gewürze kurz mitrösten.","Tomaten, Wasser, Kartoffeln und Blumenkohl dazugeben, salzen und zugedeckt 20 Minuten garen, bis alles weich ist.","Mit Chili abschmecken, mit Kräutern bestreuen und mit Fladenbrot servieren."],
  tip:"Das Fladenbrot lässt sich im Airfryer bei 180 °C in 2 bis 3 Minuten aufbacken."},
 e_gnocchi_gorgonzola:{ico:"🍐",title:"Gnocchi mit Gorgonzola-Birnen-Sauce und Walnüssen",time:"20 Min.",portions:"2 Personen",eq:"2 Herdplatten (Topf und Pfanne)",
- ingredients:["400 g Gnocchi","1 Birne","100 g Gorgonzola","100 ml Sahne","1 EL Butter","30 g Walnüsse","Pfeffer","Feldsalat"],
+ ingredients:["400 g Gnocchi","1 Birne","100 g Gorgonzola (vegetarisch, ohne tierisches Lab)","100 ml Sahne","1 EL Butter","30 g Walnüsse","Pfeffer","Feldsalat"],
  steps:["Gnocchi in Salzwasser garen, bis sie oben schwimmen, und abgießen.","Birne würfeln und in der Butter 3 Minuten anbraten.","Sahne und zerbröckelten Gorgonzola dazugeben und bei niedriger Hitze schmelzen lassen.","Gnocchi in der Sauce wenden, mit Walnüssen und Pfeffer bestreuen und mit Feldsalat servieren."],
  tip:"Birnen mit leicht festem Fruchtfleisch behalten beim Braten ihre Form."},
-e_linsencurry:{ico:"🍛",title:"Scharfes Linsen-Kokos-Curry mit Spinat und Naan",time:"30 Min.",portions:"2 Personen",eq:"1 Herdplatte (Topf)",
+e_linsencurry:{ico:"🍛",title:"Scharfes Linsen-Kokos-Curry mit Spinat und Naan",time:"30 Min.",portions:"2 Personen",eq:"1 Herdplatte (Topf), Naan im Airfryer",
  air:"Naan oder Fladenbrot bei 180 °C 2 bis 3 Minuten aufbacken.",
  ingredients:["150 g rote Linsen","1 Zwiebel","2 Knoblauchzehen","1 Stück Ingwer (2 cm)","1 EL Öl","1 EL Currypulver","1 TL Kreuzkümmel","200 ml Kokosmilch","300 ml Wasser","150 g TK-Blattspinat","Salz, Chili","Saft von 1/2 Zitrone","2 Naan"],
  steps:["Zwiebel, Knoblauch und Ingwer fein hacken und im Öl 4 Minuten anbraten, Gewürze kurz mitrösten.","Linsen, Kokosmilch und Wasser zugeben und 15 Minuten köcheln lassen, bis die Linsen zerfallen.","Spinat einrühren und 3 Minuten mitgaren.","Mit Salz, Chili und Zitronensaft abschmecken und mit dem warmen Naan servieren."],
@@ -547,7 +547,7 @@ e_pilz_stroganoff:{ico:"🍄",title:"Pilz-Stroganoff mit Reis",time:"30 Min.",po
  steps:["Reis nach Packungsanleitung kochen (Herdplatte 1).","Pilze in Scheiben schneiden und in der Butter 6 Minuten kräftig anbraten, Zwiebel und Knoblauch zugeben (Herdplatte 2).","Tomatenmark, Paprikapulver und Mehl einrühren, mit der Brühe ablöschen und 5 Minuten köcheln lassen.","Schmand und gewürfelte Gewürzgurken unterrühren, würzen und mit Reis und Petersilie servieren."],
  tip:"Die Pilze erst salzen, wenn sie schon Farbe haben, dann bleiben sie nicht wässrig."},
 e_pilz_polenta:{ico:"🍄",title:"Cremige Polenta mit Kräuterseitlingen und Thymian",time:"25 Min.",portions:"2 Personen",eq:"2 Herdplatten (Polenta und Pfanne)",
- ingredients:["120 g Instant-Polenta","500 ml Gemüsebrühe","40 g Parmesan","1 EL Butter","300 g Kräuterseitlinge oder Champignons","1 Knoblauchzehe","2 Zweige Thymian","1 EL Öl","Salz, Pfeffer"],
+ ingredients:["120 g Instant-Polenta","500 ml Gemüsebrühe","40 g Parmesan (vegetarisch, ohne tierisches Lab)","1 EL Butter","300 g Kräuterseitlinge oder Champignons","1 Knoblauchzehe","2 Zweige Thymian","1 EL Öl","Salz, Pfeffer"],
  steps:["Brühe aufkochen, Polenta unter Rühren einrieseln lassen und nach Packungsanleitung 5 Minuten quellen lassen (Herdplatte 1).","Pilze in Scheiben schneiden und im Öl 6 bis 8 Minuten kräftig braten, Knoblauch und Thymian kurz mitbraten (Herdplatte 2).","Butter und Parmesan in die Polenta rühren und mit Salz und Pfeffer abschmecken.","Polenta mit den Pilzen anrichten."],
  tip:"Kräuterseitlinge bleiben beim Braten schön bissfest und schmecken leicht nussig."},
 e_pilz_ramen:{ico:"🍜",title:"Pilz-Ramen mit Ei",time:"25 Min.",portions:"2 Personen",eq:"2 Herdplatten (Brühe und Nudeln mit Eiern)",
@@ -560,7 +560,7 @@ e_pilz_flammkuchen:{ico:"🍄",title:"Flammkuchen mit Champignons, Lauch und Zie
  steps:["Ofen auf 220 °C vorheizen. Frischkäse mit Milch, Salz und Pfeffer verrühren und auf die Tortillas streichen.","Pilze in dünne Scheiben, Lauch in feine Ringe schneiden und auf den Tortillas verteilen.","Ziegenkäse in Stücken und Thymian darübergeben.","8 bis 10 Minuten knusprig backen."],
  tip:"Den Lauch vorher gut waschen, damit kein Sand zwischen den Ringen bleibt."},
 e_pilz_tagliatelle:{ico:"🍝",title:"Tagliatelle mit Pilz-Rahmsauce und Spinat",time:"25 Min.",portions:"2 Personen",eq:"2 Herdplatten (Topf und Pfanne)",
- ingredients:["200 g Tagliatelle","250 g Champignons","1 Zwiebel","1 Knoblauchzehe","1 EL Butter","100 ml Sahne","100 g Blattspinat","2 Zweige Thymian","40 g Parmesan","Salz, Pfeffer"],
+ ingredients:["200 g Tagliatelle","250 g Champignons","1 Zwiebel","1 Knoblauchzehe","1 EL Butter","100 ml Sahne","100 g Blattspinat","2 Zweige Thymian","40 g Parmesan (vegetarisch, ohne tierisches Lab)","Salz, Pfeffer"],
  steps:["Tagliatelle in Salzwasser kochen, etwas Kochwasser aufheben.","Pilze in Scheiben schneiden und in der Butter 6 Minuten kräftig anbraten, Zwiebel, Knoblauch und Thymian zugeben.","Sahne und Spinat unterrühren und 3 Minuten köcheln lassen.","Nudeln mit einem Schuss Kochwasser untermischen und mit Parmesan und Pfeffer servieren."],
  tip:"Die Sauce lässt sich mit einem Spritzer Zitronensaft frischer abschmecken."},
 e_portobello:{ico:"🍄",title:"Gefüllte Portobello-Pilze mit Feta und Kräuterkruste",time:"25 Min.",portions:"2 Personen",eq:"Airfryer oder Backofen",
@@ -767,6 +767,7 @@ function showDay(d){
   curDay=d;
   daysEl.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.day===d));
   dayTitle.textContent=d;
+  const pn=document.getElementById("planNote");if(pn)pn.hidden=!!(edits["p|Sonntag|1"]||edits["p|Montag|1"]);
   mealsEl.innerHTML=PLAN[d].map(([text,rid],i)=>{
     const key="p|"+d+"|"+i,sl=slotOf(key,{text,rid});
     return `<div class="meal slot-${i}"><i class="ico">${ICONS[i]}</i><div class="mt"><small>${LABELS[i]}${sl.edited?" ✎ geändert":""}</small><span>${escE(sl.text)}</span>${sl.rid?`<a data-r="${sl.rid}">Rezept ansehen →</a>`:""}${editMode?(openEditor===key?editorHTML(key,sl):`<button type="button" class="fav sm" data-edit="${escE(key)}">Ändern</button>`):""}</div></div>`;
@@ -1051,7 +1052,13 @@ syncEditUI();
 let gifts=[];
 try{gifts=JSON.parse(localStorage.getItem("geschenke")||"[]")}catch(e){}
 const saveGifts=()=>{try{localStorage.setItem("geschenke",JSON.stringify(gifts))}catch(e){}};
-const priceOf=g=>{const n=parseFloat(String(g.price||"").replace(",","."));return isFinite(n)&&n>0?n:0};
+const priceOf=g=>{
+  if(/^\s*-/.test(String(g.price||"")))return 0;
+  let s=String(g.price||"").replace(/[^\d.,]/g,"");
+  if(s.includes(",")&&s.includes("."))s=s.replace(/\./g,"").replace(",",".");
+  else if(s.includes(","))s=s.replace(",",".");
+  else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,"");
+  const n=parseFloat(s);return isFinite(n)&&n>0?n:0};
 const eur=n=>n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
 
 /* ---------- Rezepte zum Einkaufen (an und ab wählbar) ---------- */
@@ -1093,7 +1100,7 @@ function renderRecipes(){
     }).join("")}</div>`;
   }).join("");
   const wg=weekGroups();
-  recPickEl.innerHTML=wg.length?wg.map(g=>`<div class="group"><h3>${g.title}</h3>${g.items.map(x=>{
+  recPickEl.innerHTML=wg.length?wg.map(g=>`<div class="group"><h3>${g.title}</h3>${g.title.startsWith("Diese Woche")?`<p class="gsub">Die Grundliste oben enthält diese Gerichte schon. Wähle hier nur Gerichte, die du im Plan geändert hast, sonst stehen Zutaten doppelt.</p>`:""}${g.items.map(x=>{
     const r=RECIPES[x.id],on=recSel.includes(x.id);
     return `<label class="${on?"sel":""}"><input type="checkbox" data-rp="${x.id}" ${on?"checked":""}><span>${r.ico||"🍴"} ${r.title}<small class="meta">${x.when}, ${r.portions}</small></span></label>`;
   }).join("")}</div>`).join(""):`<div class="group"><p class="gsub">Auf deiner Wochenliste steht gerade kein Gericht mit Rezept. Im Tab Plan kannst du Gerichte ändern.</p></div>`;
