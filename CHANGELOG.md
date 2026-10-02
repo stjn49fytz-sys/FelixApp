@@ -3,6 +3,13 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.5.0 vom 2.10.2026
+Freizeit: ausführliche Anleitungen mit Bildern.
+- Alle 26 Ideen haben jetzt Schritt für Schritt eine Anleitung. Basteln: "So geht's", Unternehmungen: "So läuft der Tag", je 4 bis 6 Schritte mit Überschrift und kurzer Erklärung.
+- Jeder Schritt hat ein Bild aus gezeichneten Symbolen (zum Beispiel Blatt und Pinsel, Schere und Papier). Sie passen sich dem gewählten Stil und der hellen oder dunklen Darstellung an.
+- Neu bei jeder Idee: "Euer Foto hinzufügen". Das Foto bleibt auf diesem Gerät, lässt sich ändern und entfernen.
+- Ideen, die ihr selbst anlegt, bleiben wie bisher ohne Schritte.
+
 ## 2.4.0 vom 2.10.2026
 Fokus-Timer und Bewegungspause.
 - Fokus-Zeit auf der großen Aufgabenkarte: 5, 10 oder 25 Minuten. Ist die Zeit um, gibt es 3 Punkte, eine Meldung und eine Erinnerung zur kurzen Pause. Mit Abbrechen gibt es keine Punkte.
