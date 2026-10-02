@@ -3,6 +3,13 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.4.0 vom 2.10.2026
+Fokus-Timer und Bewegungspause.
+- Fokus-Zeit auf der großen Aufgabenkarte: 5, 10 oder 25 Minuten. Ist die Zeit um, gibt es 3 Punkte, eine Meldung und eine Erinnerung zur kurzen Pause. Mit Abbrechen gibt es keine Punkte.
+- Bewegungspause auf der Startseite Heute: 5 oder 10 Minuten mit einem Vorschlag (Kniebeugen, Runde um den Block, tanzen, Treppe, dehnen, Hampelmänner), 3 Punkte bei vollendeter Zeit. "Anderer Vorschlag" wechselt die Idee.
+- Es läuft immer nur ein Timer. Er läuft weiter, wenn du die Seite neu lädst oder den Reiter wechselst. Ist die Zeit abgelaufen, während die App geschlossen war, gibt es keine Punkte.
+- Korrektur: Im Aufgaben-Design waren seit 2.0.0 einzelne Schriftfarben und Abstände falsch (zum Beispiel der Geschafft-Knopf mit dunkler Schrift). Jetzt wieder wie vorgesehen.
+
 ## 2.3.0 vom 2.10.2026
 Aufgaben: kleine Schritte, Wenn-dann und Uhrzeit (nach Studien zu ADHS und Planung).
 - Kleine Schritte: Jede Aufgabe lässt sich in bis zu 12 Schritte teilen. Jeder erledigte Schritt bringt 2 Punkte, die ganze Aufgabe weiterhin 10. Ein zurückgenommener oder gelöschter Schritt nimmt seine Punkte wieder weg.

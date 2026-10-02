@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.3.0">
+<meta name="version" content="2.4.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -254,9 +254,9 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     --hot:#E6C26A; --hot-soft:#2F2508;
     --spot:#C9A24A; --spot-fg:#1A1200; color-scheme:dark;
   }}
-.v-rw button,.v-rw input{font:inherit;color:inherit}
-.v-rw button{cursor:pointer}
-.v-rw h1,.v-rw h2,.v-rw p,.v-rw ul{margin:0;font-family:inherit}
+:where(.v-rw) :is(button,input){font:inherit;color:inherit}
+:where(.v-rw) button{cursor:pointer}
+:where(.v-rw) :is(h1,h2,p,ul){margin:0;font-family:inherit}
 .shell{padding:0}
 .tk-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 16px;margin-bottom:28px}
 .brand{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
@@ -593,6 +593,12 @@ input[type=checkbox]:checked::after{font-size:18px}
 .tk-opt{margin-top:10px}
 .tk-opt summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700;color:var(--muted)}
 .tk-opt .field{font-size:16px;min-height:46px}
+
+/* Timer */
+.tm-box{margin-top:16px;padding-top:14px;border-top:2px dashed var(--line)}
+.tm-h{margin:0 0 8px;font-weight:800;font-size:.95rem}
+.tm-time{font-size:2.6rem;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;font-family:var(--f-display)}
+.td-card .tm-box{margin-top:10px}
 @media print{nav,.days,.bar button,.meal a{display:none}section{display:block!important}body{background:#fff;color:#000}.meal,details.recipe{transform:none!important;break-inside:avoid}}
 </style>
 </head>
@@ -713,7 +719,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.3.0 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 2.4.0 vom 2.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -2109,6 +2115,7 @@ function heroExtra(h){
   o+='<div class="tk-steps"><p class="tk-st-h">Kleine Schritte'+(ns?' · '+nd+' von '+ns+' geschafft':'')+'</p>';
   if(ns)o+='<ul class="tk-st">'+h.steps.map(s=>'<li><button type="button" class="chk" role="checkbox" aria-checked="'+(s.done?'true':'false')+'" aria-label="Schritt erledigt: '+esc(s.t)+'" data-act="stepdone" data-id="'+id+'" data-sid="'+esc(s.id)+'">'+CHECK+'</button><span class="'+(s.done?'is-done':'')+'">'+esc(s.t)+'</span><button type="button" class="del" data-act="stepdel" data-id="'+id+'" data-sid="'+esc(s.id)+'" aria-label="Schritt löschen: '+esc(s.t)+'">'+XICON+'</button></li>').join('')+'</ul>';
   o+='<form class="tk-stform" id="stform" data-id="'+id+'" autocomplete="off"><input class="field" id="f-step" type="text" maxlength="100" placeholder="'+(ns?'Noch ein kleiner Schritt':'Ersten kleinen Schritt aufschreiben')+'" aria-label="Neuer Schritt"><button type="submit" class="btn-ghost sm">+ Schritt</button></form></div>';
+  o+=window.TIMER?TIMER.box('focus'):'';
   if(state.editPlan===h.id)o+='<div class="tk-edit"><label class="fk-date" for="e-wenn">Wenn … <input id="e-wenn" type="text" class="field" maxlength="100" value="'+esc(h.wenn)+'" placeholder="z. B. nach dem Frühstück"></label>'
     +(h.due?'<label class="fk-date" for="e-time">Uhrzeit <input id="e-time" type="time" class="field date" value="'+esc(h.time)+'"></label>':'<p class="fk-meta">Für eine Uhrzeit braucht die Aufgabe einen Tag.</p>')
     +'<div class="tk-edit-b"><button type="button" class="btn-solid" data-act="saveplan" data-id="'+id+'">Speichern</button><button type="button" class="link" data-act="cancelplan">Abbrechen</button></div></div>';
@@ -2321,6 +2328,53 @@ const PTS=(function(){
   return api;
 })();
 window.PTS=PTS;
+/* Timer: Fokus-Zeit und Bewegungspause, je 3 Punkte bei vollendeter Zeit */
+const TIMER=(function(){
+  const KEY="timer";
+  const KINDS={focus:{name:"Fokus-Zeit",opts:[5,10,25],pts:3,label:"Fokus-Zeit geschafft. Mach kurz Pause.",btn:"Fokus starten"},
+               move:{name:"Bewegungspause",opts:[5,10],pts:3,label:"Bewegungspause geschafft",btn:"Bewegung starten"}};
+  const MOVES=["10 Kniebeugen und die Arme kreisen","Eine Runde um den Block gehen","Ein Lied lang tanzen","Treppe rauf und runter","Fünf Minuten dehnen: Nacken, Schultern, Rücken","Hampelmänner, so viele wie es sich gut anfühlt"];
+  let cur=null,min={focus:10,move:5},idea=new Date().getDate()%MOVES.length;
+  try{const r=JSON.parse(localStorage.getItem(KEY)||"null");if(r&&KINDS[r.kind]&&r.end>Date.now())cur=r;else localStorage.removeItem(KEY)}catch(e){}
+  const save=()=>{try{cur?localStorage.setItem(KEY,JSON.stringify(cur)):localStorage.removeItem(KEY)}catch(e){}};
+  const fmt=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+  function rerender(){
+    if(window.TK)TK.refresh();
+    const t=document.getElementById("today");if(t&&t.classList.contains("active")&&window.renderToday)renderToday();
+  }
+  function finish(){
+    const k=cur.kind,end=cur.end;cur=null;save();
+    PTS.award("timer:"+k+":"+end,KINDS[k].pts,KINDS[k].label);
+    try{if(navigator.vibrate)navigator.vibrate([200,100,200])}catch(e){}
+    rerender();
+  }
+  setInterval(()=>{
+    if(!cur)return;
+    const left=cur.end-Date.now();
+    if(left<=0){finish();return}
+    document.querySelectorAll("[data-timer-t]").forEach(el=>el.textContent=fmt(left));
+    document.querySelectorAll("[data-timer-bar]").forEach(el=>el.style.width=Math.round((1-left/(cur.min*60000))*100)+"%");
+  },1000);
+  document.addEventListener("click",e=>{
+    const a=e.target.closest("[data-tstart],[data-tstop],[data-tmin],[data-tidea]");if(!a)return;
+    if(a.dataset.tmin){const k=a.dataset.tkind;min[k]=+a.dataset.tmin;rerender();return}
+    if(a.dataset.tidea!==undefined){idea=(idea+1)%MOVES.length;rerender();return}
+    if(a.dataset.tstop!==undefined){cur=null;save();rerender();return}
+    if(a.dataset.tstart){const k=a.dataset.tstart;if(cur)return;cur={kind:k,min:min[k],end:Date.now()+min[k]*60000};save();rerender()}
+  });
+  return {
+    idea:()=>MOVES[idea],
+    running:k=>!!cur&&(!k||cur.kind===k),
+    box(k){
+      const K=KINDS[k];
+      if(cur&&cur.kind===k){const left=cur.end-Date.now();
+        return '<div class="tm-box tm-run"><p class="tm-h">'+K.name+' läuft</p><div class="tm-time" data-timer-t role="timer">'+fmt(left)+'</div><div class="tk-prog" style="margin:8px 0"><i data-timer-bar style="width:'+Math.round((1-left/(cur.min*60000))*100)+'%"></i></div><button type="button" class="link" data-tstop>Abbrechen</button></div>'}
+      if(cur)return '<div class="tm-box"><p class="tm-h">'+K.name+'</p><p class="fk-meta" style="margin:0">'+KINDS[cur.kind].name+' läuft gerade noch.</p></div>';
+      return '<div class="tm-box"><p class="tm-h">'+K.name+' · '+K.pts+' Punkte</p><div class="chips" role="group" aria-label="Minuten">'+K.opts.map(m=>'<button type="button" class="chip" data-tmin="'+m+'" data-tkind="'+k+'" aria-pressed="'+(min[k]===m)+'">'+m+' Min</button>').join('')+'</div><button type="button" class="btn-ghost sm" style="margin-top:10px;width:100%" data-tstart="'+k+'">'+K.btn+'</button></div>';
+    }
+  };
+})();
+window.TIMER=TIMER;
 /* Gegessen: Zutaten des Gerichts verschwinden von der Einkaufsliste, Haken weg bringt sie zurück */
 function eatMeal(dn,i){
   const k=PTS.mealKey(i),was=PTS.has(k),base=PLAN[dn]&&PLAN[dn][i];
@@ -2363,6 +2417,8 @@ function renderToday(){
    ?`<div class="rw-card"><span class="fk-kicker">Nächster Schritt</span><h2 class="fk-task">${escE(hero.title)}</h2><p class="fk-meta">${escE(hero.when)}</p>${hero.wenn?`<p class="tk-wd"><b>Wenn</b> ${escE(hero.wenn)}, <b>dann</b> ${escE(hero.title)}</p>`:""}${hero.time?`<p class="tk-time">Um ${hero.time} Uhr · ${escE(hero.left)}</p>`:""}${hero.ns?`<p class="fk-meta">${hero.nd} von ${hero.ns} kleinen Schritten geschafft</p>`:""}<button type="button" class="rw-go" data-tkdone="${escE(hero.id)}">Geschafft! +10</button><button type="button" class="btn-ghost" data-tabgo="tasks">Alle Aufgaben</button></div>`
    :`<div class="rw-card"><span class="fk-kicker">${s.any?"Alles erledigt":"Los geht’s"}</span><h2 class="fk-task">${s.any?"Starker Tag. Gönn dir eine Pause.":"Noch keine Aufgabe."}</h2><p class="fk-meta">${s.any?"Deine Serie bleibt bestehen.":"Schreib die erste Aufgabe auf, ganz klein genügt."}</p><button type="button" class="btn-ghost" data-tabgo="tasks">Zu den Aufgaben</button></div>`;
   const dayPlan=PLAN[dn];
+  if(TIMER.running('focus'))html+=`<div class="td-card"><h2>Fokus</h2>${TIMER.box('focus')}</div>`;
+  html+=`<div class="td-card"><h2>Bewegungspause</h2><p class="note" style="margin:0 0 4px">${escE(TIMER.idea())}</p><button type="button" class="link" data-tidea>Anderer Vorschlag</button>${TIMER.box('move')}</div>`;
   html+=`<div class="td-card"><h2>Heute essen</h2>`+(dayPlan
    ?dayPlan.map(([text,rid],i)=>{const sl=slotOf("p|"+dn+"|"+i,{text,rid});const k=PTS.mealKey(i),on=PTS.has(k);return `<div class="td-meal"><i>${ICONS[i]}</i><div style="flex:1"><small>${LABELS[i]}</small>${escE(sl.text)}</div><button type="button" class="fav sm${on?" on":""}" style="margin:0" data-mealdone="${i}">${on?"✓":"+2"}</button></div>`}).join("")+`<button type="button" class="td-go" data-tabgo="plan">Ganzer Plan</button>`
    :`<p class="note" style="margin:0">Für ${dn} gibt es keinen festen Plan.</p><button type="button" class="td-go" data-tabgo="choose">Pläne ansehen</button>`)+`</div>`;
