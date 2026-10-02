@@ -3,6 +3,14 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 1.2.0 vom 2.10.2026
+Die Einkaufsliste ist nach Zutaten statt nach Gerichten sortiert.
+- Gleiche Zutaten aus verschiedenen Gerichten werden zusammengerechnet (zum Beispiel Eier: 15).
+- Sortierung nach Abteilung: Obst und Gemüse, Milch, Käse und Eier, Brot, Nudeln, Reis und Konserven, Kühlregal, Tiefkühl.
+- Salz, Öl, Gewürze und Ähnliches stehen am Ende unter "Vorrat prüfen" und zählen nicht im Zähler.
+- Nimmst du bei einem Gericht den Haken raus, passen sich Zutaten und Mengen an.
+- Geschenke und eigene Einträge bleiben in eigenen Gruppen.
+
 ## 1.1.1 vom 2.10.2026
 Einkauf: Die Gerichte der Woche stehen jetzt unter der Einkaufsliste.
 

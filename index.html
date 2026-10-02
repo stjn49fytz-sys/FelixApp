@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="1.1.1">
+<meta name="version" content="1.2.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -195,14 +195,14 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
   <section id="list">
     <div class="bar"><span id="count"></span><button id="reset">Zurücksetzen</button></div>
     <form id="addItem" class="addrow"><input id="newItem" class="search" placeholder="Eigenen Eintrag hinzufügen, z. B. Zimt" maxlength="60" aria-label="Eigener Einkaufseintrag"><button type="submit" class="fav on">Hinzufügen</button></form>
-    <div id="giftGroup"></div>
-    <div id="recipeGroups"></div>
     <div id="groups"></div>
+    <div id="giftGroup"></div>
+    <div id="pantryGroup"></div>
     <h2 class="dayh sub">Gerichte der Woche</h2>
-    <p class="note" style="margin-top:-6px">Alle Gerichte deiner Woche sind angehakt, ihre Zutaten stehen oben in der Liste. Nimmst du bei einem Gericht den Haken raus, verschwinden seine Zutaten aus der Liste. Mit dem Haken kommen sie zurück.</p>
+    <p class="note" style="margin-top:-6px">Alle Gerichte deiner Woche sind angehakt. Ihre Zutaten stehen oben in der Liste, nach Abteilung sortiert und zusammengerechnet. Nimmst du bei einem Gericht den Haken raus, verschwinden seine Zutaten aus der Liste. Mit dem Haken kommen sie zurück.</p>
     <div class="bar"><span id="recCount"></span><span class="bgrp"><button type="button" id="recAll" hidden>Alle anhaken</button><button type="button" id="recClear" hidden>Alle abwählen</button></span></div>
     <div id="recipePicker"></div>
-    <p class="note">Mengen mit etwas Puffer. Öl, Salz, Pfeffer, Gewürze und Brühe werden als vorhanden angenommen, bitte vorher prüfen. Frühstück und Snacks gelten für die Woche von Freitag bis Dienstag. Für alles andere kannst du oben eigene Einträge ergänzen.</p>
+    <p class="note">Gleiche Zutaten aus verschiedenen Gerichten sind zusammengerechnet, die Mengen haben etwas Puffer. Was meist zum Vorrat gehört, steht unter „Vorrat prüfen“. Frühstück und Snacks gelten für die Woche von Freitag bis Dienstag. Für alles andere kannst du oben eigene Einträge ergänzen.</p>
   </section>
   <section id="cost">
     <table>
@@ -231,7 +231,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     <p class="note">Tippe bei einer Idee auf 🛒, 📦 oder 🎁, um den Stand zu markieren. Die Ideen werden nur in diesem Browser gespeichert.</p>
   </section>
 </main>
-<footer class="ver">Felix App, Version 1.1.1 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 1.2.0 vom 2.10.2026</footer>
 <script>
 
 
@@ -314,10 +314,7 @@ const PLAN = {
 };
 const LABELS = ["Frühstück","Mittagessen","Snack","Abendessen"];
 
-const LIST = {
-  "Obst, Gemüse und Snacks":["Bananen: 8","Äpfel: 4","Weintrauben: 400 g","Karotten: 500 g (Sticks und Frühstück)","Kohlrabi: 1","Gurke: 1 (Gemüsesticks)","Reiswaffeln: 1 Packung","Hummus: 200–250 g"],
-  "Frühstück":["Milch: 1 l","Naturjoghurt: 500 g","Frischkäse: 200 g","Butter: 1 Packung","Toastbrot: 1 Packung","Knuspermüsli: 1 Packung","Honig und Marmelade (Vorrat prüfen)"]
-};
+const LIST = {}; /* Die Einkaufsliste wird aus den Rezepten erzeugt, siehe zutaten.js */
 
 
 
@@ -570,6 +567,12 @@ e_pilz_curry:{ico:"🍛",title:"Pilz-Kokos-Curry mit Reis",time:"30 Min.",portio
  steps:["Reis nach Packungsanleitung kochen (Herdplatte 1).","Pilze halbieren und im Öl 6 Minuten anbraten, Zwiebel, Knoblauch und Ingwer zugeben und mit Curry kurz mitrösten (Herdplatte 2).","Kokosmilch und Erbsen dazugeben und 8 Minuten köcheln lassen.","Mit Limettensaft, Salz und Chili abschmecken und mit dem Reis servieren."],
  tip:"Pilze nicht zu klein schneiden, sie verlieren beim Garen viel Wasser."}
 });
+
+/* Zutaten je Rezept in einheitlicher Form, damit die Einkaufsliste nach Zutat sortiert werden kann. [Name, Menge, Einheit] */
+const ING={"quesadilla":[["Tortillas",4.0,null],["Paprika",1.0,null],["Mais",1.0,"Dose"],["Käse",150.0,"g"],["Öl",null,null],["Naturjoghurt",150.0,"g"],["Frische Kräuter",null,null],["Salz",null,null],["Knoblauchzehen",null,null]],"pasta":[["Spaghetti",300.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",1.0,null],["Öl",null,null],["Passata",1.0,"Packung"],["Erbsen (TK)",150.0,"g"],["Karotten",1.0,null],["Salz",null,null],["Pfeffer",null,null],["Zucker",null,null],["Käse",50,"g"]],"pfannkuchen":[["Mehl",null,null],["Eier",2.0,null],["Milch",400.0,"ml"],["Salz",null,null],["Zucker",null,null],["Butter",20,"g"],["Bananen",2.0,null],["Apfelmus",null,null]],"wraps":[["Tortillas",4.0,null],["Frischkäse",100.0,"g"],["Käse",100.0,"g"],["Gurken",1.0,null],["Paprika",1.0,null],["Mais",null,null],["Salat",null,null]],"ofenkartoffel":[["Kartoffeln",6.0,null],["Mehl",null,null],["Öl",null,null],["Salz",null,null],["Quark",250.0,"g"],["Milch",30.0,"ml"],["Frische Kräuter",1.0,"Bund"],["Käse",100.0,"g"],["Salz",null,null],["Pfeffer",null,null]],"ruehrei":[["Eier",6.0,null],["Milch",45.0,"ml"],["Salz",null,null],["Butter",5.0,"g"],["Brötchen",3.0,null],["Frischkäse",40,"g"],["Gurken",1.0,null]],"auflauf":[["Nudeln",500.0,"g"],["Gemüsemischung (TK)",600.0,"g"],["Eier",4.0,null],["Milch",300.0,"ml"],["Käse",200.0,"g"],["Muskat",null,null],["Salz",null,null],["Pfeffer",null,null],["Butter",20,"g"]],"tomatensuppe":[["Zwiebeln",1.0,null],["Knoblauchzehen",1.0,null],["Öl",null,null],["Passata",2.0,"Packung"],["Gemüsebrühe",null,null],["Frischkäse",40.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Zucker",null,null],["Toastbrot",6.0,"Scheibe"],["Käse",50,"g"],["Butter",20,"g"]],"gnocchi":[["Gnocchi",500.0,"g"],["Gemüsemischung (TK)",300.0,"g"],["Zwiebeln",1.0,null],["Butter",15.0,"g"],["Gemüsebrühe",null,null],["Käse",100.0,"g"],["Salz",null,null],["Pfeffer",null,null]],"couscous":[["Couscous",200.0,"g"],["Gemüsebrühe",null,null],["Gurken",1.0,null],["Tomaten",200.0,"g"],["Feta",100.0,"g"],["Öl",null,null],["Zitronensaft",null,null],["Salz",null,null],["Pfeffer",null,null],["Frische Kräuter",null,null]],"reispfanne":[["Basmatireis",200.0,"g"],["Gemüsemischung (TK)",300.0,"g"],["Karotten",2.0,null],["Zwiebeln",1.0,null],["Eier",3.0,null],["Öl",null,null],["Sojasauce",null,null],["Honig",null,null]],"kartoffelsuppe":[["Kartoffeln",600.0,"g"],["Karotten",2.0,null],["Lauch",1.0,"Stange"],["Zwiebeln",1.0,null],["Öl",null,null],["Gemüsebrühe",null,null],["Frischkäse",40.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null],["Frische Kräuter",null,null]],"linsen_eintopf":[["Linsen",200.0,"g"],["Karotten",2.0,null],["Sellerie",150.0,"g"],["Zwiebeln",1.0,null],["Öl",null,null],["Tomatenmark",1.0,"EL"],["Gemüsebrühe",null,null],["Paprikapulver",null,null],["Salz",null,null],["Pfeffer",null,null],["Essig",null,null]],"rotkohl":[["Rotkohl",500.0,"g"],["Äpfel",2.0,null],["Zwiebeln",1.0,null],["Butter",15.0,"g"],["Apfelsaft",100.0,"ml"],["Essig",null,null],["Zucker",null,null],["Salz",null,null],["Semmelknödel (Kochbeutel)",1.0,"Packung"]],"kraut_nudeln":[["Bandnudeln",300.0,"g"],["Weißkohl",400.0,"g"],["Zwiebeln",1.0,null],["Öl",null,null],["Zucker",null,null],["Gemüsebrühe",null,null],["Frischkäse",40.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Käse",50,"g"]],"spinat_nudeln":[["Nudeln",300.0,"g"],["Blattspinat (TK)",300.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",1.0,null],["Öl",null,null],["Frischkäse",150.0,"g"],["Milch",100.0,"ml"],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null],["Käse",50,"g"]],"blumenkohl_gratin":[["Blumenkohl",1.0,null],["Butter",15.0,"g"],["Mehl",null,null],["Milch",300.0,"ml"],["Käse",120.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null],["Brot",null,null]],"curry":[["Süßkartoffeln",400.0,"g"],["Kichererbsen",1.0,"Dose"],["Zwiebeln",1.0,null],["Öl",null,null],["Stückige Tomaten",1.0,"Dose"],["Kokosmilch",100.0,"ml"],["Currypulver",null,null],["Reis",200.0,"g"],["Salz",null,null]],"karotten_suppe":[["Karotten",600.0,"g"],["Zwiebeln",1.0,null],["Öl",null,null],["Gemüsebrühe",null,null],["Kokosmilch",100.0,"ml"],["Salz",null,null],["Pfeffer",null,null],["Käse",50,"g"]],"lauch_quiche":[["Fertigteig (Kühlregal)",1.0,"Rolle"],["Lauch",2.0,"Stange"],["Eier",3.0,null],["Milch",200.0,"ml"],["Frischkäse",100.0,"g"],["Käse",120.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null],["Feldsalat",100.0,"g"]],"kaesespaetzle":[["Spätzle",500.0,"g"],["Käse",200.0,"g"],["Zwiebeln",2.0,null],["Butter",15.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Apfelmus",null,null]],"rote_bete_risotto":[["Risottoreis",250.0,"g"],["Rote Bete",250.0,"g"],["Zwiebeln",1.0,null],["Butter",15.0,"g"],["Gemüsebrühe",null,null],["Parmesan",40.0,"g"],["Frischkäse",40.0,"g"],["Salz",null,null],["Pfeffer",null,null]],"karotten_bratlinge":[["Karotten",400.0,"g"],["Zwiebeln",1.0,null],["Eier",2.0,null],["Käse",100.0,"g"],["Semmelbrösel",40.0,"g"],["Mehl",null,null],["Salz",null,null],["Pfeffer",null,null],["Öl",null,null],["Quark",250.0,"g"],["Frische Kräuter",null,null],["Brot",null,null]],"lasagne_pilz":[["Pilze (Champignons)",250.0,"g"],["Karotten",2.0,null],["Zwiebeln",1.0,null],["Passata",1.0,"Packung"],["Lasagneplatten",9.0,null],["Butter",30.0,"g"],["Mehl",null,null],["Milch",500.0,"ml"],["Käse",150.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Oregano",null,null]],"gnocchi_pilz":[["Gnocchi",500.0,"g"],["Pilze (Champignons)",250.0,"g"],["Zwiebeln",1.0,null],["Butter",15.0,"g"],["Frischkäse",150.0,"g"],["Milch",100.0,"ml"],["Erbsen (TK)",100.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Frische Kräuter",null,null]],"pilz_risotto":[["Risottoreis",250.0,"g"],["Pilze (Champignons)",250.0,"g"],["Zwiebeln",1.0,null],["Butter",15.0,"g"],["Gemüsebrühe",null,null],["Erbsen (TK)",100.0,"g"],["Parmesan",40.0,"g"],["Salz",null,null],["Pfeffer",null,null]],"pilz_pasta":[["Spaghetti",300.0,"g"],["Pilze (Champignons)",250.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",1.0,null],["Öl",null,null],["Passata",1.0,"Packung"],["Salz",null,null],["Pfeffer",null,null],["Oregano",null,null],["Käse",50,"g"]],"pilz_quiche":[["Fertigteig (Kühlregal)",1.0,"Rolle"],["Pilze (Champignons)",200.0,"g"],["Blattspinat (TK)",150.0,"g"],["Eier",3.0,null],["Milch",200.0,"ml"],["Frischkäse",100.0,"g"],["Käse",100.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null]],"pilz_pfanne":[["Bandnudeln",300.0,"g"],["Pilze (Champignons)",250.0,"g"],["Lauch",1.0,"Stange"],["Zwiebeln",1.0,null],["Öl",null,null],["Frischkäse",150.0,"g"],["Gemüsebrühe",null,null],["Salz",null,null],["Pfeffer",null,null],["Frische Kräuter",null,null]],"pastinaken_puere":[["Pastinaken",400.0,"g"],["Karotten",300.0,"g"],["Butter",15.0,"g"],["Milch",150.0,"ml"],["Blattspinat (TK)",200.0,"g"],["Eier",3.0,null],["Salz",null,null],["Muskat",null,null]],"kohlrabi_schnitzel":[["Kohlrabi",2.0,null],["Eier",2.0,null],["Mehl",null,null],["Semmelbrösel",80.0,"g"],["Salz",null,null],["Öl",null,null],["Reis",200.0,"g"],["Naturjoghurt",150.0,"g"],["Frische Kräuter",null,null],["Salz",null,null]],"kaiserschmarrn":[["Mehl",null,null],["Eier",4.0,null],["Milch",400.0,"ml"],["Zucker",null,null],["Salz",null,null],["Butter",30.0,"g"],["Zucker",null,null],["Äpfel",3.0,null],["Zucker",null,null],["Zimt",null,null]],"gemuesesuppe":[["Karotten",3.0,null],["Sellerie",150.0,"g"],["Lauch",1.0,"Stange"],["Zwiebeln",1.0,null],["Öl",null,null],["Gemüsebrühe",null,null],["Suppennudeln",100.0,"g"],["Salz",null,null],["Frische Kräuter",null,null]],"linsen_bolo":[["Spaghetti",300.0,"g"],["Linsen",150.0,"g"],["Karotten",1.0,null],["Zwiebeln",1.0,null],["Knoblauchzehen",1.0,null],["Öl",null,null],["Passata",1.0,"Packung"],["Gemüsebrühe",null,null],["Oregano",null,null],["Salz",null,null],["Pfeffer",null,null],["Käse",50,"g"]],"frittata":[["Eier",6.0,null],["Milch",100.0,"ml"],["Brokkoli",1.0,null],["Karotten",1.0,null],["Zwiebeln",1.0,null],["Käse",80.0,"g"],["Öl",null,null],["Salz",null,null],["Pfeffer",null,null],["Brot",null,null]],"dal":[["Linsen",200.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",1.0,null],["Karotten",1.0,null],["Öl",null,null],["Currypulver",null,null],["Tomatenmark",2.0,"EL"],["Gemüsebrühe",null,null],["Reis",200.0,"g"],["Salz",null,null]],"tortellini":[["Käse",500.0,"g"],["Brokkoli",1.0,null],["Zwiebeln",1.0,null],["Butter",15.0,"g"],["Frischkäse",150.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Parmesan",null,null]],"flammkuchen":[["Tortillas",4.0,null],["Frischkäse",200.0,"g"],["Milch",30.0,"ml"],["Lauch",1.0,"Stange"],["Zwiebeln",1.0,null],["Käse",120.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null]],"ofengemuese":[["Karotten",3.0,null],["Pastinaken",2.0,null],["Rote Bete",2.0,null],["Zwiebeln",1.0,null],["Öl",null,null],["Salz",null,null],["Frische Kräuter",null,null],["Quark",250.0,"g"],["Frische Kräuter",null,null],["Milch",30.0,"ml"],["Salz",null,null],["Brot",null,null]],"bratkartoffel":[["Kartoffeln",700.0,"g"],["Zwiebeln",1.0,null],["Öl",null,null],["Salz",null,null],["Eier",3.0,null],["Feldsalat",100.0,"g"],["Essig",null,null],["Öl",null,null]],"spinat_taschen":[["Fertigteig (Kühlregal)",1.0,"Rolle"],["Blattspinat (TK)",250.0,"g"],["Feta",150.0,"g"],["Zwiebeln",1.0,null],["Eier",1.0,null],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null],["Karotten",3.0,null],["Äpfel",1.0,null],["Zitronensaft",null,null],["Öl",null,null]],"gruenkohl":[["Nudeln",300.0,"g"],["Grünkohl",300.0,"g"],["Zwiebeln",1.0,null],["Butter",15.0,"g"],["Frischkäse",150.0,"g"],["Milch",100.0,"ml"],["Käse",60.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null]],"rosenkohl":[["Rosenkohl",400.0,"g"],["Kartoffeln",500.0,"g"],["Zwiebeln",1.0,null],["Milch",200.0,"ml"],["Frischkäse",100.0,"g"],["Käse",100.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Muskat",null,null]],"wirsing":[["Reis",200.0,"g"],["Wirsing",400.0,"g"],["Zwiebeln",1.0,null],["Öl",null,null],["Gemüsebrühe",null,null],["Feta",150.0,"g"],["Salz",null,null],["Pfeffer",null,null]],"griess":[["Milch",600.0,"ml"],["Grieß",60.0,"g"],["Zucker",null,null],["Salz",null,null],["Butter",15.0,"g"],["Äpfel",2.0,null],["Zimt",null,null]],"french":[["Toastbrot",6.0,"Scheibe"],["Eier",3.0,null],["Milch",150.0,"ml"],["Zucker",null,null],["Zimt",null,null],["Butter",20,"g"],["Äpfel",2.0,null],["Zucker",null,null]],"polenta":[["Polenta",1.0,"Rolle"],["Zwiebeln",1.0,null],["Öl",null,null],["Passata",1.0,"Packung"],["Käse",120.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Oregano",null,null]],"nudelsalat":[["Nudeln",250.0,"g"],["Erbsen (TK)",100.0,"g"],["Mais",1.0,"Dose"],["Käse",100.0,"g"],["Karotten",1.0,null],["Naturjoghurt",45.0,"g"],["Frischkäse",40.0,"g"],["Essig",null,null],["Salz",null,null],["Pfeffer",null,null]],"e_shakshuka":[["Zwiebeln",1.0,null],["Knoblauchzehen",2.0,null],["Öl",null,null],["Kreuzkümmel",null,null],["Paprikapulver",null,null],["Chili",null,null],["Passata",1.0,"Packung"],["Eier",4.0,null],["Feta",100.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Frische Kräuter",null,null],["Brot",null,null]],"e_chili":[["Zwiebeln",1.0,null],["Karotten",2.0,null],["Sellerie",100.0,"g"],["Öl",null,null],["Tomatenmark",1.0,"EL"],["Kreuzkümmel",null,null],["Paprikapulver",null,null],["Chili",null,null],["Kidneybohnen",1.0,"Dose"],["Mais",1.0,"Dose"],["Passata",1.0,"Packung"],["Salz",null,null],["Naturjoghurt",60.0,"g"],["Brot",null,null]],"e_kichererbsen_curry":[["Basmatireis",120.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",2.0,null],["Ingwer",1.0,null],["Öl",null,null],["Currypulver",null,null],["Kichererbsen",1.0,"Dose"],["Stückige Tomaten",1.0,"Dose"],["Kokosmilch",100.0,"ml"],["Blattspinat (TK)",150.0,"g"],["Salz",null,null],["Chili",null,null]],"e_aglio":[["Spaghetti",200.0,"g"],["Knoblauchzehen",4.0,null],["Öl",null,null],["Chili",null,null],["Blattspinat (TK)",150.0,"g"],["Zitronen",1.0,null],["Parmesan",40.0,"g"],["Salz",null,null]],"e_tortelloni":[["Gefüllte Pasta (Kühlregal)",250.0,"g"],["Butter",40.0,"g"],["Frische Kräuter",null,null],["Walnüsse",30.0,"g"],["Parmesan",null,null],["Salz",null,null],["Pfeffer",null,null]],"e_flammkuchen_birne":[["Tortillas",2.0,null],["Frischkäse",100.0,"g"],["Milch",15.0,"ml"],["Birnen",1.0,null],["Zwiebeln",1.0,null],["Feta",80.0,"g"],["Walnüsse",30.0,"g"],["Honig",null,null],["Salz",null,null],["Pfeffer",null,null],["Frische Kräuter",null,null]],"e_ramen":[["Eier",2.0,null],["Ramen-Nudeln",150.0,"g"],["Gemüsebrühe",null,null],["Pak Choi",2.0,null],["Karotten",1.0,null],["Ingwer",1.0,null],["Knoblauchzehen",1.0,null],["Sojasauce",null,null],["Mais",1.0,null],["Frühlingszwiebeln",1.0,null],["Öl",null,null]],"e_suesskartoffel":[["Süßkartoffeln",2.0,null],["Kichererbsen",1.0,"Dose"],["Öl",null,null],["Paprikapulver",null,null],["Kreuzkümmel",null,null],["Salz",null,null],["Naturjoghurt",100.0,"g"],["Tahini",1.0,"EL"],["Zitronensaft",null,null],["Feldsalat",null,null]],"e_haloumi":[["Karotten",2.0,null],["Pastinaken",2.0,null],["Rote Bete",1.0,null],["Zwiebeln",1.0,null],["Öl",null,null],["Salz",null,null],["Frische Kräuter",null,null],["Halloumi",1.0,"Packung"],["Naturjoghurt",100.0,"g"],["Tahini",1.0,"EL"],["Zitronensaft",null,null]],"e_rote_bete_salat":[["Linsen",100.0,"g"],["Rote Bete",2.0,null],["Äpfel",1.0,null],["Zwiebeln",1.0,null],["Feta",80.0,"g"],["Walnüsse",30.0,"g"],["Essig",null,null],["Öl",null,null],["Senf",null,null],["Honig",null,null],["Salz",null,null],["Pfeffer",null,null],["Feldsalat",null,null]],"e_blumenkohl_airfryer":[["Blumenkohl",1.0,null],["Öl",null,null],["Paprikapulver",null,null],["Knoblauchpulver",null,null],["Salz",null,null],["Chilisauce",null,null],["Honig",null,null],["Butter",15.0,"g"],["Reis",120.0,"g"],["Naturjoghurt",100.0,"g"],["Zitronensaft",null,null],["Salz",null,null],["Frische Kräuter",null,null]],"e_rosenkohl_ofen":[["Rosenkohl",500.0,"g"],["Öl",null,null],["Salz",null,null],["Pfeffer",null,null],["Feta",100.0,"g"],["Honig",null,null],["Senf",null,null],["Essig",null,null],["Couscous",100.0,"g"],["Gemüsebrühe",null,null],["Walnüsse",null,null]],"e_aloo_gobi":[["Kartoffeln",300.0,"g"],["Blumenkohl",1.0,null],["Zwiebeln",1.0,null],["Knoblauchzehen",2.0,null],["Ingwer",1.0,null],["Öl",null,null],["Currypulver",null,null],["Kurkuma",null,null],["Stückige Tomaten",1.0,"Dose"],["Salz",null,null],["Chili",null,null],["Frische Kräuter",null,null],["Naan oder Fladenbrot",null,null]],"e_gnocchi_gorgonzola":[["Gnocchi",400.0,"g"],["Birnen",1.0,null],["Gorgonzola",100.0,"g"],["Sahne",100.0,"ml"],["Butter",15.0,"g"],["Walnüsse",30.0,"g"],["Pfeffer",null,null],["Feldsalat",null,null]],"e_linsencurry":[["Linsen",150.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",2.0,null],["Ingwer",1.0,null],["Öl",null,null],["Currypulver",null,null],["Kreuzkümmel",null,null],["Kokosmilch",200.0,"ml"],["Blattspinat (TK)",150.0,"g"],["Salz",null,null],["Chili",null,null],["Zitronen",1.0,null],["Naan oder Fladenbrot",2.0,null]],"e_pilz_stroganoff":[["Reis",120.0,"g"],["Pilze (Champignons)",300.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",1.0,null],["Butter",15.0,"g"],["Tomatenmark",1.0,"EL"],["Paprikapulver",null,null],["Mehl",null,null],["Gemüsebrühe",null,null],["Schmand",100.0,"g"],["Gewürzgurken",2.0,null],["Salz",null,null],["Pfeffer",null,null],["Frische Kräuter",null,null]],"e_pilz_polenta":[["Polenta",120.0,"g"],["Gemüsebrühe",null,null],["Parmesan",40.0,"g"],["Butter",15.0,"g"],["Pilze (Champignons)",300.0,"g"],["Knoblauchzehen",1.0,null],["Frische Kräuter",null,null],["Öl",null,null],["Salz",null,null],["Pfeffer",null,null]],"e_pilz_ramen":[["Eier",2.0,null],["Ramen-Nudeln",150.0,"g"],["Gemüsebrühe",null,null],["Pilze (Champignons)",200.0,"g"],["Ingwer",1.0,null],["Knoblauchzehen",1.0,null],["Sojasauce",null,null],["Öl",null,null],["Spinat",null,null],["Frühlingszwiebeln",1.0,null]],"e_pilz_flammkuchen":[["Tortillas",2.0,null],["Frischkäse",100.0,"g"],["Milch",15.0,"ml"],["Pilze (Champignons)",150.0,"g"],["Lauch",1.0,"Stange"],["Feta",80.0,"g"],["Salz",null,null],["Pfeffer",null,null],["Frische Kräuter",null,null]],"e_pilz_tagliatelle":[["Bandnudeln",200.0,"g"],["Pilze (Champignons)",250.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",1.0,null],["Butter",15.0,"g"],["Sahne",100.0,"ml"],["Blattspinat (TK)",100.0,"g"],["Frische Kräuter",null,null],["Parmesan",40.0,"g"],["Salz",null,null],["Pfeffer",null,null]],"e_portobello":[["Pilze (Champignons)",4.0,null],["Feta",100.0,"g"],["Semmelbrösel",20.0,"g"],["Frische Kräuter",null,null],["Knoblauchzehen",1.0,null],["Öl",null,null],["Feldsalat",100.0,"g"],["Essig",null,null],["Öl",null,null],["Salz",null,null],["Brot",null,null]],"e_pilz_curry":[["Basmatireis",120.0,"g"],["Pilze (Champignons)",300.0,"g"],["Zwiebeln",1.0,null],["Knoblauchzehen",2.0,null],["Ingwer",1.0,null],["Öl",null,null],["Currypulver",null,null],["Kokosmilch",200.0,"ml"],["Erbsen (TK)",100.0,"g"],["Zitronen",1.0,null],["Salz",null,null],["Chili",null,null]]};
+const ING_CAT={"Tortillas":"Brot und Backwaren","Paprika":"Obst und Gemüse","Mais":"Nudeln, Reis und Konserven","Käse":"Milch, Käse und Eier","Öl":"Vorrat prüfen","Naturjoghurt":"Milch, Käse und Eier","Frische Kräuter":"Obst und Gemüse","Salz":"Vorrat prüfen","Knoblauchzehen":"Obst und Gemüse","Spaghetti":"Nudeln, Reis und Konserven","Zwiebeln":"Obst und Gemüse","Passata":"Nudeln, Reis und Konserven","Erbsen (TK)":"Tiefkühl","Karotten":"Obst und Gemüse","Pfeffer":"Vorrat prüfen","Zucker":"Vorrat prüfen","Mehl":"Vorrat prüfen","Eier":"Milch, Käse und Eier","Milch":"Milch, Käse und Eier","Butter":"Milch, Käse und Eier","Bananen":"Obst und Gemüse","Apfelmus":"Nudeln, Reis und Konserven","Frischkäse":"Milch, Käse und Eier","Gurken":"Obst und Gemüse","Salat":"Obst und Gemüse","Kartoffeln":"Obst und Gemüse","Quark":"Milch, Käse und Eier","Brötchen":"Brot und Backwaren","Nudeln":"Nudeln, Reis und Konserven","Gemüsemischung (TK)":"Tiefkühl","Muskat":"Vorrat prüfen","Gemüsebrühe":"Vorrat prüfen","Toastbrot":"Brot und Backwaren","Gnocchi":"Kühlregal","Couscous":"Nudeln, Reis und Konserven","Tomaten":"Obst und Gemüse","Feta":"Milch, Käse und Eier","Zitronensaft":"Vorrat prüfen","Basmatireis":"Nudeln, Reis und Konserven","Sojasauce":"Vorrat prüfen","Honig":"Vorrat prüfen","Lauch":"Obst und Gemüse","Linsen":"Nudeln, Reis und Konserven","Sellerie":"Obst und Gemüse","Tomatenmark":"Nudeln, Reis und Konserven","Paprikapulver":"Vorrat prüfen","Essig":"Vorrat prüfen","Rotkohl":"Obst und Gemüse","Äpfel":"Obst und Gemüse","Apfelsaft":"Nudeln, Reis und Konserven","Semmelknödel (Kochbeutel)":"Nudeln, Reis und Konserven","Bandnudeln":"Nudeln, Reis und Konserven","Weißkohl":"Obst und Gemüse","Blattspinat (TK)":"Tiefkühl","Blumenkohl":"Obst und Gemüse","Brot":"Brot und Backwaren","Süßkartoffeln":"Obst und Gemüse","Kichererbsen":"Nudeln, Reis und Konserven","Stückige Tomaten":"Nudeln, Reis und Konserven","Kokosmilch":"Nudeln, Reis und Konserven","Currypulver":"Vorrat prüfen","Reis":"Nudeln, Reis und Konserven","Fertigteig (Kühlregal)":"Kühlregal","Feldsalat":"Obst und Gemüse","Spätzle":"Kühlregal","Risottoreis":"Nudeln, Reis und Konserven","Rote Bete":"Obst und Gemüse","Parmesan":"Milch, Käse und Eier","Semmelbrösel":"Nudeln, Reis und Konserven","Pilze (Champignons)":"Obst und Gemüse","Lasagneplatten":"Nudeln, Reis und Konserven","Oregano":"Vorrat prüfen","Pastinaken":"Obst und Gemüse","Kohlrabi":"Obst und Gemüse","Zimt":"Vorrat prüfen","Suppennudeln":"Nudeln, Reis und Konserven","Brokkoli":"Obst und Gemüse","Grünkohl":"Obst und Gemüse","Rosenkohl":"Obst und Gemüse","Wirsing":"Obst und Gemüse","Grieß":"Nudeln, Reis und Konserven","Polenta":"Nudeln, Reis und Konserven","Kreuzkümmel":"Vorrat prüfen","Chili":"Vorrat prüfen","Kidneybohnen":"Nudeln, Reis und Konserven","Ingwer":"Obst und Gemüse","Zitronen":"Obst und Gemüse","Gefüllte Pasta (Kühlregal)":"Kühlregal","Walnüsse":"Nudeln, Reis und Konserven","Birnen":"Obst und Gemüse","Ramen-Nudeln":"Nudeln, Reis und Konserven","Pak Choi":"Obst und Gemüse","Frühlingszwiebeln":"Obst und Gemüse","Tahini":"Nudeln, Reis und Konserven","Halloumi":"Milch, Käse und Eier","Senf":"Vorrat prüfen","Knoblauchpulver":"Vorrat prüfen","Chilisauce":"Vorrat prüfen","Kurkuma":"Vorrat prüfen","Naan oder Fladenbrot":"Brot und Backwaren","Gorgonzola":"Milch, Käse und Eier","Sahne":"Milch, Käse und Eier","Schmand":"Milch, Käse und Eier","Gewürzgurken":"Nudeln, Reis und Konserven","Spinat":"Obst und Gemüse","Weintrauben":"Obst und Gemüse","Reiswaffeln":"Nudeln, Reis und Konserven","Hummus":"Kühlregal","Müsli":"Nudeln, Reis und Konserven","Marmelade":"Vorrat prüfen"};
+const ING_BASE=[["Bananen",8,null],["Äpfel",4,null],["Weintrauben",400,"g"],["Karotten",500,"g"],["Kohlrabi",1,null],["Gurken",1,null],["Reiswaffeln",1,"Packung"],["Hummus",250,"g"],["Milch",1000,"ml"],["Naturjoghurt",500,"g"],["Frischkäse",200,"g"],["Toastbrot",4,"Scheibe"],["Müsli",1,"Packung"],["Honig",null,null],["Marmelade",null,null]];
+const ING_ORDER=["Obst und Gemüse", "Milch, Käse und Eier", "Brot und Backwaren", "Nudeln, Reis und Konserven", "Kühlregal", "Tiefkühl", "Vorrat prüfen"];
 
 const ALIAS={pfann:"pfannkuchen"};
 const DISHES={
@@ -1063,7 +1066,7 @@ let recOff=[];
 try{recOff=JSON.parse(localStorage.getItem("einkauf-rezepte-aus")||"[]");if(!Array.isArray(recOff))recOff=[]}catch(e){}
 const saveRec=()=>{try{localStorage.setItem("einkauf-rezepte-aus",JSON.stringify(recOff))}catch(e){}};
 const weekIds=()=>weekGroups().flatMap(g=>g.items.map(x=>x.id));
-const giftGroupEl=document.getElementById("giftGroup"),recGroupsEl=document.getElementById("recipeGroups"),recPickEl=document.getElementById("recipePicker");
+const giftGroupEl=document.getElementById("giftGroup"),pantryEl=document.getElementById("pantryGroup"),recPickEl=document.getElementById("recipePicker");
 function mergeWhen(list){
   const m=new Map();
   list.forEach(x=>{if(!m.has(x.id))m.set(x.id,[]);m.get(x.id).push(x.when)});
@@ -1088,15 +1091,52 @@ function weekGroups(){
   });
   return groups.map(g=>({title:g.title,items:g.items.filter(x=>!seen.has(x.id)&&seen.add(x.id))})).filter(g=>g.items.length);
 }
+/* ---------- Einkaufsliste nach Zutaten sortiert ---------- */
+const UPL={Dose:"Dosen",Packung:"Packungen",Rolle:"Rollen",Stange:"Stangen",Scheibe:"Scheiben",Zehe:"Zehen",Knolle:"Knollen",Kopf:"Köpfe"};
+const UORD=["g","ml","","Dose","Packung","Rolle","Bund","Stange","Scheibe","Zehe","EL","TL"];
+const fmtN=n=>n.toLocaleString("de-DE",{maximumFractionDigits:1});
+function fmtQty(q,u){
+  if(u==="g"||u==="ml"){
+    if(q>=1000)return fmtN(Math.round(q/100)/10)+(u==="g"?" kg":" l");
+    return fmtN(Math.round(q))+" "+u;
+  }
+  if(u==="EL"||u==="TL")return fmtN(Math.round(q*2)/2)+" "+u;
+  const n=Math.ceil(q-1e-9);
+  return u?`${n} ${n===1?u:(UPL[u]||u)}`:String(n);
+}
+function activeIds(){return weekGroups().flatMap(g=>g.items.map(x=>x.id)).filter(id=>!recOff.includes(id))}
+function buildList(){
+  const agg=new Map();
+  const add=(n,q,u)=>{
+    let a=agg.get(n);if(!a){a={q:new Map(),none:false};agg.set(n,a)}
+    if(q==null){a.none=true;return}
+    a.q.set(u||"",(a.q.get(u||"")||0)+q);
+  };
+  ING_BASE.forEach(([n,q,u])=>add(n,q,u));
+  activeIds().forEach(id=>(ING[id]||[]).forEach(([n,q,u])=>add(n,q,u)));
+  const cats={};
+  ING_ORDER.forEach(c=>cats[c]=[]);
+  agg.forEach((a,n)=>{
+    const c=ING_CAT[n]||"Nudeln, Reis und Konserven";
+    const keys=[...a.q.keys()].sort((x,y)=>UORD.indexOf(x)-UORD.indexOf(y));
+    let parts=keys.map(k=>fmtQty(a.q.get(k),k));
+    if(parts.length>1)parts=keys.map(k=>k===""?fmtQty(a.q.get(k),"")+" Stück":fmtQty(a.q.get(k),k));
+    let label=n;
+    if(c!=="Vorrat prüfen"&&parts.length)label=`${n}: ${parts.join(" + ")}`;
+    cats[c].push({key:"z:"+n,label,name:n});
+  });
+  Object.values(cats).forEach(l=>l.sort((x,y)=>x.name.localeCompare(y.name,"de")));
+  return cats;
+}
 function renderRecipes(){
-  const wg=weekGroups(),allIds=wg.flatMap(g=>g.items.map(x=>x.id)),ids=allIds.filter(id=>!recOff.includes(id));
-  recGroupsEl.innerHTML=ids.map(id=>{
-    const r=RECIPES[id];
-    return `<div class="group"><h3 class="rh"><span>${r.ico||"🍴"} ${r.title}</span><button type="button" class="x" data-rdel="${id}" aria-label="Gericht von der Liste entfernen">✕</button></h3><p class="gsub">${r.portions}</p>${r.ingredients.map((ing,k)=>{
-      const key="r:"+id+":"+k;
-      return `<label class="${state[key]?"done":""}"><input type="checkbox" data-rk="${key}" ${state[key]?"checked":""}><span>${ing}</span></label>`;
-    }).join("")}</div>`;
-  }).join("");
+  const wg=weekGroups(),allIds=wg.flatMap(g=>g.items.map(x=>x.id)),ids=activeIds();
+  const cats=buildList();
+  const row=(it,x)=>`<label class="${state[it.key]?"done":""}"><input type="checkbox" data-i="${escE(it.key)}" ${state[it.key]?"checked":""}><span>${escE(it.label)}</span>${x||""}</label>`;
+  const grp=(t,items,sub)=>items.length?`<div class="group"><h3>${t}</h3>${sub?`<p class="gsub">${sub}</p>`:""}${items.join("")}</div>`:"";
+  const own=extra.map(v=>row({key:v,label:v},`<button type="button" class="x" data-xdel="${escE(v)}" aria-label="Eintrag löschen">✕</button>`));
+  const main=ING_ORDER.filter(c=>c!=="Vorrat prüfen").map(c=>grp(c,cats[c].map(it=>row(it)))).join("")+grp("Eigene Einträge",own);
+  groupsEl.innerHTML=main||`<div class="group"><p class="gsub">Die Liste ist leer. Hake unten Gerichte an.</p></div>`;
+  pantryEl.innerHTML=grp("Vorrat prüfen",cats["Vorrat prüfen"].map(it=>row(it)),"Das gehört meist zum Vorrat. Hake an, was du noch kaufen musst.");
   recPickEl.innerHTML=wg.length?wg.map(g=>`<div class="group"><h3>${g.title}</h3>${g.items.map(x=>{
     const r=RECIPES[x.id],on=!recOff.includes(x.id);
     return `<label class="${on?"sel":""}"><input type="checkbox" data-rp="${x.id}" ${on?"checked":""}><span>${r.ico||"🍴"} ${r.title}<small class="meta">${x.when}, ${r.portions}</small></span></label>`;
@@ -1106,19 +1146,15 @@ function renderRecipes(){
     const key="g:"+g.id,p=priceOf(g);
     return `<label class="${state[key]?"done":""}"><input type="checkbox" data-gk="${key}" ${state[key]?"checked":""}><span>${escE(g.idea)}<small class="meta">für ${escE(g.who)}${p?", "+eur(p):""}${g.shop?", "+escE(g.shop):""}</small></span><button type="button" class="x" data-goff="${g.id}" aria-label="Von der Einkaufsliste entfernen">✕</button></label>`;
   }).join("")}</div>`:"";
-  const nSel=ids.length;
-  document.getElementById("recCount").textContent=allIds.length?`${nSel} von ${allIds.length} Gerichten auf der Liste`:"";
-  document.getElementById("recClear").hidden=!nSel;
+  document.getElementById("recCount").textContent=allIds.length?`${ids.length} von ${allIds.length} Gerichten auf der Liste`:"";
+  document.getElementById("recClear").hidden=!ids.length;
   document.getElementById("recAll").hidden=!allIds.some(id=>recOff.includes(id));
-  // Gesamtzähler: Grundliste plus Rezeptzutaten
-  const base=Object.values(allList()).flat();
-  const recItems=ids.flatMap(id=>RECIPES[id].ingredients.map((_,k)=>"r:"+id+":"+k));
-  const giftItems=gl.map(g=>"g:"+g.id);
-  const total=base.length+recItems.length+giftItems.length,done=base.filter(i=>state[i]).length+recItems.filter(k=>state[k]).length+giftItems.filter(k=>state[k]).length;
-  document.getElementById("count").textContent=`${done} von ${total} erledigt`;
+  // Zähler: ohne "Vorrat prüfen"
+  const keys=[...ING_ORDER.filter(c=>c!=="Vorrat prüfen").flatMap(c=>cats[c].map(i=>i.key)),...extra,...gl.map(g=>"g:"+g.id)];
+  const done=keys.filter(k=>state[k]).length;
+  document.getElementById("count").textContent=`${done} von ${keys.length} erledigt`;
 }
-const _renderBase=render;
-render=function(){_renderBase();renderRecipes()};
+render=function(){renderRecipes()};
 giftGroupEl.addEventListener("change",e=>{
   const c=e.target.closest("input[data-gk]");if(!c)return;
   state[c.dataset.gk]=c.checked;save();render();
@@ -1129,10 +1165,10 @@ giftGroupEl.addEventListener("click",e=>{
   const g=gifts.find(i=>i.id===x.dataset.goff);
   if(g){g.onList=false;delete state["g:"+g.id];saveGifts();save();render();renderGifts()}
 });
-recGroupsEl.addEventListener("change",e=>{
-  const c=e.target.closest("input[data-rk]");if(!c)return;
-  state[c.dataset.rk]=c.checked;save();render();
-});
+[groupsEl,pantryEl].forEach(el=>el.addEventListener("change",e=>{
+  const c=e.target.closest("input[data-i]");if(!c)return;
+  state[c.dataset.i]=c.checked;save();render();
+}));
 recPickEl.addEventListener("change",e=>{
   const c=e.target.closest("input[data-rp]");if(!c)return;
   const id=c.dataset.rp,top=c.getBoundingClientRect().top;
@@ -1140,10 +1176,6 @@ recPickEl.addEventListener("change",e=>{
   saveRec();render();
   const again=recPickEl.querySelector(`input[data-rp="${id}"]`);
   if(again)window.scrollBy(0,again.getBoundingClientRect().top-top);
-});
-recGroupsEl.addEventListener("click",e=>{
-  const x=e.target.closest("[data-rdel]");if(!x)return;
-  if(!recOff.includes(x.dataset.rdel))recOff.push(x.dataset.rdel);saveRec();render();
 });
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.tab==="list")render()}));
 document.getElementById("recClear").onclick=()=>{recOff=[...new Set([...recOff,...weekIds()])];saveRec();render()};
