@@ -3,6 +3,13 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.2.0 vom 2.10.2026
+Aufgaben mit klarem Kalendertag.
+- Jede Aufgabe zeigt ihren Tag mit Wochentag und Datum, zum Beispiel "Morgen, Sa, 3. Okt".
+- Neue Kalenderleiste mit den nächsten 7 Tagen. Die Zahl zeigt, wie viele Aufgaben an dem Tag offen sind. Ein Tipp auf einen Tag zeigt nur diesen Tag, "Alle" zeigt alles.
+- Die Liste ist nach Tagen sortiert: Überfällig, Heute, Morgen, danach jeder Tag mit Datum, am Ende Irgendwann.
+- Neue Aufgaben stehen von Anfang an auf Heute (oder auf dem gewählten Kalendertag). Unter dem Eingabefeld steht klar, für welchen Tag die Aufgabe gilt. "Anderes Datum" ist jetzt sichtbar, "Irgendwann" bleibt möglich.
+
 ## 2.1.0 vom 2.10.2026
 Alles bringt jetzt Punkte, mit Level.
 - Aufgabe erledigt: 10 Punkte. Mahlzeit als gegessen abhaken (heute): 2 Punkte. Einkauf: 1 Punkt je abgehakter Zutat, 20 Bonuspunkte für die komplette Liste. Geschenk-Schritt (bestellt, geliefert, verpackt): 5 Punkte. Freizeit-Idee gemacht: 10 Punkte. Rezept im Kochbuch: 2 Punkte.
