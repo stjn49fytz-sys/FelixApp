@@ -3,6 +3,9 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 1.4.1 vom 2.10.2026
+Erneute Veröffentlichung, Inhalt wie 1.4.0 (nur die Versionsnummer ist neu).
+
 ## 1.4.0 vom 2.10.2026
 Eigene Einträge in der Einkaufsliste werden automatisch einsortiert.
 - Ein eigener Eintrag landet selbst in der passenden Abteilung, zum Beispiel Bananen bei Obst und Gemüse oder Zahnpasta bei Haushalt und Sonstiges.
