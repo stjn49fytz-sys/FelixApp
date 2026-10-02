@@ -3,6 +3,15 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 1.5.0 vom 2.10.2026
+Neuer Reiter Aufgaben mit Tagesziel und Belohnungen.
+- Aufgaben mit oder ohne Datum. Schnellwahl: Heute, Morgen, In 1 Woche, Irgendwann. Das Datum lässt sich später ändern oder entfernen.
+- Oben steht immer der nächste Schritt (zuerst Überfälliges, dann Heute, dann der Rest). "Später" schiebt eine Aufgabe nach hinten.
+- Tagesziel mit 3 Aufgaben, 10 Punkte je Aufgabe, Serie der letzten 7 Tage.
+- Vier Stile zur Wahl: Standard, Punk, Rock, Gothic. Der Stil gilt nur im Reiter Aufgaben.
+- Gelöschte oder abgehakte Aufgaben lassen sich sofort rückgängig machen.
+- Alles bleibt auf diesem Gerät gespeichert, helle und dunkle Darstellung werden unterstützt.
+
 ## 1.4.1 vom 2.10.2026
 Erneute Veröffentlichung, Inhalt wie 1.4.0 (nur die Versionsnummer ist neu).
 
