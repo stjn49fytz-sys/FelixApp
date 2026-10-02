@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.0.0">
+<meta name="version" content="2.1.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -671,7 +671,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.0.0 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 2.1.0 vom 2.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -1222,7 +1222,13 @@ function showDay(d){
     return `<div class="meal slot-${i}"><i class="ico">${ICONS[i]}</i><div class="mt"><small>${LABELS[i]}${sl.edited?" ✎ geändert":""}</small><span>${escE(sl.text)}</span>${sl.rid?`<a data-r="${sl.rid}">Rezept ansehen →</a>`:""}${editMode?(openEditor===key?editorHTML(key,sl):`<button type="button" class="fav sm" data-edit="${escE(key)}">Ändern</button>`):""}</div></div>`;
   }).join("");
   mealsEl.querySelectorAll("a[data-r]").forEach(a=>a.onclick=()=>showRecipe(a.dataset.r));
+  if(window.PTS&&d===DAYNAMES_[new Date().getDay()])mealsEl.querySelectorAll(".meal .mt").forEach((mt,i)=>{
+    const k=PTS.mealKey(i),on=PTS.has(k),b=document.createElement("button");
+    b.type="button";b.className="fav sm"+(on?" on":"");b.textContent=on?"✓ Gegessen":"Gegessen +2";
+    b.onclick=()=>{PTS.toggle(k,2,"Mahlzeit");showDay(d)};mt.appendChild(b);
+  });
 }
+const DAYNAMES_=["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
 Object.keys(PLAN).forEach(d=>{
   const b=document.createElement("button");
   b.dataset.day=d;
@@ -1996,6 +2002,7 @@ function praise(id){
 /* ---------- 3 Belohnung ---------- */
 function streakInfo(){
   const days=new Set(state.tasks.filter(x=>x.done&&x.doneAt).map(x=>iso(new Date(x.doneAt))));
+  (window.PTS?PTS.days():[]).forEach(d=>days.add(d));
   const t=todayISO();let n=0,d=days.has(t)?t:addDays(t,-1);
   while(days.has(d)){n++;d=addDays(d,-1)}
   const week=[];for(let i=6;i>=0;i--){const x=addDays(t,-i);week.push({on:days.has(x),wd:wdShort(x),today:i===0})}
@@ -2034,7 +2041,7 @@ function fillReward(){
   const top=$('#rw-top');if(!top)return;
   const v=state.variant,S=STY[v]||STY.reward,GOAL=3,dt=doneTodayCount(),s=streakInfo();
   top.innerHTML='<div class="rw-top"><div><h1 class="page-h1">'+(S.h||greet())+'</h1><p class="page-sub">'+esc(longDate())+'</p></div>'+goalHTML(v,dt,GOAL)+'</div>'
-    +'<div class="rw-streak"><div><b>'+(s.n?s.n+(s.n===1?' Tag':' Tage')+' in Folge':'Heute starten')+'</b><div><span class="rw-pts">'+(dt*10)+' Punkte heute</span></div></div>'
+    +'<div class="rw-streak"><div><b>'+(s.n?s.n+(s.n===1?' Tag':' Tage')+' in Folge':'Heute starten')+'</b><div><span class="rw-pts">'+(window.PTS?PTS.today():dt*10)+' Punkte heute</span></div></div>'
     +'<div class="rw-days">'+s.week.map(d=>'<div class="rw-day'+(d.on?' on':'')+(d.today?' today':'')+'"><span class="rw-dot">'+S.icon+'</span>'+d.wd+'</div>').join('')+'</div></div>';
   const q=focusQueue(),h=q[0];
   let hero=praiseHTML();
@@ -2123,6 +2130,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.editDate){sta
 document.addEventListener('click',e=>{const sv=e.target.closest('[data-variant]');if(sv)setStyle(sv.dataset.variant)});
 window.TK={
   toast:toast,
+  doneAt:()=>state.tasks.filter(t=>t.done&&t.doneAt).map(t=>t.doneAt),
+  refresh:()=>renderContent(),
   hero:()=>{const q=focusQueue();return q[0]?{id:q[0].id,title:q[0].title,when:softLabel(q[0])}:null},
   summary:()=>({done:doneTodayCount(),goal:3,streak:streakInfo().n,any:state.tasks.length>0}),
   toggle:id=>{const t=find(id);if(!t)return;const nowDone=!t.done;if(nowDone)praise(id);
@@ -2143,6 +2152,64 @@ window.TK={
 
 
 
+/* ---------- Punktekonto ---------- */
+const PTS=(function(){
+  const KEY="punkte";
+  let L=null,seeded=true;
+  try{const raw=localStorage.getItem(KEY);if(raw===null)seeded=false;L=raw?JSON.parse(raw):{}}catch(e){L={}}
+  if(!L||typeof L!=="object")L={};
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(L))}catch(e){}};
+  const pad=n=>String(n).padStart(2,"0");
+  const iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+  const start=()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime()};
+  const sum=f=>Object.values(L).filter(f).reduce((a,x)=>a+(+x.p||0),0);
+  const total=()=>sum(()=>true)+TK.doneAt().length*10;
+  const today=()=>{const s=start();return sum(x=>x.t>=s)+TK.doneAt().filter(t=>t>=s).length*10};
+  const level=()=>{const t=total();return {n:Math.floor(t/100)+1,into:t%100}};
+  function change(fn,msg){
+    const before=level().n,b=total();fn();save();
+    const gain=total()-b;
+    if(gain>0&&msg){const lv=level().n;TK.toast("+"+gain+(gain===1?" Punkt":" Punkte")+" · "+msg+(lv>before?" · Level "+lv+" erreicht!":""))}
+    TK.refresh();
+  }
+  const api={
+    has:k=>!!L[k],
+    award:(k,p,label)=>{if(!L[k])change(()=>{L[k]={p:p,t:Date.now()}},label)},
+    revoke:k=>{if(L[k])change(()=>{delete L[k]})},
+    toggle:(k,p,label)=>{L[k]?api.revoke(k):api.award(k,p,label)},
+    today,total,level,
+    days:()=>Object.values(L).filter(x=>x.t>0).map(x=>iso(new Date(x.t))),
+    week:()=>{const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return iso(d)},
+    mealKey:i=>"meal:"+iso(new Date())+":"+i,
+    /* Punkte, die sich aus dem Stand der anderen Reiter ergeben (abhaken nimmt sie wieder weg) */
+    sync:()=>{
+      const want={};
+      Object.keys(fz.done||{}).forEach(id=>want["fz:"+id]=[10,"Idee gemacht"]);
+      gifts.forEach(g=>["b","g","v"].forEach(k=>{if(g.s&&g.s[k])want["gift:"+g.id+":"+k]=[5,"Geschenk-Schritt"]}));
+      Object.keys(book.favs||{}).forEach(id=>want["fav:"+id]=[2,"Kochbuch"]);
+      const have=Object.keys(L).filter(k=>/^(fz|gift|fav):/.test(k));
+      let first=null;
+      change(()=>{
+        have.forEach(k=>{if(!want[k])delete L[k]});
+        Object.keys(want).forEach(k=>{if(!L[k]){L[k]={p:want[k][0],t:seeded?Date.now():0};if(!first)first=want[k][1]}});
+      },seeded?first||"":"");
+      seeded=true;
+    }
+  };
+  return api;
+})();
+window.PTS=PTS;
+/* Einkauf: 1 Punkt je abgehakter Zutat (Vorrat zählt nicht) */
+document.addEventListener("change",e=>{
+  const c=e.target;if(!c.matches||!c.matches('input[type=checkbox]'))return;
+  if(!c.closest("#groups,#giftGroup"))return;
+  const id=c.dataset.i||c.dataset.gk||c.dataset.gi||Object.values(c.dataset)[0];if(!id)return;
+  const k="shop:"+PTS.week()+":"+id;
+  if(c.checked)PTS.award(k,1,"Einkauf");else PTS.revoke(k);
+},true);
+/* Nach jedem Tippen den Stand der anderen Reiter abgleichen */
+document.addEventListener("click",()=>setTimeout(()=>PTS.sync(),0));
+
 /* ---------- Startseite Heute ---------- */
 const DAYNAMES=["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
 function shopProgress(){
@@ -2155,17 +2222,21 @@ function renderToday(){
   const pct=sp.total?Math.round(sp.done/sp.total*100):0;
   const hr=new Date().getHours(),greet=hr<11?"Guten Morgen":(hr<18?"Hallo":"Guten Abend");
   let html=`<h2 class="dayh" style="text-align:left;margin:0">${greet}</h2><p class="note" style="margin:2px 0 14px">${new Date().toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"})} · Tagesziel ${Math.min(s.done,s.goal)} von ${s.goal}${s.streak?` · ${s.streak} ${s.streak===1?"Tag":"Tage"} in Folge`:""}</p>`;
+  const lv=PTS.level();
+  html+=`<div class="td-card"><h2>${PTS.today()} Punkte heute</h2><div class="tk-prog" style="margin:0 0 8px" role="progressbar" aria-label="Weg zum nächsten Level" aria-valuenow="${lv.into}" aria-valuemin="0" aria-valuemax="100"><i style="width:${lv.into}%"></i></div><p class="note" style="margin:0">Level ${lv.n} · noch ${100-lv.into} Punkte bis Level ${lv.n+1}</p></div>`;
   html+=hero
    ?`<div class="rw-card"><span class="fk-kicker">Nächster Schritt</span><h2 class="fk-task">${escE(hero.title)}</h2><p class="fk-meta">${escE(hero.when)}</p><button type="button" class="rw-go" data-tkdone="${escE(hero.id)}">Geschafft! +10</button><button type="button" class="btn-ghost" data-tabgo="tasks">Alle Aufgaben</button></div>`
    :`<div class="rw-card"><span class="fk-kicker">${s.any?"Alles erledigt":"Los geht’s"}</span><h2 class="fk-task">${s.any?"Starker Tag. Gönn dir eine Pause.":"Noch keine Aufgabe."}</h2><p class="fk-meta">${s.any?"Deine Serie bleibt bestehen.":"Schreib die erste Aufgabe auf, ganz klein genügt."}</p><button type="button" class="btn-ghost" data-tabgo="tasks">Zu den Aufgaben</button></div>`;
   const dayPlan=PLAN[dn];
   html+=`<div class="td-card"><h2>Heute essen</h2>`+(dayPlan
-   ?dayPlan.map(([text,rid],i)=>{const sl=slotOf("p|"+dn+"|"+i,{text,rid});return `<div class="td-meal"><i>${ICONS[i]}</i><div><small>${LABELS[i]}</small>${escE(sl.text)}</div></div>`}).join("")+`<button type="button" class="td-go" data-tabgo="plan">Ganzer Plan</button>`
+   ?dayPlan.map(([text,rid],i)=>{const sl=slotOf("p|"+dn+"|"+i,{text,rid});const k=PTS.mealKey(i),on=PTS.has(k);return `<div class="td-meal"><i>${ICONS[i]}</i><div style="flex:1"><small>${LABELS[i]}</small>${escE(sl.text)}</div><button type="button" class="fav sm${on?" on":""}" style="margin:0" data-mealdone="${i}">${on?"✓":"+2"}</button></div>`}).join("")+`<button type="button" class="td-go" data-tabgo="plan">Ganzer Plan</button>`
    :`<p class="note" style="margin:0">Für ${dn} gibt es keinen festen Plan.</p><button type="button" class="td-go" data-tabgo="choose">Pläne ansehen</button>`)+`</div>`;
   html+=`<div class="td-card"><h2>Einkauf</h2><div class="tk-prog" style="margin:0 0 8px"><i style="width:${pct}%"></i></div><p class="note" style="margin:0">${sp.total?`${sp.done} von ${sp.total} erledigt`:"Die Liste ist leer."}</p><button type="button" class="td-go" data-tabgo="list">Zur Liste</button></div>`;
   el.innerHTML=html;
 }
 document.getElementById("todayBody").addEventListener("click",e=>{
+  const m=e.target.closest("[data-mealdone]");
+  if(m){PTS.toggle(PTS.mealKey(+m.dataset.mealdone),2,"Mahlzeit");renderToday();return}
   const b=e.target.closest("[data-tkdone]");if(!b)return;
   TK.toggle(b.dataset.tkdone);renderToday();
 });
@@ -2177,12 +2248,15 @@ document.getElementById("todayBody").addEventListener("click",e=>{
     const p=shopProgress(),pct=p.total?Math.round(p.done/p.total*100):0;
     bar.style.width=pct+"%";pb.setAttribute("aria-valuenow",pct);
     const full=p.total>0&&p.done===p.total;
-    if(full&&was===false)TK.toast("Einkauf komplett! Super gemacht.");
+    if(full&&was===false)PTS.award("shopfull:"+PTS.week(),20,"Einkauf komplett");
     was=full;
   }
   new MutationObserver(upd).observe(c,{childList:true,characterData:true,subtree:true});
   upd();
 })();
+PTS.sync();
+TK.refresh();
+showDay(curDay);
 renderToday();
 </script>
 </body>

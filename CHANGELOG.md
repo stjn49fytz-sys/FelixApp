@@ -3,6 +3,14 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.1.0 vom 2.10.2026
+Alles bringt jetzt Punkte, mit Level.
+- Aufgabe erledigt: 10 Punkte. Mahlzeit als gegessen abhaken (heute): 2 Punkte. Einkauf: 1 Punkt je abgehakter Zutat, 20 Bonuspunkte für die komplette Liste. Geschenk-Schritt (bestellt, geliefert, verpackt): 5 Punkte. Freizeit-Idee gemacht: 10 Punkte. Rezept im Kochbuch: 2 Punkte.
+- Je 100 Punkte ein neues Level. Auf der Startseite stehen die Punkte von heute und der Weg zum nächsten Level.
+- Nimmst du einen Haken zurück, geht der Punkt wieder weg. Zurücksetzen der Einkaufsliste bringt nicht noch einmal Punkte.
+- Tage mit Punkten zählen für die Serie.
+- Schon vorhandene Haken (zum Beispiel erledigte Freizeit-Ideen) zählen als Startguthaben, aber nicht für heute.
+
 ## 2.0.0 vom 2.10.2026
 Neues Design für die ganze App, gebaut für ruhiges Arbeiten mit ADHS.
 - Neue Startseite "Heute": ein nächster Schritt mit großem Abhaken-Knopf, was heute gegessen wird und wie weit der Einkauf ist.
