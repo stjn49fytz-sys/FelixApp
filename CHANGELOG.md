@@ -3,6 +3,9 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 1.1.1 vom 2.10.2026
+Einkauf: Die Gerichte der Woche stehen jetzt unter der Einkaufsliste.
+
 ## 1.1.0 vom 2.10.2026
 Die Einkaufsliste richtet sich jetzt nach den Gerichten der Woche.
 - Alle gewählten Wochengerichte sind angehakt, ihre Zutaten stehen in der Liste.
