@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Felix App</title>
+<meta name="version" content="1.0.0">
+<meta name="application-name" content="Felix App">
+<meta name="apple-mobile-web-app-title" content="Felix App">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--head:'Quicksand',ui-rounded,'Nunito',system-ui,sans-serif;--body:'Nunito',ui-rounded,system-ui,sans-serif;
+--bg:#e9f4fb;--ink:#1b3a4b;--muted:#567486;--card:#fff;--accent:#2aa89a;--on-accent:#fff;--r:20px;--chip-border:0;--link:#d4513a;--line:#c5dcea;--tip:#fff1d6;
+--c1:#ffd27a;--c2:#9fe0d6;--c3:#ffb3a7;--c4:#b9c8ff}
+.top{text-align:center}
+.days{justify-content:center}
+.days button .full{display:none}.days button .short{display:inline}
+.days button{width:54px;height:54px;padding:0;border-radius:50%;font-size:1.05rem;box-shadow:0 2px 0 rgba(27,58,75,.08)}
+.days button.active{background:var(--accent);color:var(--on-accent)}
+.dayh{text-align:center;font-size:1.7rem}
+main .meal{background:transparent;padding:0;gap:14px;position:relative;align-items:flex-start}
+.meal .mt{background:var(--card);border-radius:var(--r);padding:12px 16px;box-shadow:0 2px 0 rgba(27,58,75,.07)}
+.meal .ico{width:2.8rem;height:2.8rem;box-shadow:0 0 0 4px var(--bg);position:relative;z-index:1}
+.meal:not(:last-child)::after{content:"";position:absolute;left:1.4rem;margin-left:-2px;top:2.8rem;bottom:-12px;width:4px;background:var(--line);border-radius:2px}
+details.recipe,.group,table{box-shadow:0 2px 0 rgba(27,58,75,.07)}
+nav button{box-shadow:0 2px 0 rgba(27,58,75,.07)}
+@media(prefers-color-scheme:dark){:root{--bg:#12232d;--ink:#e6f2f8;--muted:#9bb6c4;--card:#1c3441;--line:#2c4a5a;--tip:#3b3422;--link:#ff9d88;--accent:#3cc5b5;--on-accent:#0d1f27;--c1:#6b5521;--c2:#245a54;--c3:#6b3b34;--c4:#35417a}
+.days button{background:var(--card)}.days button.active{background:var(--accent)}}
+
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.5;font-size:17px}
+h1,h2,h3,h4{font-family:var(--head)}
+.top{max-width:760px;margin:0 auto;padding:22px 16px 6px}
+.top h1{margin:0;font-size:clamp(1.9rem,6vw,2.6rem);line-height:1.1}
+.top p{margin:8px 0 0;color:var(--muted)}
+nav{display:flex;gap:8px;max-width:760px;margin:12px auto;padding:0 16px;overflow-x:auto}
+nav button{flex:1 0 auto;min-width:68px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;font:inherit;font-weight:700;cursor:pointer;color:var(--ink);background:var(--card);border:var(--chip-border);border-radius:var(--r);font-size:.82rem;min-width:0}
+nav button i{font-style:normal;font-size:1.3rem}
+nav button.active{background:var(--accent);color:var(--on-accent)}
+main{max-width:760px;margin:0 auto;padding:0 16px 48px}
+section{display:none}section.active{display:block}
+.days{display:flex;gap:8px;overflow-x:auto;padding:6px 4px 14px}
+.days button{font:inherit;font-weight:700;cursor:pointer;color:var(--ink);background:var(--card);border:var(--chip-border);border-radius:999px;padding:9px 18px;white-space:nowrap}
+.days .short{display:none}
+.dayh{margin:4px 0 14px;font-size:1.6rem}
+.meal{display:flex;gap:12px;align-items:flex-start;background:var(--card);border-radius:var(--r);padding:12px 14px;margin-bottom:12px}
+.mt{flex:1;min-width:0}
+.meal .ico{font-style:normal;font-size:1.6rem;line-height:1;flex:none;width:2.6rem;height:2.6rem;display:grid;place-items:center;border-radius:50%}
+.meal small{display:block;font-weight:700;font-size:.85rem;color:var(--muted)}
+.meal .mt span{display:block;font-size:1.1rem;font-weight:700}
+.meal a{display:block;width:fit-content;margin-top:6px;font-weight:800;color:var(--link);cursor:pointer}
+.slot-0 .ico{background:var(--c1)}.slot-1 .ico{background:var(--c2)}.slot-2 .ico{background:var(--c3)}.slot-3 .ico{background:var(--c4)}
+details.recipe{background:var(--card);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+details.recipe summary{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;list-style:none;font-weight:800}
+details.recipe summary::-webkit-details-marker{display:none}
+details.recipe summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:1.6rem;line-height:1}
+details.recipe[open] summary::after{content:"–"}
+.ri{font-size:1.8rem;line-height:1}
+.meta{display:block;font-weight:600;font-size:.85rem;color:var(--muted)}
+.rbody{padding:0 16px 16px}
+.rbody h4{margin:14px 0 6px;font-size:1.1rem}
+.rbody ul,.rbody ol{margin:0;padding-left:22px}
+.rbody li{margin:5px 0}
+.tip{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--tip)}
+.group{background:var(--card);border-radius:var(--r);padding:12px 16px;margin-bottom:14px}
+.group h3{margin:0 0 6px;font-size:1.15rem}
+label{display:flex;gap:12px;align-items:center;padding:9px 0;cursor:pointer;font-weight:600}
+label+label{border-top:1px dashed var(--line)}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;width:26px;height:26px;border-radius:8px;border:3px solid var(--accent);background:#fff;flex:none;display:grid;place-items:center;cursor:pointer;margin:0}
+input[type=checkbox]:checked{background:var(--accent)}
+input[type=checkbox]:checked::after{content:"✓";color:var(--on-accent);font-weight:900;font-size:16px;line-height:1}
+label.done span{text-decoration:line-through;color:var(--muted)}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:700}
+.bar button{font:inherit;font-weight:700;padding:7px 14px;border-radius:999px;border:var(--chip-border);background:var(--card);color:var(--ink);cursor:pointer}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r);overflow:hidden}
+td,th{padding:12px 14px;text-align:left}
+th{background:var(--accent);color:var(--on-accent)}
+tr+tr td{border-top:1px solid var(--line)}
+.note{color:var(--muted);font-size:.92rem;margin-top:14px}
+.eq{margin:12px 0 0;padding:8px 12px;border-radius:12px;background:var(--bg);font-weight:700;font-size:.92rem}
+.empty{text-align:center;background:var(--card);border-radius:var(--r);padding:26px 18px;margin-bottom:14px}
+.empty .big{font-size:2.8rem;line-height:1}
+.empty h3{margin:8px 0 4px;font-size:1.3rem}
+.empty p{margin:0 auto;max-width:34ch;color:var(--muted)}
+button.fav{margin-top:14px;font:inherit;font-weight:800;padding:9px 18px;border-radius:999px;border:var(--chip-border);background:var(--bg);color:var(--ink);cursor:pointer}
+button.fav.on{background:var(--c1)}
+label.fld{display:block;border:0!important;padding:6px 0;font-weight:700}
+label.fld span{display:block;font-size:.9rem;color:var(--muted)}
+.fld input,.fld textarea{display:block;width:100%;font:inherit;font-weight:600;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);margin-top:4px;resize:vertical}
+.dish{display:block;width:100%;max-height:340px;object-fit:cover;border-radius:16px;margin:12px 0 6px}
+.prow{display:flex;gap:8px;flex-wrap:wrap}
+.prow button.fav{margin-top:6px}
+.pbox .hint{margin:14px 0 0;color:var(--muted);font-size:.92rem}
+.pbox[hidden]{display:none}
+.thumb{width:46px;height:46px;border-radius:12px;object-fit:cover;flex:none}
+.appts{display:flex;gap:8px;overflow-x:auto;padding:6px 4px 12px}
+.appts button{flex:none;font:inherit;font-weight:700;cursor:pointer;color:var(--ink);background:var(--card);border:var(--chip-border);border-radius:999px;padding:8px 14px;white-space:nowrap}
+.appts button.active{background:var(--accent);color:var(--on-accent)}
+.lead{margin:-6px 0 12px;color:var(--muted);font-weight:700}
+.season{background:var(--tip);border-radius:var(--r);padding:12px 14px;margin-bottom:14px;font-size:.95rem}
+.pcard{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;border:3px solid transparent}
+.pcard.chosen{border-color:var(--accent)}
+.pcard h3{margin:0;font-size:1.25rem}
+.pcard .ptag{margin:4px 0 8px;color:var(--muted)}
+.badge{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;background:var(--c2);font-size:.8rem;font-weight:800;vertical-align:middle}
+.pcard details summary{cursor:pointer;font-weight:800;padding:6px 0}
+.pday h4{margin:12px 0 4px;font-size:1.05rem}
+.pday ul{list-style:none;margin:0;padding:0}
+.pday li{padding:6px 0;border-top:1px dashed var(--line)}
+.pday li small{display:block;color:var(--muted);font-weight:700;font-size:.8rem}
+.pday a{margin-left:6px;font-weight:800;color:var(--link);cursor:pointer;white-space:nowrap}
+.search{width:100%;font:inherit;font-weight:600;padding:11px 16px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);margin:2px 0 14px}
+.bar{flex-wrap:wrap;gap:8px}
+.bar .bgrp{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.bar button.fav{margin-top:0}
+.bar button.etoggle.on{background:var(--c1)}
+button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
+.editor{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--bg)}
+.editor select{display:block;width:100%;font:inherit;font-weight:600;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);margin-top:4px}
+.addrow{display:flex;gap:8px;margin-bottom:14px}
+.addrow .search{margin:0;flex:1;min-width:0}
+.addrow button.fav{margin-top:0;white-space:nowrap}
+.x{margin-left:auto;border:0;background:transparent;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px 8px}
+.two{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;background:var(--c4);font-size:.75rem;font-weight:800;vertical-align:middle}
+.dayh.sub{text-align:left;margin:26px 0 10px;font-size:1.35rem}
+.gsub{margin:-4px 0 6px;color:var(--muted);font-size:.9rem;font-weight:700}
+.group label.sel span{font-weight:800}
+.group label small.meta{font-weight:600}
+.gform{background:var(--card);border-radius:var(--r);padding:12px 16px 16px;margin-bottom:14px}
+.gform .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:420px){.gform .two-col{grid-template-columns:1fr}}
+.gform button.fav{margin-top:12px}
+.gwho{margin:18px 0 8px;font-size:1.25rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.gcount{font-size:.85rem;color:var(--muted);font-weight:700}
+.gcard{background:var(--card);border-radius:var(--r);padding:12px 16px 14px;margin-bottom:10px;border:3px solid transparent}
+.gcard.done{border-color:var(--accent)}
+.ghead{display:flex;align-items:flex-start;gap:8px}
+.ghead h4{margin:0;font-size:1.08rem;flex:1;overflow-wrap:anywhere}
+.gmeta{margin:6px 0 10px;display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--muted);font-weight:700;font-size:.92rem}
+.gmeta .who{color:var(--ink)}
+.gmeta .fin{color:var(--accent);font-weight:800}
+.glink{color:var(--link);font-weight:800;text-decoration:none;overflow-wrap:anywhere}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer;color:var(--muted);background:var(--bg);border:2px dashed var(--line);border-radius:14px}
+.st i{font-style:normal;font-size:1.5rem;line-height:1;filter:grayscale(1);opacity:.55}
+.st.on{color:var(--ink);background:var(--c2);border:2px solid var(--accent)}
+.st.on i{filter:none;opacity:1}
+.onlist{margin:0 0 10px}
+.onlist button.fav{margin-top:0}
+.gwho button.fav.sm{margin:0 0 0 auto}
+.group label .x{flex:none}
+.rh{display:flex;align-items:flex-start;gap:8px}.rh span{flex:1}
+.ver{max-width:760px;margin:0 auto;padding:0 16px 28px;text-align:center;color:var(--muted);font-size:.8rem;font-weight:700}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media print{nav,.days,.bar button,.meal a{display:none}section{display:block!important}body{background:#fff;color:#000}.meal,details.recipe{transform:none!important;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="top"><h1>Felix App 🌞</h1><p>Essensplan, Einkauf und Geschenke für die Familie.</p></header>
+<nav><button data-tab="plan" class="active"><i>📅</i><span>Plan</span></button><button data-tab="choose"><i>🗓️</i><span>Auswahl</span></button><button data-tab="recipes"><i>👩‍🍳</i><span>Rezepte</span></button><button data-tab="book"><i>📖</i><span>Kochbuch</span></button><button data-tab="list"><i>🛒</i><span>Einkauf</span></button><button data-tab="cost"><i>💶</i><span>Kosten</span></button><button data-tab="gifts"><i>🎁</i><span>Geschenke</span></button></nav>
+<main>
+  <section id="plan" class="active">
+    <div class="bar"><span id="editHint"></span><span class="bgrp"><button type="button" class="etoggle fav">✏️ Bearbeiten</button><button type="button" class="fav" data-resetall hidden>Alles zurücksetzen</button></span></div>
+    <div class="days" id="days"></div>
+    <h2 class="dayh" id="dayTitle"></h2>
+    <div id="meals"></div>
+    <p class="note">Tipp: Der Nudelauflauf am Sonntag wird doppelt gekocht und deckt den Montagmittag ab.</p>
+  </section>
+  <section id="choose">
+    <div id="chooseBody"></div>
+  </section>
+  <section id="recipes">
+    <input id="rsearch" class="search" type="search" placeholder="Rezept oder Zutat suchen" aria-label="Rezept oder Zutat suchen">
+    <div id="recipeList"></div>
+    <p class="note">Alle Rezepte sind für 3 Personen berechnet und für 2 Herdplatten, einen Backofen und einen Airfryer geplant. Öl, Salz, Pfeffer und Gewürze werden als vorhanden angenommen.</p>
+  </section>
+  <section id="book">
+    <div class="bar"><span id="bookCount"></span></div>
+    <div id="bookList"></div>
+    <details class="recipe addform" id="addForm">
+      <summary><span class="ri">➕</span><span class="rt">Eigenes Gericht hinzufügen</span></summary>
+      <form id="ownForm" class="rbody">
+        <label class="fld"><span>Name des Gerichts</span><input name="dish" required maxlength="80"></label>
+        <label class="fld"><span>Zutaten (eine pro Zeile)</span><textarea name="ing" rows="4" required></textarea></label>
+        <label class="fld"><span>Zubereitung (ein Schritt pro Zeile)</span><textarea name="steps" rows="4" required></textarea></label>
+        <button type="submit" class="fav on">Im Kochbuch speichern</button>
+      </form>
+    </details>
+    <p class="note">Das Kochbuch wird in diesem Browser gespeichert. Auf einem anderen Gerät beginnt es neu.</p>
+  </section>
+  <section id="list">
+    <div class="bar"><span id="count"></span><button id="reset">Zurücksetzen</button></div>
+    <form id="addItem" class="addrow"><input id="newItem" class="search" placeholder="Eigenen Eintrag hinzufügen, z. B. Zimt" maxlength="60" aria-label="Eigener Einkaufseintrag"><button type="submit" class="fav on">Hinzufügen</button></form>
+    <div id="groups"></div>
+    <div id="giftGroup"></div>
+    <div id="recipeGroups"></div>
+    <h2 class="dayh sub">Gerichte der Woche</h2>
+    <p class="note" style="margin-top:-6px">Hier stehen die Gerichte deiner Wochenliste. Wähle ein Gericht an, dann erscheinen seine Zutaten oben in der Liste. Wähle es ab, um es wieder zu entfernen.</p>
+    <div class="bar"><span id="recCount"></span><button type="button" id="recClear" hidden>Alle abwählen</button></div>
+    <div id="recipePicker"></div>
+    <p class="note">Mengen mit etwas Puffer. Grundvorräte wie Öl, Mehl, Honig, Marmelade, Sojasauce und Brühe bitte vorher prüfen. Die Liste gilt für den Plan von Freitag bis Dienstag. Für geänderte Gerichte kannst du oben eigene Einträge ergänzen.</p>
+  </section>
+  <section id="cost">
+    <table>
+      <tr><th>Laden</th><th>Schätzung</th><th>Spanne</th></tr>
+      <tr><td>Aldi</td><td>ca. 66 €</td><td>60–73 €</td></tr>
+      <tr><td>Penny</td><td>ca. 71 €</td><td>65–78 €</td></tr>
+      <tr><td>Rewe</td><td>ca. 82 €</td><td>74–90 €</td></tr>
+      <tr><td>Lidl</td><td>ca. 68 €</td><td>61–75 €</td></tr>
+    </table>
+    <p class="note">Grobe Schätzwerte, keine tagesaktuellen Preise. Mit Eigenmarken und Wochenangeboten lässt sich bei Rewe in Richtung 80 € sparen.</p>
+    <p class="note"><b>Lidl</b> ist unsere Ergänzung: Preislich meist nah an Aldi, mit großer Obst- und Gemüseauswahl und frischem Brot aus der Backstation.</p>
+  </section>
+  <section id="gifts">
+    <form id="giftForm" class="gform">
+      <label class="fld"><span>Geschenkidee</span><input name="idea" required maxlength="80" placeholder="z. B. Bauklötze aus Holz"></label>
+      <label class="fld"><span>Für wen?</span><input name="who" list="whoList" required maxlength="40" placeholder="Name der Person" autocomplete="off"></label>
+      <datalist id="whoList"></datalist>
+      <div class="two-col">
+        <label class="fld"><span>Preis in Euro (optional)</span><input name="price" inputmode="decimal" maxlength="10" placeholder="z. B. 24,90"></label>
+        <label class="fld"><span>Shop oder Link (optional)</span><input name="shop" maxlength="200" placeholder="z. B. https://..."></label>
+      </div>
+      <button type="submit" class="fav on">Idee hinzufügen</button>
+    </form>
+    <div class="appts" id="giftFilter"></div>
+    <div id="giftList"></div>
+    <p class="note">Tippe bei einer Idee auf 🛒, 📦 oder 🎁, um den Stand zu markieren. Die Ideen werden nur in diesem Browser gespeichert.</p>
+  </section>
+</main>
+<footer class="ver">Felix App, Version 1.0.0 vom 2.10.2026</footer>
+<script>
+
+
+const RECIPES = {
+  quesadilla:{
+    title:"Gemüse-Quesadillas mit Joghurt-Dip", time:"20 Min.", portions:"3 Personen",
+    ingredients:["4 Tortillas","1 Paprika, in kleine Würfel","1 Dose Mais (ca. 140 g abgetropft)","150 g geriebener Käse","1 EL Öl","Für den Dip: 150 g Naturjoghurt, 1 EL Schnittlauch, Salz, Prise Knoblauch (optional)"],
+    steps:["Paprika in einer Pfanne mit etwas Öl 3 Minuten anbraten, Mais dazugeben und kurz mitbraten. Vom Herd nehmen.","Eine Tortilla in die Pfanne legen, mit der Hälfte des Käses bestreuen, Gemüse darauf verteilen, restlichen Käse darüber und eine zweite Tortilla obenauf legen.","Bei mittlerer Hitze 2 bis 3 Minuten pro Seite goldbraun braten, einmal vorsichtig wenden.","Mit dem Pizzaschneider oder Messer in Dreiecke schneiden. Das zweite Paar genauso machen.","Joghurt mit Schnittlauch und Salz verrühren und als Dip dazu reichen."],
+    tip:"Die Kinder können den Käse und das Gemüse selbst auf der Tortilla verteilen."
+  },
+  pasta:{
+    title:"Pasta mit Tomatensauce und Erbsen", time:"20 Min.", portions:"3 Personen",
+    ingredients:["300 g Spaghetti","1 Zwiebel, fein gewürfelt","1 Knoblauchzehe","1 EL Öl","1 Packung Passata (500 g)","150 g TK-Erbsen","1 Karotte, fein gerieben (versteckt sich in der Sauce)","Salz, Pfeffer, Prise Zucker","Käse zum Bestreuen"],
+    steps:["Spaghetti nach Packungsanleitung in Salzwasser kochen.","Währenddessen Zwiebel in Öl glasig dünsten, Knoblauch und geriebene Karotte kurz mitbraten.","Passata dazugeben, mit Salz, Pfeffer und Zucker würzen und 10 Minuten leise köcheln lassen.","Die Erbsen 3 Minuten vor Ende in die Sauce geben.","Nudeln abgießen, mit der Sauce mischen und mit Käse servieren."],
+    tip:"Für wählerische Esser die Sauce mit dem Stabmixer fein pürieren, dann sieht man das Gemüse nicht mehr."
+  },
+  pfannkuchen:{
+    title:"Pfannkuchen mit Banane und Apfelmus", time:"25 Min.", portions:"3 Personen (ca. 8 Stück)",
+    ingredients:["200 g Mehl","2 Eier","400 ml Milch","1 Prise Salz","1 EL Zucker","Butter oder Öl zum Braten","2 Bananen","Apfelmus zum Servieren"],
+    steps:["Mehl, Eier, Milch, Salz und Zucker zu einem glatten Teig verrühren. 10 Minuten ruhen lassen.","Etwas Butter in einer Pfanne erhitzen, eine kleine Kelle Teig hineingeben und die Pfanne schwenken, bis der Teig dünn verteilt ist.","Bei mittlerer Hitze 1 bis 2 Minuten backen, wenden und die andere Seite goldgelb backen.","Nach Wunsch mit Bananenscheiben füllen und aufrollen, dazu Apfelmus servieren."],
+    tip:"Der Teig lässt sich schon am Vorabend anrühren und im Kühlschrank aufbewahren. Vor dem Backen kurz umrühren."
+  },
+  wraps:{
+    title:"Käse-Wraps mit Gurke, Mais und Paprika", time:"10 Min.", portions:"3 Personen (ca. 4 Wraps)",
+    ingredients:["4 Tortillas","100 g Frischkäse","100 g Käse in Scheiben oder gerieben","1/2 Gurke, in Stifte","1/2 Paprika, in Streifen","4 EL Mais (aus der Dose)","Salat (optional)"],
+    steps:["Tortillas mit einer dünnen Schicht Frischkäse bestreichen.","Käse, Gurke, Paprika und Mais in einem Streifen in die Mitte legen.","Untere Kante einschlagen, die Seiten einklappen und fest aufrollen.","Halbieren und mit Rohkost servieren."],
+    tip:"Für Kinder, die kein rohes Gemüse mögen: einfach nur Frischkäse, Käse und Gurke einrollen."
+  },
+  ofenkartoffel:{
+    title:"Gefüllte Ofenkartoffeln mit Kräuterquark", time:"ca. 60 Min. (davon 10 Min. aktiv)", portions:"3 Personen",
+    ingredients:["6 große Kartoffeln, mehligkochend","1 EL Öl, Salz","250 g Quark","2 EL Milch","1 Bund Schnittlauch oder Petersilie","100 g geriebener Käse","Salz, Pfeffer"],
+    steps:["Ofen auf 200 °C Ober- und Unterhitze vorheizen.","Kartoffeln gründlich waschen, mehrmals mit der Gabel einstechen, mit Öl und Salz einreiben und 45 bis 50 Minuten backen, bis sie weich sind.","Quark mit Milch, gehackten Kräutern, Salz und Pfeffer verrühren.","Kartoffeln der Länge nach einschneiden, leicht aufdrücken und mit etwas Käse füllen. 5 Minuten zurück in den Ofen, bis der Käse schmilzt.","Kräuterquark darübergeben und mit Salat oder Gurkenscheiben servieren."],
+    tip:"Die Kinder dürfen den Quark mit dem Löffel in die Kartoffeln füllen. Vorsicht, die Kartoffeln sind sehr heiß."
+  },
+  ruehrei:{
+    title:"Rührei mit Brötchen, Frischkäse und Gurke", time:"10 Min.", portions:"3 Personen",
+    ingredients:["6 Eier","3 EL Milch","Salz","1 TL Butter","3 Brötchen","Frischkäse","1/2 Gurke oder Kohlrabi, in Scheiben"],
+    steps:["Eier mit Milch und etwas Salz verquirlen.","Butter in einer Pfanne bei mittlerer bis niedriger Hitze schmelzen, Eier hineingießen.","Mit dem Pfannenwender langsam von außen nach innen schieben, bis das Ei gerade stockt, aber noch cremig ist.","Brötchen aufschneiden, mit Frischkäse bestreichen, Gurkenscheiben und Rührei dazugeben."],
+    tip:"Nicht zu heiß braten, dann bleibt das Rührei saftig."
+  },
+  auflauf:{
+    title:"Nudelauflauf mit TK-Gemüse (doppelte Menge)", time:"35 Min. (davon 10 Min. aktiv)", portions:"6 Portionen: Sonntag und Montag",
+    ingredients:["500 g Nudeln (Penne oder Fusilli)","600 g TK-Gemüsemischung","4 Eier","300 ml Milch","200 g geriebener Käse","1 Prise Muskat, Salz, Pfeffer","Butter für die Form"],
+    steps:["Ofen auf 200 °C vorheizen. Nudeln 2 Minuten kürzer kochen als auf der Packung angegeben, abgießen.","Das TK-Gemüse ohne Auftauen kurz in kochendes Wasser geben und abgießen, oder direkt mit den Nudeln im letzten Moment ins Kochwasser geben.","Eier mit Milch, der Hälfte des Käses, Salz, Pfeffer und Muskat verquirlen.","Nudeln und Gemüse in eine gefettete Auflaufform geben, die Eiermilch darübergießen und alles vorsichtig vermischen.","Mit dem restlichen Käse bestreuen und 25 Minuten goldbraun backen."],
+    tip:"Die Hälfte am Sonntag essen, die andere Hälfte abgedeckt in den Kühlschrank stellen. Am Montag in der Mikrowelle oder 15 Minuten im Ofen aufwärmen."
+  },
+  tomatensuppe:{
+    title:"Tomatensuppe mit Käsetoast", time:"25 Min.", portions:"3 Personen",
+    ingredients:["1 Zwiebel","1 Knoblauchzehe","1 EL Öl","2 Packungen Passata (1 l)","200 ml Gemüsebrühe","2 EL Frischkäse","Salz, Pfeffer, Prise Zucker","6 Scheiben Toastbrot","Käse (Scheiben oder gerieben)","Butter"],
+    steps:["Zwiebel und Knoblauch fein würfeln und im Öl 3 Minuten andünsten.","Passata und Brühe dazugeben, mit Salz, Pfeffer und einer Prise Zucker würzen und 10 Minuten köcheln.","Frischkäse einrühren, bis die Suppe cremig ist. Wer mag, püriert sie kurz.","Währenddessen Toast mit Käse belegen, mit einer zweiten Scheibe abdecken, außen mit Butter bestreichen und in der Pfanne von beiden Seiten goldbraun braten. Diagonal teilen.","Suppe in Schalen füllen und den Käsetoast zum Eintauchen dazu reichen."],
+    tip:"Der Käsetoast schmeckt auch im Ofen: 8 Minuten bei 200 °C, einmal wenden."
+  },
+  gnocchi:{
+    title:"Gnocchi-Pfanne mit Gemüse und Käse", time:"20 Min.", portions:"3 Personen",
+    ingredients:["500 g Gnocchi","300 g TK-Gemüsemischung","1 Zwiebel","1 EL Butter oder Öl","100 ml Gemüsebrühe","100 g geriebener Käse","Salz, Pfeffer"],
+    steps:["Butter in einer großen Pfanne erhitzen, Gnocchi darin 5 bis 6 Minuten rundherum goldbraun anbraten, dann herausnehmen.","Zwiebel würfeln und in derselben Pfanne anbraten, TK-Gemüse dazugeben und 5 Minuten mitbraten.","Mit der Brühe ablöschen, Gnocchi zurück in die Pfanne geben und 2 Minuten ziehen lassen.","Mit Salz und Pfeffer abschmecken, Käse darüberstreuen, Deckel auflegen und 2 Minuten schmelzen lassen."],
+    tip:"Gnocchi direkt aus der Packung in die Pfanne geben, vorheriges Kochen ist nicht nötig."
+  },
+  couscous:{
+    title:"Couscous mit Feta, Gurke und Tomate", time:"15 Min.", portions:"3 Personen",
+    ingredients:["200 g Couscous","250 ml heiße Gemüsebrühe","1 Gurke, gewürfelt","200 g Tomaten oder Cherrytomaten, gewürfelt","100 g Feta","1 EL Öl, 1 EL Zitronensaft (optional)","Salz, Pfeffer, Kräuter"],
+    steps:["Couscous in eine Schüssel geben, mit der heißen Brühe übergießen, abdecken und 5 Minuten quellen lassen.","Mit einer Gabel auflockern und mit Öl und Zitronensaft mischen.","Gurke, Tomaten und zerbröselten Feta unterheben.","Mit Salz, Pfeffer und Kräutern abschmecken."],
+    tip:"Schmeckt auch kalt und lässt sich gut für die Brotdose vorbereiten."
+  },
+  reispfanne:{
+    title:"Gemüse-Reis-Pfanne mit Ei", time:"25 Min.", portions:"3 Personen",
+    ingredients:["200 g Basmatireis","300 g TK-Gemüsemischung","2 Karotten, klein gewürfelt","1 Zwiebel","3 Eier","2 EL Öl","2 bis 3 EL Sojasauce","1 TL Honig (optional)"],
+    steps:["Reis nach Packungsanleitung kochen, am besten schon vorher oder am Vortag, dann wird er körniger.","Zwiebel und Karotten in Öl 5 Minuten braten, TK-Gemüse dazugeben und weitere 5 Minuten braten.","Das Gemüse an den Rand schieben, Eier in die Mitte schlagen und unter Rühren stocken lassen.","Reis dazugeben, alles gut mischen, mit Sojasauce und Honig würzen und 3 Minuten durchbraten."],
+    tip:"Für Kinder die Sojasauce zunächst sparsam dosieren und am Tisch bei Bedarf nachwürzen."
+  }
+};
+
+/* ---------- Plan ---------- */
+const PLAN = {
+  "Freitag":[["Müsli mit Joghurt und Banane"],["Gemüse-Quesadillas mit Mais und Paprika, Joghurt-Dip","quesadilla"],["Obst und Reiswaffeln"],["Pasta mit Tomatensauce und TK-Erbsen","pasta"]],
+  "Samstag":[["Pfannkuchen mit Banane und Apfelmus","pfannkuchen"],["Käse-Wraps mit Gurke, Mais und Paprika","wraps"],["Naturjoghurt mit Honig"],["Gefüllte Ofenkartoffeln mit Kräuterquark und Käse","ofenkartoffel"]],
+  "Sonntag":[["Brötchen mit Frischkäse, Rührei und Gurke","ruehrei"],["Nudelauflauf mit TK-Gemüse (doppelte Menge)","auflauf"],["Gemüsesticks mit Hummus"],["Tomatensuppe mit Käsetoast","tomatensuppe"]],
+  "Montag":[["Toast mit Frischkäse und Marmelade"],["Nudelauflauf von gestern","auflauf"],["Karottensticks mit Hummus"],["Gnocchi-Pfanne mit TK-Gemüse und Käse","gnocchi"]],
+  "Dienstag":[["Knuspermüsli mit Milch"],["Couscous mit Feta, Gurke und Tomate","couscous"],["Banane und Trauben"],["Gemüse-Reis-Pfanne mit Ei","reispfanne"]]
+};
+const LABELS = ["Frühstück","Mittagessen","Snack","Abendessen"];
+
+const LIST = {
+  "Obst und Gemüse":["Bananen: 8","Äpfel: 4","Weintrauben: 400 g","Gurken: 3","Paprika: 3","Tomaten / Cherrytomaten: 500 g","Karotten: 800 g","Kohlrabi: 1","Salat: 1 Kopf (optional)","Kartoffeln, mehligkochend: 6 Stück","Zwiebeln: 3","Knoblauch: 1 Knolle","Kräuter (Schnittlauch, Petersilie): je 1 Bund"],
+  "Milchprodukte und Eier":["Milch: 3 l","Naturjoghurt: 1 kg","Quark: 500 g","Frischkäse: 400 g","Geriebener Käse / Gouda: 600 g","Feta: 200 g","Eier: 16","Butter: 1 Packung"],
+  "Trockenwaren und Brot":["Spaghetti: 500 g","Nudeln für den Auflauf: 500 g","Gnocchi: 500 g","Couscous: 250 g","Basmatireis: 400 g","Knuspermüsli: 1 Packung","Reiswaffeln: 1 Packung","Tortillas: 1 Packung (8 Stück)","Toastbrot: 1 Packung","Brötchen: 6","Passata / stückige Tomaten: 3 × 500 g","Mais (Dose): 2","Apfelmus: 1 Glas"],
+  "Kühlregal":["Hummus: 200–250 g"],
+  "Tiefkühl":["Erbsen: 450 g","Gemüsemischung: 1,2 kg"]
+};
+
+
+
+Object.assign(RECIPES,{
+kartoffelsuppe:{ico:"🥣",title:"Kartoffelsuppe mit Karotte und Lauch",time:"30 Min.",portions:"3 Personen",
+ ingredients:["600 g Kartoffeln","2 Karotten","1 Stange Lauch","1 Zwiebel","1 EL Öl","700 ml Gemüsebrühe","2 EL Frischkäse","Salz, Pfeffer, Muskat, Petersilie"],
+ steps:["Kartoffeln, Karotten und Lauch klein schneiden, Zwiebel würfeln.","Zwiebel und Lauch im Öl 3 Minuten andünsten, Kartoffeln, Karotten und Brühe dazugeben.","20 Minuten weich kochen, mit dem Stabmixer grob pürieren (ein Teil darf stückig bleiben).","Frischkäse einrühren, mit Salz, Pfeffer und Muskat abschmecken und mit Petersilie servieren."],
+ tip:"Mit Käsewürfeln oder Brot zum Dippen wird die Suppe sättigender."},
+linsen_eintopf:{ico:"🍲",title:"Linsen-Gemüse-Eintopf",time:"35 Min.",portions:"3 Personen",
+ ingredients:["200 g rote Linsen","2 Karotten","150 g Sellerie","1 Zwiebel","1 EL Öl","1 EL Tomatenmark","800 ml Gemüsebrühe","1 TL mildes Paprikapulver","Salz, Pfeffer, Schuss Essig"],
+ steps:["Karotten, Sellerie und Zwiebel klein würfeln und im Öl 5 Minuten anbraten.","Tomatenmark und Paprikapulver kurz mitrösten, Linsen und Brühe dazugeben.","20 Minuten köcheln lassen, bis die Linsen zerfallen und alles weich ist.","Mit Salz, Pfeffer und einem Schuss Essig abschmecken."],
+ tip:"Rote Linsen müssen nicht eingeweicht werden und kochen schnell weich."},
+rotkohl:{ico:"🥬",title:"Rotkohl-Apfel-Gemüse mit Semmelknödeln",time:"40 Min.",portions:"3 Personen",
+ ingredients:["500 g Rotkohl","2 Äpfel","1 Zwiebel","1 EL Butter","100 ml Apfelsaft","2 EL Essig","1 EL Zucker","Salz","1 Packung Semmelknödel im Kochbeutel (6 Stück)"],
+ steps:["Rotkohl fein hobeln, Zwiebel würfeln, Äpfel in Stücke schneiden.","Zwiebel in Butter anbraten, Kohl und Äpfel dazugeben, mit Apfelsaft, Essig, Zucker und Salz würzen.","Zugedeckt 25 bis 30 Minuten weich schmoren, dabei ab und zu umrühren.","Die Knödel nach Packungsanleitung zubereiten und mit dem Rotkohl servieren."],
+ tip:"Rotkohl schmeckt aufgewärmt noch besser, also gern die doppelte Menge kochen."},
+kraut_nudeln:{ico:"🥬",title:"Weißkohl-Nudel-Pfanne",time:"25 Min.",portions:"3 Personen",
+ ingredients:["300 g Bandnudeln","400 g Weißkohl","1 Zwiebel","2 EL Öl","1 TL Zucker","100 ml Gemüsebrühe","2 EL Frischkäse","Salz, Pfeffer, geriebener Käse"],
+ steps:["Nudeln in Salzwasser kochen.","Weißkohl in feine Streifen schneiden, Zwiebel würfeln.","Zucker im Öl leicht bräunen, Zwiebel und Kohl 8 Minuten kräftig anbraten, mit Brühe ablöschen.","Nudeln und Frischkäse unterheben, mit Salz und Pfeffer würzen und Käse darüberstreuen."],
+ tip:"Der Kohl wird durch das Anbraten süßlich und milder, das mögen auch Kinder."},
+spinat_nudeln:{ico:"🍝",title:"Spinat-Frischkäse-Nudeln",time:"20 Min.",portions:"3 Personen",
+ ingredients:["300 g Nudeln","300 g TK-Blattspinat","1 Zwiebel","1 Knoblauchzehe","1 EL Öl","150 g Frischkäse","100 ml Milch","Salz, Pfeffer, Muskat, geriebener Käse"],
+ steps:["Nudeln in Salzwasser kochen.","Zwiebel und Knoblauch im Öl andünsten, den Spinat dazugeben und zugedeckt auftauen und erhitzen.","Frischkäse und Milch einrühren, mit Salz, Pfeffer und Muskat abschmecken.","Nudeln untermischen und mit Käse servieren."],
+ tip:"Mit dem Stabmixer pürieren, wenn der Spinat die Kinder stört. Dann ist die Sauce schön grün und glatt."},
+blumenkohl_gratin:{ico:"🧀",title:"Blumenkohl-Käse-Gratin mit Brot",time:"40 Min.",portions:"3 Personen",
+ ingredients:["1 Blumenkohl (ca. 700 g)","1 EL Butter","1 EL Mehl","300 ml Milch","120 g geriebener Käse","Salz, Pfeffer, Muskat","Brot zum Servieren"],
+ steps:["Ofen auf 200 °C vorheizen. Blumenkohl in Röschen teilen und 5 Minuten in Salzwasser vorkochen, abtropfen lassen.","Butter schmelzen, Mehl einrühren, nach und nach die Milch zugeben und unter Rühren aufkochen. Mit Salz, Pfeffer und Muskat würzen, die Hälfte des Käses einrühren.","Blumenkohl in eine Auflaufform geben, Sauce darübergießen, mit dem restlichen Käse bestreuen.","20 Minuten goldbraun überbacken und mit Brot servieren."],
+ tip:"Auch Brokkoli passt in das Gratin, einfach die Hälfte austauschen."},
+curry:{ico:"🍛",title:"Süßkartoffel-Kichererbsen-Curry mit Reis",time:"30 Min.",portions:"3 Personen",
+ ingredients:["400 g Süßkartoffel","1 Dose Kichererbsen","1 Zwiebel","1 EL Öl","1 Dose stückige Tomaten (400 g)","100 ml Kokosmilch","1 TL mildes Currypulver","200 g Reis","Salz"],
+ steps:["Reis nach Packungsanleitung kochen.","Süßkartoffel in kleine Würfel schneiden, Zwiebel würfeln und beides im Öl 5 Minuten anbraten.","Currypulver kurz mitrösten, Tomaten, Kokosmilch und abgespülte Kichererbsen dazugeben.","15 Minuten köcheln lassen, bis die Süßkartoffel weich ist, mit Salz abschmecken und mit dem Reis servieren."],
+ tip:"Das Curry ist bewusst mild gewürzt und lässt sich am Tisch nachwürzen."},
+karotten_suppe:{ico:"🥕",title:"Karotten-Kokos-Suppe mit Käsebrot",time:"25 Min.",portions:"3 Personen",
+ ingredients:["600 g Karotten","1 Zwiebel","1 EL Öl","600 ml Gemüsebrühe","100 ml Kokosmilch","Salz, Pfeffer","Brot und Käse für das Käsebrot"],
+ steps:["Karotten schälen und in Scheiben schneiden, Zwiebel würfeln.","Zwiebel im Öl andünsten, Karotten und Brühe dazugeben und 15 Minuten weich kochen.","Kokosmilch zugeben, alles fein pürieren und mit Salz und Pfeffer abschmecken.","Brot mit Käse belegen und kurz im Ofen oder Toaster überbacken."],
+ tip:"Statt Kokosmilch geht auch 2 EL Frischkäse, das schmeckt ebenfalls cremig."},
+lauch_quiche:{ico:"🥧",title:"Lauch-Käse-Quiche mit Feldsalat",time:"50 Min. (15 Min. aktiv)",portions:"3 Personen",
+ ingredients:["1 Rolle Quiche- oder Mürbeteig aus dem Kühlregal","2 Stangen Lauch","3 Eier","200 ml Milch","100 g Frischkäse","120 g geriebener Käse","Salz, Pfeffer, Muskat","100 g Feldsalat"],
+ steps:["Ofen auf 200 °C vorheizen, Teig in eine Form legen und mit der Gabel mehrmals einstechen.","Lauch in Ringe schneiden und 5 Minuten in etwas Öl dünsten.","Eier, Milch, Frischkäse und Käse verrühren, mit Salz, Pfeffer und Muskat würzen.","Lauch auf dem Teig verteilen, Eiermilch darübergießen und 30 Minuten backen.","Mit Feldsalat servieren."],
+ tip:"Feldsalat vorher gründlich waschen, denn er sitzt oft voller Sand."},
+kaesespaetzle:{ico:"🧀",title:"Käsespätzle mit Röstzwiebeln und Apfelmus",time:"25 Min.",portions:"3 Personen",
+ ingredients:["500 g Spätzle aus dem Kühlregal","200 g geriebener Käse","2 Zwiebeln","1 EL Butter","Salz, Pfeffer","Apfelmus zum Servieren"],
+ steps:["Zwiebeln in Ringe schneiden und in Butter 10 Minuten goldbraun braten.","Spätzle in einer großen Pfanne mit etwas Wasser erhitzen.","Käse in Lagen unterheben und schmelzen lassen, mit Pfeffer würzen.","Mit den Röstzwiebeln bestreuen und das Apfelmus dazu reichen."],
+ tip:"Das Apfelmus dazu ist ein klassischer Begleiter und bringt Fruchtigkeit."},
+rote_bete_risotto:{ico:"🍚",title:"Rote-Bete-Risotto mit Parmesan",time:"35 Min.",portions:"3 Personen",
+ ingredients:["250 g Risottoreis","250 g vorgegarte Rote Bete","1 Zwiebel","1 EL Butter","800 ml heiße Gemüsebrühe","40 g Parmesan","2 EL Frischkäse","Salz, Pfeffer"],
+ steps:["Zwiebel würfeln und in Butter glasig dünsten, den Reis kurz mitbraten.","Heiße Brühe kellenweise zugeben (in einem Topf auf der zweiten Platte heiß halten) und unter Rühren etwa 18 Minuten garen.","Rote Bete fein pürieren und in den letzten 5 Minuten unterrühren.","Parmesan und Frischkäse einrühren und abschmecken."],
+ tip:"Das Risotto wird knallpink, was Kinder oft begeistert. Rote Bete färbt beim Schneiden ab, am besten Handschuhe tragen."},
+karotten_bratlinge:{ico:"🥕",title:"Karotten-Käse-Bratlinge mit Kräuterquark",time:"30 Min.",portions:"3 Personen",
+ ingredients:["400 g Karotten","1 Zwiebel","2 Eier","100 g geriebener Käse","4 EL Semmelbrösel","3 EL Mehl","Salz, Pfeffer, Öl zum Braten","250 g Quark","Kräuter, Brot"],
+ steps:["Karotten fein raspeln, Zwiebel würfeln und beides mit Eiern, Käse, Semmelbröseln und Mehl mischen. Mit Salz und Pfeffer würzen.","Kleine Bratlinge formen und in heißem Öl 3 bis 4 Minuten pro Seite goldbraun braten.","Quark mit gehackten Kräutern und Salz verrühren.","Bratlinge mit Quark und Brot servieren."],
+ tip:"Der Teig lässt sich gut vorbereiten und die Bratlinge schmecken auch kalt in der Brotdose."},
+lasagne_pilz:{ico:"🍄",title:"Gemüselasagne mit Champignons",time:"60 Min. (25 Min. aktiv)",portions:"3 Personen",
+ ingredients:["250 g Champignons","2 Karotten","1 Zwiebel","1 Packung Passata (500 g)","ca. 9 Lasagneplatten","2 EL Butter","2 EL Mehl","500 ml Milch","150 g geriebener Käse","Salz, Pfeffer, Oregano"],
+ steps:["Pilze, Karotten und Zwiebel fein würfeln, in Öl 8 Minuten anbraten, Passata zugeben und 10 Minuten köcheln lassen. Würzen.","Für die Sauce Butter schmelzen, Mehl einrühren, Milch nach und nach zugeben und aufkochen. Mit Salz und Muskat abschmecken.","Ofen auf 190 °C vorheizen. Abwechselnd Tomatensauce, Platten und weiße Sauce in eine Form schichten, mit Käse abschließen.","35 Minuten backen und 5 Minuten ruhen lassen."],
+ tip:"Pilze ganz fein hacken, dann fallen sie in der Sauce kaum auf."},
+gnocchi_pilz:{ico:"🍄",title:"Gnocchi mit Pilz-Rahmsauce und Erbsen",time:"20 Min.",portions:"3 Personen",
+ ingredients:["500 g Gnocchi","250 g Champignons","1 Zwiebel","1 EL Butter","150 g Frischkäse","100 ml Milch","100 g TK-Erbsen","Salz, Pfeffer, Petersilie"],
+ steps:["Gnocchi nach Packungsanleitung in Salzwasser garen, abgießen.","Zwiebel und in Scheiben geschnittene Pilze in Butter 6 Minuten kräftig anbraten.","Frischkäse, Milch und Erbsen zugeben und 3 Minuten köcheln.","Gnocchi unterheben, mit Salz und Pfeffer würzen und mit Petersilie servieren."],
+ tip:"Alternativ die Gnocchi extra in der Pfanne anbraten, dann werden sie außen knusprig."},
+pilz_risotto:{ico:"🍄",title:"Champignon-Risotto mit Erbsen",time:"35 Min.",portions:"3 Personen",
+ ingredients:["250 g Risottoreis","250 g Champignons","1 Zwiebel","1 EL Butter","800 ml heiße Gemüsebrühe","100 g TK-Erbsen","40 g Parmesan","Salz, Pfeffer"],
+ steps:["Pilze in Scheiben schneiden und in Butter kräftig anbraten, herausnehmen.","Zwiebel würfeln, andünsten, Reis kurz mitbraten und mit heißer Brühe kellenweise 18 Minuten garen (die Brühe in einem Topf auf der zweiten Platte heiß halten).","Pilze und Erbsen in den letzten 5 Minuten unterrühren.","Parmesan einrühren und mit Salz und Pfeffer abschmecken."],
+ tip:"Mit kleinen Pilzwürfeln statt Scheiben fällt der Pilzgeschmack milder aus."},
+pilz_pasta:{ico:"🍝",title:"Spaghetti mit Pilz-Tomatensauce",time:"25 Min.",portions:"3 Personen",
+ ingredients:["300 g Spaghetti","250 g Champignons","1 Zwiebel","1 Knoblauchzehe","1 EL Öl","1 Packung Passata (500 g)","Salz, Pfeffer, Oregano, geriebener Käse"],
+ steps:["Spaghetti in Salzwasser kochen.","Pilze sehr fein hacken, Zwiebel und Knoblauch würfeln und alles im Öl 8 Minuten anbraten.","Passata zugeben, würzen und 10 Minuten köcheln lassen.","Mit den Nudeln mischen und Käse darüberstreuen."],
+ tip:"Fein gehackt schmecken die Pilze wie eine herzhafte Hackfleisch-Alternative."},
+pilz_quiche:{ico:"🥧",title:"Pilz-Spinat-Quiche",time:"50 Min. (15 Min. aktiv)",portions:"3 Personen",
+ ingredients:["1 Rolle Quiche- oder Mürbeteig","200 g Champignons","150 g TK-Blattspinat, aufgetaut und ausgedrückt","3 Eier","200 ml Milch","100 g Frischkäse","100 g geriebener Käse","Salz, Pfeffer, Muskat"],
+ steps:["Ofen auf 200 °C vorheizen, Teig in die Form legen und einstechen.","Pilze in Scheiben schneiden und in einer Pfanne 5 Minuten anbraten, Spinat untermischen.","Eier, Milch, Frischkäse und Käse verrühren, würzen.","Pilz-Spinat-Mischung auf dem Teig verteilen, Eiermilch darübergießen und 30 Minuten backen."],
+ tip:"Schmeckt lauwarm und kalt, deshalb gut für den nächsten Tag."},
+pilz_pfanne:{ico:"🍄",title:"Bandnudeln mit Champignon-Lauch-Sauce",time:"25 Min.",portions:"3 Personen",
+ ingredients:["300 g Bandnudeln","250 g Champignons","1 Stange Lauch","1 Zwiebel","1 EL Öl","150 g Frischkäse","100 ml Gemüsebrühe","Salz, Pfeffer, Petersilie"],
+ steps:["Nudeln in Salzwasser kochen.","Pilze, Lauch und Zwiebel klein schneiden und 8 Minuten im Öl anbraten.","Brühe und Frischkäse einrühren und 3 Minuten köcheln lassen.","Mit den Nudeln mischen und mit Petersilie servieren."],
+ tip:"Lauch gründlich waschen, damit kein Sand in der Sauce landet."},
+pastinaken_puere:{ico:"🍳",title:"Pastinaken-Karotten-Püree mit Spiegelei und Spinat",time:"30 Min.",portions:"3 Personen",
+ ingredients:["400 g Pastinaken","300 g Karotten","1 EL Butter","ca. 150 ml Milch","200 g TK-Blattspinat","3 Eier","Salz, Muskat"],
+ steps:["Pastinaken und Karotten schälen, würfeln und in Salzwasser 15 Minuten weich kochen (Herdplatte 1).","Abgießen, mit Butter und Milch zu einem cremigen Püree stampfen, mit Salz und Muskat würzen. Mit Deckel warm halten, die Platte kann aus.","Spinat in einer Pfanne erhitzen und würzen (Herdplatte 1).","Gleichzeitig Spiegeleier in einer zweiten Pfanne braten (Herdplatte 2) und alles zusammen anrichten."],
+ tip:"Pastinaken schmecken leicht süß und sind eine gute Alternative zum Kartoffelpüree."},
+kohlrabi_schnitzel:{ico:"🥬",title:"Panierte Kohlrabi-Schnitzel mit Reis und Dip",time:"35 Min.",portions:"3 Personen",
+ ingredients:["2 große Kohlrabi","2 Eier","5 EL Mehl","8 EL Semmelbrösel","Salz, 2 EL Öl","200 g Reis","Dip: 150 g Joghurt, Schnittlauch, Salz"],
+ steps:["Reis nach Packungsanleitung kochen (Herdplatte 1).","Kohlrabi schälen, in 1 cm dicke Scheiben schneiden und 8 Minuten in Salzwasser vorgaren (Herdplatte 2), dann abtropfen lassen.","Scheiben nacheinander in Mehl, verquirltem Ei und Semmelbröseln wenden und mit etwas Öl beträufeln.","Im Airfryer bei 190 °C 10 bis 12 Minuten goldbraun backen, nach der Hälfte wenden. Bei Bedarf in zwei Portionen.","Joghurt mit Schnittlauch und Salz verrühren und dazu reichen."],
+ tip:"Ein echter Kinderfavorit, denn die Kohlrabi sind unter der Panade kaum als Gemüse erkennbar."},
+kaiserschmarrn:{ico:"🥞",title:"Kaiserschmarrn mit Apfelkompott",time:"30 Min.",portions:"3 Personen",
+ ingredients:["200 g Mehl","4 Eier","400 ml Milch","1 EL Zucker","1 Prise Salz","2 EL Butter","Puderzucker","Kompott: 3 Äpfel, 1 EL Zucker, Zimt, 50 ml Wasser"],
+ steps:["Äpfel würfeln und mit Zucker, Zimt und Wasser 10 Minuten weich kochen.","Mehl, Eier, Milch, Zucker und Salz zu einem glatten Teig verrühren.","Butter in einer großen Pfanne erhitzen, den Teig hineingeben und bei mittlerer Hitze stocken lassen.","Wenden, mit zwei Gabeln in Stücke reißen und kurz weiterbraten.","Mit Puderzucker bestäuben und mit dem Kompott servieren."],
+ tip:"Hält sich gut warm im Ofen bei 80 °C, bis alle am Tisch sind."},
+gemuesesuppe:{ico:"🍜",title:"Gemüsesuppe mit Nudeln",time:"30 Min.",portions:"3 Personen",
+ ingredients:["3 Karotten","150 g Sellerie","1 Stange Lauch","1 Zwiebel","1 EL Öl","1 l Gemüsebrühe","100 g Suppennudeln","Salz, Petersilie"],
+ steps:["Gemüse schälen und in kleine Würfel oder Scheiben schneiden.","Zwiebel im Öl andünsten, Gemüse kurz mitbraten, Brühe angießen.","15 Minuten köcheln lassen, dann die Nudeln zugeben und nach Packungsanleitung garen.","Mit Salz abschmecken und mit Petersilie servieren."],
+ tip:"Kleine Gemüsewürfel sind für den Fünfjährigen leichter zu essen."},
+linsen_bolo:{ico:"🍝",title:"Linsen-Bolognese mit Spaghetti",time:"35 Min.",portions:"3 Personen",
+ ingredients:["300 g Spaghetti","150 g rote Linsen","1 Karotte, fein gerieben","1 Zwiebel","1 Knoblauchzehe","1 EL Öl","1 Packung Passata (500 g)","200 ml Gemüsebrühe","Oregano, Salz, Pfeffer, geriebener Käse"],
+ steps:["Zwiebel und Knoblauch würfeln und im Öl anbraten, Karotte kurz mitbraten.","Linsen, Passata und Brühe zugeben, würzen und 20 Minuten köcheln lassen, bis eine dickliche Sauce entsteht.","Spaghetti in Salzwasser kochen.","Nudeln mit der Sauce servieren und Käse darüberstreuen."],
+ tip:"Die Sauce lässt sich gut einfrieren, am besten gleich die doppelte Menge machen."},
+frittata:{ico:"🍳",title:"Gemüse-Frittata mit Brokkoli und Karotte",time:"25 Min.",portions:"3 Personen",
+ ingredients:["6 Eier","100 ml Milch","1 kleiner Brokkoli (250 g)","1 Karotte","1 Zwiebel","80 g geriebener Käse","1 EL Öl","Salz, Pfeffer, Brot"],
+ steps:["Brokkoli in kleine Röschen teilen, Karotte raspeln, Zwiebel würfeln. Alles 6 Minuten im Öl anbraten.","Eier mit Milch, Käse, Salz und Pfeffer verquirlen und über das Gemüse gießen.","Zugedeckt bei niedriger Hitze 10 Minuten stocken lassen, bis die Oberfläche fest ist.","In Stücke schneiden und mit Brot servieren."],
+ tip:"Schmeckt auch kalt als Brotdosen-Snack."},
+dal:{ico:"🍛",title:"Rote-Linsen-Dal mit Reis",time:"30 Min.",portions:"3 Personen",
+ ingredients:["200 g rote Linsen","1 Zwiebel","1 Knoblauchzehe","1 Karotte","1 EL Öl","1 TL mildes Currypulver","2 EL Tomatenmark","600 ml Gemüsebrühe","200 g Reis","Salz"],
+ steps:["Reis kochen.","Zwiebel, Knoblauch und geraspelte Karotte im Öl anbraten, Curry und Tomatenmark kurz mitrösten.","Linsen und Brühe zugeben und 15 Minuten köcheln, bis ein cremiger Brei entsteht.","Mit Salz abschmecken und mit Reis servieren."],
+ tip:"Etwas Joghurt obendrauf macht das Dal milder."},
+tortellini:{ico:"🍝",title:"Käse-Tortellini mit Brokkoli-Sauce",time:"20 Min.",portions:"3 Personen",
+ ingredients:["500 g Käse-Tortellini (Kühlregal)","1 Brokkoli (300 g)","1 Zwiebel","1 EL Butter","150 g Frischkäse","Salz, Pfeffer, Parmesan"],
+ steps:["Brokkoli in kleine Röschen teilen und in einem Topf mit Salzwasser 4 Minuten kochen, dann herausnehmen.","Im selben Wasser die Tortellini nach Packungsanleitung garen.","Zwiebel in Butter andünsten, Frischkäse und 4 EL Kochwasser einrühren, Brokkoli zugeben.","Tortellini mit der Sauce mischen und mit Parmesan servieren."],
+ tip:"Brokkoli mit dem Stabmixer kurz pürieren, falls die Kinder die Röschen nicht mögen."},
+flammkuchen:{ico:"🧅",title:"Flammkuchen mit Lauch und Käse",time:"25 Min.",portions:"3 Personen",
+ ingredients:["4 Tortillas oder 1 Flammkuchenteig","200 g Frischkäse","2 EL Milch","1 Stange Lauch","1 Zwiebel","120 g geriebener Käse","Salz, Pfeffer, Muskat"],
+ steps:["Ofen auf 220 °C vorheizen.","Frischkäse mit Milch, Salz, Pfeffer und Muskat glatt rühren.","Lauch in dünne Ringe, Zwiebel in feine Ringe schneiden.","Tortillas auf ein Blech legen, mit der Creme bestreichen, mit Lauch, Zwiebel und Käse belegen.","8 bis 10 Minuten knusprig backen."],
+ tip:"Mit Tortillas geht es schneller als mit Hefeteig und wird trotzdem knusprig."},
+ofengemuese:{ico:"🥕",title:"Ofengemüse mit Kräuterquark",time:"45 Min. (10 Min. aktiv)",portions:"3 Personen",
+ ingredients:["3 Karotten","2 Pastinaken","2 Rote Bete (vorgegart oder roh)","1 Zwiebel","3 EL Öl","Salz, Thymian","Quark: 250 g Quark, Kräuter, 2 EL Milch, Salz","Brot"],
+ steps:["Ofen auf 200 °C vorheizen.","Gemüse schälen und in gleichmäßige Stücke schneiden, mit Öl, Salz und Thymian mischen.","Auf einem Blech 30 bis 35 Minuten rösten, einmal wenden.","Quark mit Kräutern, Milch und Salz verrühren und mit dem Gemüse und Brot servieren."],
+ tip:"Rote Bete färbt alles ein, am besten auf ein eigenes Blech legen."},
+bratkartoffel:{ico:"🍳",title:"Bratkartoffeln mit Spiegelei und Feldsalat",time:"30 Min.",portions:"3 Personen",
+ ingredients:["700 g Kartoffeln, am besten vom Vortag gekocht","1 Zwiebel","2 EL Öl","Salz","3 Eier","100 g Feldsalat","1 EL Essig, 1 EL Öl für das Dressing"],
+ steps:["Gekochte Kartoffeln in Scheiben schneiden.","In heißem Öl 12 bis 15 Minuten goldbraun braten, Zwiebelwürfel in den letzten 5 Minuten zugeben und salzen.","Spiegeleier braten.","Feldsalat mit Essig, Öl und Salz anmachen und alles zusammen servieren."],
+ tip:"Wenn die Kartoffeln roh gebraten werden, vorher 10 Minuten in der Mikrowelle oder im Wasser vorgaren."},
+spinat_taschen:{ico:"🥟",title:"Spinat-Feta-Taschen mit Karottensalat",time:"35 Min.",portions:"3 Personen",
+ ingredients:["1 Rolle Blätterteig","250 g TK-Blattspinat, aufgetaut und ausgedrückt","150 g Feta","1 Zwiebel","1 Ei","Salz, Pfeffer, Muskat","Salat: 3 Karotten, 1 Apfel, 1 EL Zitronensaft, 1 EL Öl"],
+ steps:["Ofen auf 200 °C vorheizen.","Spinat mit zerbröseltem Feta, gewürfelter Zwiebel, Salz, Pfeffer und Muskat mischen.","Blätterteig in Quadrate schneiden, Füllung daraufgeben, zu Dreiecken falten und die Ränder festdrücken. Mit verquirltem Ei bestreichen.","20 Minuten goldbraun backen.","Karotten und Apfel raspeln und mit Zitronensaft, Öl und etwas Salz mischen."],
+ tip:"Die Taschen schmecken kalt in der Brotdose."},
+gruenkohl:{ico:"🥬",title:"Grünkohl-Nudeln mit Frischkäse-Sauce",time:"25 Min.",portions:"3 Personen",
+ ingredients:["300 g Nudeln","300 g Grünkohl (TK oder frisch)","1 Zwiebel","1 EL Butter","150 g Frischkäse","100 ml Milch","60 g Käse","Salz, Pfeffer, Muskat"],
+ steps:["Nudeln in Salzwasser kochen.","Zwiebel in Butter andünsten, den fein gehackten Grünkohl dazugeben und 8 Minuten weich dünsten.","Frischkäse und Milch einrühren, würzen.","Nudeln untermischen und mit Käse bestreuen."],
+ tip:"Frischen Grünkohl vorher von den harten Stielen befreien und kurz blanchieren."},
+rosenkohl:{ico:"🥬",title:"Rosenkohl-Kartoffel-Gratin",time:"50 Min. (15 Min. aktiv)",portions:"3 Personen",
+ ingredients:["400 g Rosenkohl","500 g Kartoffeln","1 Zwiebel","200 ml Milch","100 g Frischkäse","100 g geriebener Käse","Salz, Pfeffer, Muskat"],
+ steps:["Ofen auf 200 °C vorheizen. Rosenkohl halbieren und 5 Minuten in Salzwasser vorkochen.","Kartoffeln in dünne Scheiben schneiden.","Milch mit Frischkäse, Salz, Pfeffer und Muskat verrühren.","Kartoffeln, Rosenkohl und Zwiebelringe in eine Form schichten, Sauce darübergießen, mit Käse bestreuen.","35 Minuten backen, bis die Kartoffeln weich sind."],
+ tip:"Rosenkohl schmeckt milder, wenn er vorgekocht und mit Käse überbacken wird."},
+wirsing:{ico:"🥬",title:"Wirsing-Reis-Pfanne mit Feta",time:"30 Min.",portions:"3 Personen",
+ ingredients:["200 g Reis","400 g Wirsing","1 Zwiebel","1 EL Öl","100 ml Gemüsebrühe","150 g Feta","Salz, Pfeffer"],
+ steps:["Reis nach Packungsanleitung kochen.","Wirsing in feine Streifen schneiden, Zwiebel würfeln und beides im Öl 8 Minuten anbraten.","Mit Brühe ablöschen und 5 Minuten garen.","Reis untermischen, mit Salz und Pfeffer abschmecken und den Feta darüberbröseln."],
+ tip:"Wirsing ist milder als Weißkohl und lässt sich schnell zubereiten."},
+griess:{ico:"🥣",title:"Grießbrei mit Zimt-Apfel",time:"15 Min.",portions:"3 Personen",
+ ingredients:["600 ml Milch","60 g Weichweizengrieß","1 EL Zucker","1 Prise Salz","1 EL Butter","2 Äpfel","Zimt"],
+ steps:["Milch mit Zucker und Salz aufkochen, den Grieß unter Rühren einrieseln lassen.","Bei kleiner Hitze 3 Minuten quellen lassen, Butter einrühren.","Äpfel würfeln und in einem Topf mit etwas Wasser und Zimt 5 Minuten weich dünsten.","Grießbrei mit den Zimt-Äpfeln servieren."],
+ tip:"Mit etwas mehr Milch wird der Brei flüssiger und kühlt schneller ab."},
+french:{ico:"🍞",title:"French Toast mit Apfelkompott",time:"20 Min.",portions:"3 Personen",
+ ingredients:["6 Scheiben Toastbrot","3 Eier","150 ml Milch","1 EL Zucker","1 Prise Zimt","Butter zum Braten","Kompott: 2 Äpfel, 1 EL Zucker, 50 ml Wasser"],
+ steps:["Äpfel würfeln und mit Zucker und Wasser 8 Minuten zu Kompott kochen.","Eier mit Milch, Zucker und Zimt verquirlen.","Toastscheiben kurz in der Eiermilch wenden.","In Butter von beiden Seiten goldbraun braten und mit dem Kompott servieren."],
+ tip:"Altes Toastbrot saugt die Eiermilch besser auf."},
+polenta:{ico:"🧀",title:"Polenta-Schnitten mit Tomatensauce und Käse",time:"30 Min.",portions:"3 Personen",
+ ingredients:["1 Rolle Fertigpolenta (ca. 500 g)","1 Zwiebel","1 EL Öl","1 Packung Passata (500 g)","120 g geriebener Käse","Salz, Pfeffer, Oregano"],
+ steps:["Zwiebel würfeln, im Öl andünsten, Passata zugeben, würzen und 10 Minuten köcheln lassen.","Polenta in 1 cm dicke Scheiben schneiden und in einer Pfanne von beiden Seiten goldbraun braten.","Scheiben in eine Form legen, Sauce darübergeben, mit Käse bestreuen.","10 Minuten bei 200 °C überbacken."],
+ tip:"Fertigpolenta ist ohne Aufwand verwendbar und kommt auch bei wählerischen Essern gut an."},
+nudelsalat:{ico:"🥗",title:"Nudelsalat mit Mais, Erbsen und Käsewürfeln",time:"20 Min.",portions:"3 Personen",
+ ingredients:["250 g Nudeln (Fusilli)","100 g TK-Erbsen","1 Dose Mais","100 g Käse in Würfeln","1 Karotte, fein gerieben","3 EL Joghurt","2 EL Frischkäse","1 EL Essig","Salz, Pfeffer"],
+ steps:["Nudeln kochen, in den letzten 2 Minuten die Erbsen mitkochen. Abgießen und kalt abspülen.","Joghurt, Frischkäse, Essig, Salz und Pfeffer zu einem Dressing verrühren.","Nudeln mit Mais, Karotte, Käse und Dressing mischen.","15 Minuten durchziehen lassen."],
+ tip:"Schmeckt gut für die Brotdose und hält sich im Kühlschrank einen Tag."}
+});
+
+Object.assign(RECIPES,{
+e_shakshuka:{ico:"🍳",title:"Shakshuka mit Feta und Brot",time:"25 Min.",portions:"2 Personen",eq:"1 Herdplatte (Pfanne)",
+ ingredients:["1 Zwiebel","2 Knoblauchzehen","1 EL Öl","1 TL Kreuzkümmel","1 TL Paprikapulver (am besten geräuchert)","1 Prise Chiliflocken","1 Packung Passata (500 g)","4 Eier","100 g Feta","Salz, Pfeffer, Petersilie","Brot zum Dippen"],
+ steps:["Zwiebel und Knoblauch würfeln und im Öl 4 Minuten anbraten, Gewürze eine Minute mitrösten.","Passata dazugeben, salzen und 8 Minuten einköcheln lassen, bis die Sauce dicklich ist.","Vier Mulden in die Sauce drücken und die Eier hineingleiten lassen. Mit Deckel 6 bis 8 Minuten stocken lassen, das Eiweiß soll fest und das Eigelb weich sein.","Feta darüberbröseln, mit Petersilie bestreuen und mit Brot servieren."],
+ tip:"Für mehr Schärfe Chiliflocken nach Geschmack nachlegen."},
+e_chili:{ico:"🌶️",title:"Bohnen-Chili mit Mais und Joghurt",time:"30 Min.",portions:"2 Personen",eq:"1 Herdplatte (Topf)",
+ ingredients:["1 Zwiebel","2 Karotten","100 g Sellerie","1 EL Öl","1 EL Tomatenmark","1 TL Kreuzkümmel","1 TL Paprikapulver","1/2 TL Chiliflocken","1 Dose Kidneybohnen","1 Dose Mais","1 Packung Passata (500 g)","Salz","4 EL Joghurt","Brot"],
+ steps:["Zwiebel, Karotten und Sellerie klein würfeln und im Öl 6 Minuten anbraten.","Tomatenmark und Gewürze eine Minute mitrösten.","Passata, abgespülte Bohnen, Mais und 100 ml Wasser dazugeben und 15 bis 20 Minuten köcheln lassen.","Mit Salz abschmecken und mit einem Klecks Joghurt und Brot servieren."],
+ tip:"Schmeckt am nächsten Tag noch besser und lässt sich gut einfrieren."},
+e_kichererbsen_curry:{ico:"🍛",title:"Kichererbsen-Spinat-Curry mit Reis",time:"30 Min.",portions:"2 Personen",eq:"2 Herdplatten (Reis und Curry)",
+ ingredients:["120 g Basmatireis","1 Zwiebel","2 Knoblauchzehen","1 Stück Ingwer (2 cm)","1 EL Öl","1 EL Currypulver","1 Dose Kichererbsen","1 Dose stückige Tomaten","100 ml Kokosmilch","150 g TK-Blattspinat","Salz, Chili nach Geschmack"],
+ steps:["Reis nach Packungsanleitung kochen (Herdplatte 1).","Zwiebel, Knoblauch und Ingwer fein hacken und im Öl 4 Minuten anbraten, Curry kurz mitrösten (Herdplatte 2).","Tomaten, Kokosmilch, abgespülte Kichererbsen und den Spinat dazugeben und 12 Minuten köcheln lassen.","Mit Salz und Chili abschmecken und mit dem Reis servieren."],
+ tip:"Ein Spritzer Zitronensaft am Ende macht das Curry frischer."},
+e_aglio:{ico:"🍝",title:"Spaghetti Aglio e Olio mit Chili und Spinat",time:"20 Min.",portions:"2 Personen",eq:"2 Herdplatten (Topf und Pfanne)",
+ ingredients:["200 g Spaghetti","4 Knoblauchzehen","4 EL Olivenöl","1/2 TL Chiliflocken","150 g Blattspinat (frisch oder TK)","1/2 Zitrone (Abrieb und Saft)","40 g Parmesan","Salz"],
+ steps:["Spaghetti in Salzwasser kochen, vor dem Abgießen 100 ml Kochwasser abschöpfen.","Knoblauch in dünne Scheiben schneiden und im Olivenöl bei niedriger Hitze 3 Minuten goldgelb werden lassen, Chili dazugeben.","Spinat in die Pfanne geben und zusammenfallen lassen.","Spaghetti mit etwas Kochwasser in der Pfanne schwenken, Zitrone und Parmesan untermischen."],
+ tip:"Der Knoblauch darf nicht braun werden, sonst wird er bitter."},
+e_tortelloni:{ico:"🥟",title:"Ravioli mit Salbeibutter und Walnüssen",time:"15 Min.",portions:"2 Personen",eq:"2 Herdplatten (Topf und Pfanne)",
+ ingredients:["250 g gefüllte Ravioli oder Tortelloni (Kühlregal, z. B. Ricotta-Spinat)","40 g Butter","8 Salbeiblätter","30 g Walnüsse","Parmesan","Salz, Pfeffer"],
+ steps:["Ravioli nach Packungsanleitung in Salzwasser garen.","Butter in einer Pfanne schmelzen, Salbei und grob gehackte Walnüsse 2 Minuten darin schwenken, bis die Butter nussig duftet.","Ravioli abgießen, in der Salbeibutter wenden und mit Parmesan und Pfeffer servieren."],
+ tip:"Die Butter nur leicht bräunen lassen, nicht dunkel werden lassen."},
+e_flammkuchen_birne:{ico:"🍐",title:"Flammkuchen mit Birne, Walnüssen und Ziegenkäse",time:"20 Min.",portions:"2 Personen",eq:"Backofen oder Airfryer",
+ air:"Je einen Flammkuchen bei 200 °C 5 bis 6 Minuten backen, während der nächste belegt wird.",
+ ingredients:["2 große Tortillas oder 1 Flammkuchenteig","100 g Frischkäse","1 EL Milch","1 Birne","1 kleine rote Zwiebel","80 g Ziegenfrischkäse oder Feta","30 g Walnüsse","1 EL Honig","Salz, Pfeffer, Thymian"],
+ steps:["Ofen auf 220 °C vorheizen.","Frischkäse mit Milch, Salz und Pfeffer glatt rühren und auf die Tortillas streichen.","Birne in dünne Scheiben schneiden, Zwiebel in Ringe. Beides mit Käsestücken, Walnüssen und Thymian auf den Tortillas verteilen.","8 bis 10 Minuten knusprig backen und zum Schluss mit Honig beträufeln."],
+ tip:"Birne und Ziegenkäse passen herbstlich zusammen und schmecken auch kalt."},
+e_ramen:{ico:"🍜",title:"Gemüse-Ramen mit Ei",time:"25 Min.",portions:"2 Personen",eq:"2 Herdplatten (Brühe und Nudeln mit Eiern)",
+ ingredients:["2 Eier","150 g Ramen- oder Mie-Nudeln","600 ml Gemüsebrühe","2 Pak Choi (oder 150 g Spinat)","1 Karotte","1 Stück Ingwer (2 cm)","1 Knoblauchzehe","2 EL Sojasauce","1/2 Dose Mais","1 Frühlingszwiebel","Chiliöl nach Geschmack"],
+ steps:["Eier 7 Minuten in kochendem Wasser garen (Herdplatte 1), kalt abschrecken und schälen. Im selben Wasser die Nudeln nach Packungsanleitung garen und abgießen.","Brühe mit Ingwer, Knoblauch und Sojasauce erhitzen (Herdplatte 2), Karotte in dünnen Scheiben 5 Minuten, Pak Choi 2 Minuten mitgaren.","Nudeln in zwei Schalen geben, Brühe samt Gemüse darübergießen, Eier halbieren und mit Mais und Frühlingszwiebel obenauf legen.","Nach Geschmack mit Chiliöl scharf machen."],
+ tip:"Pak Choi hat im Herbst Saison, Spinat oder Wirsing gehen ebenfalls."},
+e_suesskartoffel:{ico:"🍠",title:"Ofen-Süßkartoffeln mit Kichererbsen und Joghurt-Tahini",time:"45 Min. (10 Min. aktiv)",portions:"2 Personen",eq:"Backofen oder Airfryer",
+ air:"Süßkartoffelwürfel und Kichererbsen bei 190 °C 15 bis 18 Minuten garen, zwischendurch schütteln.",
+ ingredients:["2 Süßkartoffeln (ca. 500 g)","1 Dose Kichererbsen","2 EL Öl","1 TL Paprikapulver","1 TL Kreuzkümmel","Salz","100 g Joghurt","1 EL Tahini","1 TL Zitronensaft","1 Handvoll Feldsalat oder Petersilie"],
+ steps:["Ofen auf 200 °C vorheizen. Süßkartoffeln waschen und in 2 cm große Würfel schneiden, Kichererbsen abspülen und trocken tupfen.","Alles mit Öl, Gewürzen und Salz mischen und auf einem Blech 30 Minuten rösten, einmal wenden.","Joghurt mit Tahini, Zitronensaft und einer Prise Salz verrühren.","Das Ofengemüse mit dem Dip und Feldsalat anrichten."],
+ tip:"Süßkartoffeln müssen nicht geschält werden, die Schale wird beim Rösten knusprig."},
+e_haloumi:{ico:"🧀",title:"Halloumi mit Ofengemüse und Tahini-Joghurt",time:"45 Min. (15 Min. aktiv)",portions:"2 Personen",eq:"Backofen und 1 Herdplatte (Pfanne) oder Airfryer",
+ air:"Halloumi-Scheiben bei 200 °C 6 bis 8 Minuten backen, einmal wenden.",
+ ingredients:["2 Karotten","2 Pastinaken","1 vorgegarte Rote Bete","1 Zwiebel","2 EL Öl","Salz, Thymian","1 Packung Halloumi (225 g)","100 g Joghurt","1 EL Tahini","1 TL Zitronensaft"],
+ steps:["Ofen auf 200 °C vorheizen. Gemüse schälen, in Stücke schneiden und mit Öl, Salz und Thymian auf ein Blech geben.","30 Minuten rösten, einmal wenden.","Halloumi in Scheiben schneiden und in einer Pfanne ohne Fett von beiden Seiten goldbraun braten.","Joghurt mit Tahini, Zitronensaft und Salz verrühren und alles zusammen anrichten."],
+ tip:"Rote Bete färbt alles ein, am besten auf einem eigenen Blech rösten."},
+e_rote_bete_salat:{ico:"🥗",title:"Rote-Bete-Linsen-Salat mit Ziegenkäse",time:"30 Min.",portions:"2 Personen",eq:"1 Herdplatte (Topf)",
+ ingredients:["100 g grüne Linsen","2 vorgegarte Rote Bete","1 Apfel","1 rote Zwiebel","80 g Ziegenfrischkäse oder Feta","30 g Walnüsse","2 EL Essig","2 EL Öl","1 TL Senf","1 TL Honig","Salz, Pfeffer","Feldsalat"],
+ steps:["Linsen nach Packungsanleitung etwa 20 Minuten kochen, abgießen und abkühlen lassen.","Essig, Öl, Senf, Honig, Salz und Pfeffer zu einem Dressing verrühren.","Rote Bete und Apfel würfeln, Zwiebel in feine Ringe schneiden und mit den Linsen und dem Dressing mischen.","Auf Feldsalat anrichten, Käse und gehackte Walnüsse darüberstreuen."],
+ tip:"Der Salat wird nach 30 Minuten Durchziehen noch besser und hält sich einen Tag im Kühlschrank."},
+e_blumenkohl_airfryer:{ico:"🥦",title:"Scharfer Airfryer-Blumenkohl mit Reis und Joghurt-Dip",time:"30 Min.",portions:"2 Personen",eq:"Airfryer und 1 Herdplatte (Reis)",
+ air:"Blumenkohl bei 200 °C 14 bis 16 Minuten garen, einmal schütteln.",
+ ingredients:["1 Blumenkohl (ca. 600 g)","2 EL Öl","1 TL Paprikapulver","1 TL Knoblauchpulver","Salz","2 EL scharfe Chilisauce (z. B. Sriracha)","1 EL Honig","1 EL Butter","120 g Reis","Dip: 100 g Joghurt, 1 TL Zitronensaft, Salz, Schnittlauch"],
+ steps:["Reis nach Packungsanleitung kochen.","Blumenkohl in Röschen teilen und mit Öl, Paprikapulver, Knoblauchpulver und Salz mischen.","Im Airfryer bei 200 °C 14 bis 16 Minuten garen, einmal schütteln.","Chilisauce, Honig und Butter kurz erwärmen, den Blumenkohl darin wenden und 2 Minuten im Airfryer nachbacken.","Joghurt mit Zitronensaft, Salz und Schnittlauch verrühren und alles mit dem Reis anrichten."],
+ tip:"Wer es milder mag, nimmt weniger Chilisauce und etwas mehr Honig."},
+e_rosenkohl_ofen:{ico:"🥬",title:"Ofen-Rosenkohl mit Feta und Honig-Senf-Sauce",time:"40 Min. (10 Min. aktiv)",portions:"2 Personen",eq:"Backofen oder Airfryer",
+ air:"Halbierten Rosenkohl bei 190 °C 12 bis 15 Minuten garen, zwischendurch schütteln.",
+ ingredients:["500 g Rosenkohl","2 EL Öl","Salz, Pfeffer","100 g Feta","1 EL Honig","1 EL Senf","1 EL Essig","100 g Couscous","150 ml heiße Gemüsebrühe","Walnüsse (optional)"],
+ steps:["Ofen auf 220 °C vorheizen. Rosenkohl putzen, halbieren und mit Öl, Salz und Pfeffer mischen.","25 Minuten rösten, bis die Ränder dunkel und knusprig sind.","Couscous mit der heißen Brühe übergießen, abdecken und 5 Minuten quellen lassen.","Honig, Senf und Essig verrühren. Rosenkohl mit Couscous anrichten, Feta darüberbröseln und mit der Sauce beträufeln."],
+ tip:"Beim Rösten verliert Rosenkohl seine Bitterkeit und wird nussig."},
+e_aloo_gobi:{ico:"🍛",title:"Kartoffel-Blumenkohl-Curry (Aloo Gobi)",time:"35 Min.",portions:"2 Personen",eq:"1 Herdplatte (Topf)",
+ ingredients:["300 g Kartoffeln","1/2 Blumenkohl (ca. 300 g)","1 Zwiebel","2 Knoblauchzehen","1 Stück Ingwer (2 cm)","1 EL Öl","1 EL Currypulver","1/2 TL Kurkuma","1 Dose stückige Tomaten","100 ml Wasser","Salz, Chili","Koriander oder Petersilie","Fladenbrot oder Naan"],
+ steps:["Kartoffeln in 2 cm große Würfel schneiden, Blumenkohl in kleine Röschen teilen.","Zwiebel, Knoblauch und Ingwer fein hacken und im Öl 4 Minuten anbraten, Gewürze kurz mitrösten.","Tomaten, Wasser, Kartoffeln und Blumenkohl dazugeben, salzen und zugedeckt 20 Minuten garen, bis alles weich ist.","Mit Chili abschmecken, mit Kräutern bestreuen und mit Fladenbrot servieren."],
+ tip:"Das Fladenbrot lässt sich im Airfryer bei 180 °C in 2 bis 3 Minuten aufbacken."},
+e_gnocchi_gorgonzola:{ico:"🍐",title:"Gnocchi mit Gorgonzola-Birnen-Sauce und Walnüssen",time:"20 Min.",portions:"2 Personen",eq:"2 Herdplatten (Topf und Pfanne)",
+ ingredients:["400 g Gnocchi","1 Birne","100 g Gorgonzola","100 ml Sahne","1 EL Butter","30 g Walnüsse","Pfeffer","Feldsalat"],
+ steps:["Gnocchi in Salzwasser garen, bis sie oben schwimmen, und abgießen.","Birne würfeln und in der Butter 3 Minuten anbraten.","Sahne und zerbröckelten Gorgonzola dazugeben und bei niedriger Hitze schmelzen lassen.","Gnocchi in der Sauce wenden, mit Walnüssen und Pfeffer bestreuen und mit Feldsalat servieren."],
+ tip:"Birnen mit leicht festem Fruchtfleisch behalten beim Braten ihre Form."},
+e_linsencurry:{ico:"🍛",title:"Scharfes Linsen-Kokos-Curry mit Spinat und Naan",time:"30 Min.",portions:"2 Personen",eq:"1 Herdplatte (Topf)",
+ air:"Naan oder Fladenbrot bei 180 °C 2 bis 3 Minuten aufbacken.",
+ ingredients:["150 g rote Linsen","1 Zwiebel","2 Knoblauchzehen","1 Stück Ingwer (2 cm)","1 EL Öl","1 EL Currypulver","1 TL Kreuzkümmel","200 ml Kokosmilch","300 ml Wasser","150 g TK-Blattspinat","Salz, Chili","Saft von 1/2 Zitrone","2 Naan"],
+ steps:["Zwiebel, Knoblauch und Ingwer fein hacken und im Öl 4 Minuten anbraten, Gewürze kurz mitrösten.","Linsen, Kokosmilch und Wasser zugeben und 15 Minuten köcheln lassen, bis die Linsen zerfallen.","Spinat einrühren und 3 Minuten mitgaren.","Mit Salz, Chili und Zitronensaft abschmecken und mit dem warmen Naan servieren."],
+ tip:"Mit Chiliflocken kann sich jeder am Tisch seine Schärfe selbst einstellen."},
+e_pilz_stroganoff:{ico:"🍄",title:"Pilz-Stroganoff mit Reis",time:"30 Min.",portions:"2 Personen",eq:"2 Herdplatten (Reis und Pfanne)",
+ ingredients:["120 g Reis","300 g Champignons","1 Zwiebel","1 Knoblauchzehe","1 EL Butter","1 EL Tomatenmark","1 TL Paprikapulver (edelsüß, gern geräuchert)","1 EL Mehl","150 ml Gemüsebrühe","100 g Schmand oder saure Sahne","2 kleine Gewürzgurken","Salz, Pfeffer, Petersilie"],
+ steps:["Reis nach Packungsanleitung kochen (Herdplatte 1).","Pilze in Scheiben schneiden und in der Butter 6 Minuten kräftig anbraten, Zwiebel und Knoblauch zugeben (Herdplatte 2).","Tomatenmark, Paprikapulver und Mehl einrühren, mit der Brühe ablöschen und 5 Minuten köcheln lassen.","Schmand und gewürfelte Gewürzgurken unterrühren, würzen und mit Reis und Petersilie servieren."],
+ tip:"Die Pilze erst salzen, wenn sie schon Farbe haben, dann bleiben sie nicht wässrig."},
+e_pilz_polenta:{ico:"🍄",title:"Cremige Polenta mit Kräuterseitlingen und Thymian",time:"25 Min.",portions:"2 Personen",eq:"2 Herdplatten (Polenta und Pfanne)",
+ ingredients:["120 g Instant-Polenta","500 ml Gemüsebrühe","40 g Parmesan","1 EL Butter","300 g Kräuterseitlinge oder Champignons","1 Knoblauchzehe","2 Zweige Thymian","1 EL Öl","Salz, Pfeffer"],
+ steps:["Brühe aufkochen, Polenta unter Rühren einrieseln lassen und nach Packungsanleitung 5 Minuten quellen lassen (Herdplatte 1).","Pilze in Scheiben schneiden und im Öl 6 bis 8 Minuten kräftig braten, Knoblauch und Thymian kurz mitbraten (Herdplatte 2).","Butter und Parmesan in die Polenta rühren und mit Salz und Pfeffer abschmecken.","Polenta mit den Pilzen anrichten."],
+ tip:"Kräuterseitlinge bleiben beim Braten schön bissfest und schmecken leicht nussig."},
+e_pilz_ramen:{ico:"🍜",title:"Pilz-Ramen mit Ei",time:"25 Min.",portions:"2 Personen",eq:"2 Herdplatten (Brühe und Nudeln mit Eiern)",
+ ingredients:["2 Eier","150 g Ramen- oder Mie-Nudeln","600 ml Gemüsebrühe","200 g Champignons oder Shiitake","1 Stück Ingwer (2 cm)","1 Knoblauchzehe","2 EL Sojasauce","1 TL Sesamöl (optional)","2 Handvoll Spinat","1 Frühlingszwiebel"],
+ steps:["Eier 7 Minuten kochen (Herdplatte 1), abschrecken und schälen. Im selben Wasser die Nudeln garen und abgießen.","Pilze in Scheiben schneiden und mit Ingwer und Knoblauch in einem Topf 5 Minuten anbraten (Herdplatte 2).","Brühe und Sojasauce dazugeben, 5 Minuten köcheln lassen, Spinat kurz mitgaren.","Nudeln und Suppe in Schalen füllen, Eier halbieren, Frühlingszwiebel und Sesamöl darübergeben."],
+ tip:"Mit Chiliöl oder Sriracha am Tisch lässt sich die Schärfe selbst regeln."},
+e_pilz_flammkuchen:{ico:"🍄",title:"Flammkuchen mit Champignons, Lauch und Ziegenkäse",time:"25 Min.",portions:"2 Personen",eq:"Backofen oder Airfryer",
+ air:"Je einen Flammkuchen bei 200 °C 5 bis 6 Minuten backen.",
+ ingredients:["2 große Tortillas oder 1 Flammkuchenteig","100 g Frischkäse","1 EL Milch","150 g Champignons","1 Stange Lauch","80 g Ziegenfrischkäse oder Feta","Salz, Pfeffer, Thymian"],
+ steps:["Ofen auf 220 °C vorheizen. Frischkäse mit Milch, Salz und Pfeffer verrühren und auf die Tortillas streichen.","Pilze in dünne Scheiben, Lauch in feine Ringe schneiden und auf den Tortillas verteilen.","Ziegenkäse in Stücken und Thymian darübergeben.","8 bis 10 Minuten knusprig backen."],
+ tip:"Den Lauch vorher gut waschen, damit kein Sand zwischen den Ringen bleibt."},
+e_pilz_tagliatelle:{ico:"🍝",title:"Tagliatelle mit Pilz-Rahmsauce und Spinat",time:"25 Min.",portions:"2 Personen",eq:"2 Herdplatten (Topf und Pfanne)",
+ ingredients:["200 g Tagliatelle","250 g Champignons","1 Zwiebel","1 Knoblauchzehe","1 EL Butter","100 ml Sahne","100 g Blattspinat","2 Zweige Thymian","40 g Parmesan","Salz, Pfeffer"],
+ steps:["Tagliatelle in Salzwasser kochen, etwas Kochwasser aufheben.","Pilze in Scheiben schneiden und in der Butter 6 Minuten kräftig anbraten, Zwiebel, Knoblauch und Thymian zugeben.","Sahne und Spinat unterrühren und 3 Minuten köcheln lassen.","Nudeln mit einem Schuss Kochwasser untermischen und mit Parmesan und Pfeffer servieren."],
+ tip:"Die Sauce lässt sich mit einem Spritzer Zitronensaft frischer abschmecken."},
+e_portobello:{ico:"🍄",title:"Gefüllte Portobello-Pilze mit Feta und Kräuterkruste",time:"25 Min.",portions:"2 Personen",eq:"Airfryer oder Backofen",
+ air:"Gefüllte Pilze bei 190 °C 10 bis 12 Minuten backen.",
+ ingredients:["4 große Champignons oder 2 Portobello","100 g Feta","2 EL Semmelbrösel","1 EL Petersilie","1 Knoblauchzehe","1 EL Öl","Salat: 100 g Feldsalat, 1 EL Essig, 1 EL Öl, Salz","Brot"],
+ steps:["Stiele aus den Pilzen drehen und fein hacken, die Pilzköpfe innen leicht salzen.","Gehackte Stiele mit zerbröseltem Feta, Semmelbröseln, Petersilie, fein gehacktem Knoblauch und Öl mischen.","Die Köpfe damit füllen und im Airfryer bei 190 °C 10 bis 12 Minuten backen (im Backofen 20 Minuten bei 200 °C).","Feldsalat mit Essig, Öl und Salz anmachen und mit Brot dazu servieren."],
+ tip:"Mit großen Portobello-Pilzen wird es ein Hauptgericht, mit kleinen Champignons ein Fingerfood."},
+e_pilz_curry:{ico:"🍛",title:"Pilz-Kokos-Curry mit Reis",time:"30 Min.",portions:"2 Personen",eq:"2 Herdplatten (Reis und Curry)",
+ ingredients:["120 g Basmatireis","300 g Champignons","1 Zwiebel","2 Knoblauchzehen","1 Stück Ingwer (2 cm)","1 EL Öl","1 EL Currypulver","200 ml Kokosmilch","100 g TK-Erbsen","Saft von 1/2 Limette oder Zitrone","Salz, Chili"],
+ steps:["Reis nach Packungsanleitung kochen (Herdplatte 1).","Pilze halbieren und im Öl 6 Minuten anbraten, Zwiebel, Knoblauch und Ingwer zugeben und mit Curry kurz mitrösten (Herdplatte 2).","Kokosmilch und Erbsen dazugeben und 8 Minuten köcheln lassen.","Mit Limettensaft, Salz und Chili abschmecken und mit dem Reis servieren."],
+ tip:"Pilze nicht zu klein schneiden, sie verlieren beim Garen viel Wasser."}
+});
+
+const ALIAS={pfann:"pfannkuchen"};
+const DISHES={
+  mues:["Müsli mit Joghurt und Apfel"],
+  knus:["Knuspermüsli mit Milch und Birne"],
+  toast:["Toast mit Frischkäse und Marmelade"],
+  brotapfel:["Vollkornbrot mit Butter, Käse und Apfelspalten"],
+  quarkapfel:["Quark mit geriebenem Apfel, Zimt und gemahlenen Mandeln"],
+  kohlbr:["Brötchen mit Frischkäse und Kohlrabi"],
+  pilzei:["Rührei mit Champignons auf Toast"],
+  sapfel:["Apfelspalten mit Mandelmus"],
+  sbirne:["Birne mit Käsewürfeln"],
+  sjoghurt:["Naturjoghurt mit Honig und Apfelstückchen"],
+  skarotte:["Karottensticks mit Hummus"],
+  skohlrabi:["Kohlrabisticks mit Kräuterquark"],
+  sknaecke:["Knäckebrot mit Frischkäse und Karottenraspeln"],
+  sapfelmus:["Reiswaffeln mit Apfelmus"],
+  sclem:["Clementinen und Cracker"],
+  e_b1:["Rührei mit Lauch und Käse auf Vollkornbrot"],
+  e_b2:["Skyr mit warmem Zimt-Apfel und Walnüssen"],
+  e_b3:["Spiegelei-Toast mit Spinat und Feta"],
+  e_b4:["Vollkornbrot mit Frischkäse, Birne und Walnüssen"],
+  e_b5:["Knuspermüsli mit Skyr und Birne"],
+  e_b6:["Käse-Omelett mit Kräutern und Brot"],
+  e_b7:["Avocado-Toast mit Ei"],
+  e_b8:["French Toast mit Zimt-Apfel"],
+  e_b9:["Vollkornbrot mit Frischkäse, Roter Bete und Walnüssen"],
+  e_pilzei:["Rührei mit Champignons und Kräutern auf Sauerteigbrot"]
+};
+/* p = Pilze, k = Kartoffeln, o = Sommergemüse (nur frühe Wochen), n = erst ab Ende Oktober */
+const FLAGS={
+  e_pilzei:"p",e_pilz_stroganoff:"p",e_pilz_polenta:"p",e_pilz_ramen:"p",e_pilz_flammkuchen:"p",e_pilz_tagliatelle:"p",e_portobello:"p",e_pilz_curry:"p",e_rosenkohl_ofen:"n",e_aloo_gobi:"k",e_gnocchi_gorgonzola:"k",
+  lasagne_pilz:"p",gnocchi_pilz:"pk",pilz_risotto:"p",pilz_pasta:"p",pilz_quiche:"p",pilz_pfanne:"p",pilzei:"p",
+  kartoffelsuppe:"k",bratkartoffel:"k",ofenkartoffel:"k",gnocchi:"k",rosenkohl:"kn",
+  quesadilla:"o",wraps:"o",couscous:"o",gruenkohl:"n",sclem:"n"
+};
+const APPT_DATES=["2026-10-06","2026-10-08","2026-10-13","2026-10-15","2026-10-20","2026-10-22","2026-10-27","2026-10-29","2026-11-03","2026-11-05","2026-11-10","2026-11-12"];
+/* Pro Termin: A = schnell und kinderfreundlich, B = Saisongemüse, C = mit Pilzen.
+   Tage mit "|" getrennt. Dienstag bis Donnerstag: Frühstück und Abendessen (2 Einträge). Freitag bis Montag: 4 Mahlzeiten. */
+const PLANSRAW=[
+ ["e_b1 e_shakshuka|e_b5 e_flammkuchen_birne",
+  "e_b9 e_blumenkohl_airfryer|e_b5 e_ramen",
+  "e_pilzei e_pilz_tagliatelle|e_b3 e_pilz_ramen"],
+ ["mues wraps sapfel linsen_bolo|pfann quesadilla sjoghurt bratkartoffel|french tortellini skarotte gemuesesuppe|brotapfel nudelsalat sbirne polenta|e_b3 e_aglio",
+  "quarkapfel kartoffelsuppe skohlrabi kraut_nudeln|kohlbr ofengemuese sbirne blumenkohl_gratin|griess dal sapfel kohlrabi_schnitzel|knus wirsing skarotte karotten_bratlinge|e_b1 e_linsencurry",
+  "mues pilz_quiche sapfel spinat_nudeln|pfann curry sbirne pilz_risotto|french gemuesesuppe skarotte ofenkartoffel|toast nudelsalat sjoghurt lasagne_pilz|e_b2 e_ramen"],
+ ["e_b6 e_ramen|e_b1 e_aglio",
+  "e_b8 e_haloumi|e_b9 e_linsencurry",
+  "e_pilzei e_pilz_flammkuchen|e_b4 e_pilz_polenta"],
+ ["knus nudelsalat sapfel tomatensuppe|pfann spinat_taschen sbirne kaesespaetzle|ruehrei auflauf skarotte flammkuchen|toast auflauf sjoghurt linsen_bolo|e_b8 e_chili",
+  "quarkapfel kartoffelsuppe skohlrabi kraut_nudeln|kohlbr ofengemuese sapfelmus rotkohl|french curry sbirne blumenkohl_gratin|brotapfel gemuesesuppe skarotte pastinaken_puere|e_b4 e_aloo_gobi",
+  "mues lauch_quiche sapfel pilz_pasta|pfann tortellini sbirne gnocchi_pilz|pilzei linsen_eintopf sknaecke polenta|toast frittata sjoghurt spinat_nudeln|e_b1 e_linsencurry"],
+ ["e_b2 e_tortelloni|e_b6 e_chili",
+  "e_b2 e_suesskartoffel|e_b8 e_aloo_gobi",
+  "e_pilzei e_pilz_ramen|e_b5 e_pilz_stroganoff"],
+ ["mues nudelsalat sapfel linsen_bolo|pfann flammkuchen sbirne ofenkartoffel|ruehrei auflauf skarotte tomatensuppe|toast auflauf sjoghurt gnocchi|e_b5 e_suesskartoffel",
+  "quarkapfel linsen_eintopf skohlrabi blumenkohl_gratin|kohlbr spinat_taschen sbirne rotkohl|french ofengemuese sapfelmus kaesespaetzle|brotapfel karotten_suppe skarotte wirsing|e_b5 e_rote_bete_salat",
+  "mues pilz_quiche sapfel spinat_nudeln|pilzei curry sbirne lasagne_pilz|french kartoffelsuppe skarotte kraut_nudeln|toast nudelsalat sjoghurt pilz_risotto|e_b3 e_aloo_gobi"],
+ ["e_b7 e_kichererbsen_curry|e_b2 e_suesskartoffel",
+  "e_b3 e_gnocchi_gorgonzola|e_b2 e_rote_bete_salat",
+  "e_pilzei e_pilz_polenta|e_b7 e_pilz_curry"],
+ ["mues nudelsalat sapfel polenta|pfann flammkuchen sbirne bratkartoffel|ruehrei kaiserschmarrn skarotte tomatensuppe|toast auflauf sjoghurt tortellini|e_b1 e_flammkuchen_birne",
+  "quarkapfel kartoffelsuppe skohlrabi gruenkohl|kohlbr ofengemuese sapfelmus blumenkohl_gratin|french dal sbirne rotkohl|brotapfel gemuesesuppe skarotte kohlrabi_schnitzel|e_b9 e_gnocchi_gorgonzola",
+  "mues lauch_quiche sapfel pilz_pasta|pilzei tortellini sbirne gnocchi_pilz|pfann linsen_eintopf skarotte spinat_nudeln|toast nudelsalat sjoghurt pilz_risotto|e_b4 e_suesskartoffel"],
+ ["e_b3 e_shakshuka|e_b7 e_flammkuchen_birne",
+  "e_b1 e_ramen|e_b3 e_aloo_gobi",
+  "e_pilzei e_pilz_stroganoff|e_b6 e_portobello"],
+ ["knus flammkuchen sapfel linsen_bolo|pfann nudelsalat sbirne ofenkartoffel|ruehrei auflauf skarotte polenta|toast auflauf sclem tomatensuppe|e_b6 e_aglio",
+  "quarkapfel linsen_eintopf skohlrabi rosenkohl|kohlbr spinat_taschen sapfelmus kaesespaetzle|french ofengemuese sbirne rotkohl|brotapfel karotten_suppe skarotte pastinaken_puere|e_b8 e_blumenkohl_airfryer",
+  "mues lauch_quiche sapfel pilz_risotto|pilzei curry sbirne spinat_nudeln|pfann wirsing skarotte lasagne_pilz|toast nudelsalat sjoghurt gnocchi|e_b5 e_aloo_gobi"],
+ ["e_b8 e_ramen|e_b3 e_aglio",
+  "e_b4 e_gnocchi_gorgonzola|e_b1 e_rote_bete_salat",
+  "e_pilzei e_pilz_curry|e_b2 e_pilz_tagliatelle"],
+ ["mues flammkuchen sapfel polenta|pfann nudelsalat sclem bratkartoffel|ruehrei auflauf skarotte tortellini|toast auflauf sjoghurt tomatensuppe|e_b2 e_chili",
+  "quarkapfel kartoffelsuppe skohlrabi gruenkohl|kohlbr ofengemuese sapfelmus blumenkohl_gratin|french dal sbirne rotkohl|brotapfel gemuesesuppe skarotte kohlrabi_schnitzel|e_b2 e_ramen",
+  "mues lauch_quiche sapfel pilz_pasta|pilzei curry sbirne gnocchi_pilz|pfann linsen_eintopf skarotte spinat_nudeln|toast nudelsalat sjoghurt pilz_risotto|e_b7 e_rote_bete_salat"]
+];
+const SEASON=[
+ "Jetzt Saison: Äpfel, Birnen, Zwetschgen und Trauben. Beim Gemüse sind Karotten, Brokkoli, Blumenkohl, Weiß- und Rotkohl, Spinat, Lauch, Kohlrabi, Rote Bete, Sellerie, Pastinaken und Feldsalat reif. Tomaten, Paprika und Gurken gehen langsam zu Ende. Pilze: Champignons und Kräuterseitlinge gibt es das ganze Jahr, Waldpilze nur noch kurz.",
+ "Jetzt Saison: Äpfel, Birnen und Quitten. Beim Gemüse sind Karotten, Brokkoli, Blumenkohl, Weiß-, Rot- und Wirsingkohl, Spinat, Lauch, Kohlrabi, Rote Bete, Sellerie, Pastinaken und Feldsalat reif. Sommergemüse wie Tomaten, Paprika und Gurken kommt jetzt meist aus Gewächshaus oder Import, deshalb stecken Tomaten nur noch als Passata drin. Pilze: Champignons und Kräuterseitlinge.",
+ "Jetzt Saison: Äpfel, Birnen und Quitten, ab November auch Clementinen. Beim Gemüse sind Grünkohl, Rosenkohl, Wirsing, Rot- und Weißkohl, Pastinaken, Sellerie, Lauch, Rote Bete, Karotten, Feldsalat und Kartoffeln reif. Pilze: Champignons, Kräuterseitlinge und Austernpilze."
+];
+
+const EQUIP={
+quesadilla:"1 Herdplatte (Pfanne) oder Airfryer",pasta:"2 Herdplatten (Topf und Pfanne)",pfannkuchen:"1 Herdplatte (Pfanne)",wraps:"Kein Herd nötig",
+ofenkartoffel:"Backofen oder Airfryer",ruehrei:"1 Herdplatte (Pfanne)",auflauf:"1 Herdplatte (Nudeln) und Backofen",
+tomatensuppe:"1 Herdplatte (Topf), Käsetoast im Airfryer oder Backofen",gnocchi:"1 Herdplatte (Pfanne)",couscous:"Wasserkocher oder 1 Herdplatte",
+reispfanne:"2 Herdplatten (Topf und Pfanne)",
+kartoffelsuppe:"1 Herdplatte (Topf)",linsen_eintopf:"1 Herdplatte (Topf)",rotkohl:"2 Herdplatten (Rotkohl und Knödel)",
+kraut_nudeln:"2 Herdplatten (Topf und Pfanne)",spinat_nudeln:"2 Herdplatten (Topf und Pfanne)",blumenkohl_gratin:"2 Herdplatten (Topf und Sauce) und Backofen",
+curry:"2 Herdplatten (Reis und Curry)",karotten_suppe:"1 Herdplatte (Topf), Käsebrot im Airfryer oder Backofen",lauch_quiche:"1 Herdplatte (Pfanne) und Backofen",
+kaesespaetzle:"2 Herdplatten (zwei Pfannen)",rote_bete_risotto:"2 Herdplatten (Brühe und Risotto)",karotten_bratlinge:"1 Herdplatte (Pfanne) oder Airfryer",
+lasagne_pilz:"2 Herdplatten (Tomatensauce und weiße Sauce) und Backofen",gnocchi_pilz:"2 Herdplatten (Topf und Pfanne)",pilz_risotto:"2 Herdplatten (Brühe und Risotto)",
+pilz_pasta:"2 Herdplatten (Topf und Pfanne)",pilz_quiche:"1 Herdplatte (Pfanne) und Backofen",pilz_pfanne:"2 Herdplatten (Topf und Pfanne)",
+pastinaken_puere:"2 Herdplatten (Püree-Topf, dann zwei Pfannen)",kohlrabi_schnitzel:"2 Herdplatten (Reis und Kohlrabi) und Airfryer",
+kaiserschmarrn:"2 Herdplatten (Kompott und Pfanne)",gemuesesuppe:"1 Herdplatte (Topf)",linsen_bolo:"2 Herdplatten (Sauce und Nudeln)",
+frittata:"1 Herdplatte (Pfanne)",dal:"2 Herdplatten (Reis und Dal)",tortellini:"2 Herdplatten (Topf und Pfanne)",flammkuchen:"Backofen oder Airfryer",
+ofengemuese:"Backofen",bratkartoffel:"2 Herdplatten (zwei Pfannen) oder Airfryer",spinat_taschen:"Backofen oder Airfryer",
+gruenkohl:"2 Herdplatten (Topf und Pfanne)",rosenkohl:"1 Herdplatte (Vorkochen) und Backofen",wirsing:"2 Herdplatten (Reis und Pfanne)",
+griess:"2 Herdplatten (Brei und Äpfel)",french:"2 Herdplatten (Kompott und Pfanne)",polenta:"2 Herdplatten (Sauce und Pfanne), Überbacken im Backofen oder Airfryer",
+nudelsalat:"1 Herdplatte (Topf)"
+};
+const AIR={
+quesadilla:"Quesadilla gefüllt bei 190 °C 5 bis 6 Minuten backen, einmal wenden.",
+ofenkartoffel:"Kartoffeln bei 200 °C 35 bis 40 Minuten garen, größere brauchen etwas länger. Der Backofen bleibt frei.",
+tomatensuppe:"Käsetoast bei 190 °C 4 bis 5 Minuten backen, einmal wenden. So bleibt die zweite Herdplatte frei.",
+karotten_suppe:"Käsebrot bei 190 °C 3 bis 4 Minuten überbacken.",
+karotten_bratlinge:"Bratlinge mit Öl bestreichen und bei 180 °C 10 bis 12 Minuten backen, nach der Hälfte wenden.",
+flammkuchen:"Je einen Flammkuchen bei 200 °C 5 bis 6 Minuten backen, während der nächste belegt wird.",
+bratkartoffel:"Gekochte Kartoffelscheiben mit 1 EL Öl mischen und bei 200 °C 15 bis 18 Minuten knusprig backen, zwischendurch schütteln.",
+spinat_taschen:"Bei 180 °C 12 bis 14 Minuten backen, in zwei Portionen.",
+polenta:"Polenta-Scheiben mit Öl bestreichen und bei 200 °C 10 bis 12 Minuten knusprig backen, dann mit Sauce und Käse belegen."
+};
+Object.entries(EQUIP).forEach(([id,t])=>{RECIPES[id].eq=t});
+Object.entries(AIR).forEach(([id,t])=>{RECIPES[id].air=t});
+
+/* ---------- Änderungen am Plan (Bearbeiten) ---------- */
+let edits={};
+try{edits=JSON.parse(localStorage.getItem("aenderungen")||"{}")}catch(e){}
+const saveEdits=()=>{try{localStorage.setItem("aenderungen",JSON.stringify(edits))}catch(e){}};
+let editMode=false,openEditor=null,curDay="Freitag";
+const escE=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function slotOf(key,base){
+  const o=edits[key];
+  return o?{text:o.text,rid:o.rid||null,edited:true}:{text:base.text,rid:base.rid||null,edited:false};
+}
+function textFlags(text,rid){
+  if(rid&&FLAGS[rid])return FLAGS[rid];
+  return /pilz|champignon|austernpilz|kräuterseitling/i.test(text)?"p":"";
+}
+function editorHTML(key,cur){
+  const rec=Object.entries(RECIPES).map(([id,r])=>`<option value="r:${id}">${escE(r.title)}</option>`).join("");
+  const dis=[...new Set(Object.values(DISHES).map(d=>d[0]))].map(t=>`<option value="t:${escE(t)}">${escE(t)}</option>`).join("");
+  return `<div class="editor" data-rid="${escE(cur.rid||"")}" data-orig="${escE(cur.text)}">
+    <label class="fld"><span>Gericht aus der Liste wählen</span><select data-es><option value="">Bitte wählen</option><optgroup label="Rezepte">${rec}</optgroup><optgroup label="Frühstück und Snacks">${dis}</optgroup></select></label>
+    <label class="fld"><span>Oder selbst eintragen</span><input data-et value="${escE(cur.text)}" maxlength="100"></label>
+    <div class="prow"><button type="button" class="fav on" data-esave="${escE(key)}">Speichern</button><button type="button" class="fav" data-ecancel>Abbrechen</button>${cur.edited?`<button type="button" class="fav" data-ereset="${escE(key)}">Original wiederherstellen</button>`:""}</div>
+  </div>`;
+}
+function syncEditUI(){
+  document.querySelectorAll(".etoggle").forEach(b=>{b.textContent=editMode?"✓ Fertig":"✏️ Bearbeiten";b.classList.toggle("on",editMode)});
+  document.querySelectorAll("[data-resetall]").forEach(b=>{b.hidden=!editMode});
+  const h=document.getElementById("editHint");if(h)h.textContent=editMode?"Tippe bei einer Mahlzeit auf Ändern.":"";
+}
+function rerender(){
+  showDay(curDay);
+  if(typeof renderChoose==="function")renderChoose();
+  syncEditUI();
+}
+document.addEventListener("change",e=>{
+  const s=e.target.closest&&e.target.closest("select[data-es]");
+  if(!s||!s.value)return;
+  const ed=s.closest(".editor"),inp=ed.querySelector("[data-et]");
+  const kind=s.value.slice(0,1),v=s.value.slice(2);
+  inp.value=kind==="r"?RECIPES[v].title:v;
+  ed.dataset.rid=kind==="r"?v:"";
+});
+document.addEventListener("click",e=>{
+  const t=e.target.closest&&e.target.closest("button");
+  if(!t)return;
+  if(t.classList.contains("etoggle")){editMode=!editMode;openEditor=null;rerender();return}
+  if(t.dataset.edit!==undefined){openEditor=t.dataset.edit;rerender();return}
+  if(t.dataset.ecancel!==undefined){openEditor=null;rerender();return}
+  if(t.dataset.ereset!==undefined){delete edits[t.dataset.ereset];saveEdits();openEditor=null;rerender();return}
+  if(t.dataset.resetall!==undefined){
+    if(confirm("Alle Änderungen an den Plänen zurücksetzen?")){edits={};saveEdits();openEditor=null;rerender()}
+    return;
+  }
+  if(t.dataset.esave!==undefined){
+    const ed=t.closest(".editor"),inp=ed.querySelector("[data-et]"),text=inp.value.trim();
+    if(!text){inp.focus();return}
+    let rid=ed.dataset.rid||null;
+    if(rid&&text!==ed.dataset.orig&&(!RECIPES[rid]||RECIPES[rid].title!==text))rid=null;
+    edits[t.dataset.esave]={text,rid};saveEdits();openEditor=null;rerender();
+  }
+});
+
+
+const ICONS=["🥣","🥪","🍎","🍽️"];
+const SHORT={"Freitag":"Fr","Samstag":"Sa","Sonntag":"So","Montag":"Mo","Dienstag":"Di"};
+const RICON={quesadilla:"🌮",pasta:"🍝",pfannkuchen:"🥞",wraps:"🌯",ofenkartoffel:"🥔",ruehrei:"🍳",auflauf:"🧀",tomatensuppe:"🍅",gnocchi:"🥘",couscous:"🥗",reispfanne:"🍚"};
+
+function openTab(name){
+  document.querySelectorAll("nav button,section").forEach(e=>e.classList.remove("active"));
+  document.querySelector(`nav button[data-tab="${name}"]`).classList.add("active");
+  document.getElementById(name).classList.add("active");
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>openTab(b.dataset.tab));
+
+const daysEl=document.getElementById("days"),mealsEl=document.getElementById("meals"),dayTitle=document.getElementById("dayTitle");
+function showDay(d){
+  curDay=d;
+  daysEl.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.day===d));
+  dayTitle.textContent=d;
+  mealsEl.innerHTML=PLAN[d].map(([text,rid],i)=>{
+    const key="p|"+d+"|"+i,sl=slotOf(key,{text,rid});
+    return `<div class="meal slot-${i}"><i class="ico">${ICONS[i]}</i><div class="mt"><small>${LABELS[i]}${sl.edited?" ✎ geändert":""}</small><span>${escE(sl.text)}</span>${sl.rid?`<a data-r="${sl.rid}">Rezept ansehen →</a>`:""}${editMode?(openEditor===key?editorHTML(key,sl):`<button type="button" class="fav sm" data-edit="${escE(key)}">Ändern</button>`):""}</div></div>`;
+  }).join("");
+  mealsEl.querySelectorAll("a[data-r]").forEach(a=>a.onclick=()=>showRecipe(a.dataset.r));
+}
+Object.keys(PLAN).forEach(d=>{
+  const b=document.createElement("button");
+  b.dataset.day=d;
+  b.innerHTML=`<span class="full">${d}</span><span class="short">${SHORT[d]}</span>`;
+  b.setAttribute("aria-label",d);
+  b.onclick=()=>showDay(d);
+  daysEl.appendChild(b);
+});
+showDay("Freitag");
+
+let book={favs:{},own:[],notes:{}};
+try{book=Object.assign(book,JSON.parse(localStorage.getItem("kochbuch")||"{}"))}catch(e){}
+book.notes=book.notes||{};
+let photos={};
+try{photos=JSON.parse(localStorage.getItem("kochbuch-fotos")||"{}")}catch(e){}
+const saveBook=()=>{try{localStorage.setItem("kochbuch",JSON.stringify(book))}catch(e){}};
+function savePhotos(){
+  try{localStorage.setItem("kochbuch-fotos",JSON.stringify(photos));return true}
+  catch(e){alert("Der Speicher im Browser ist voll. Bitte entfernt zuerst ein altes Foto.");return false}
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function recipeBody(r){
+  return `${r.eq?`<p class="eq">🔥 ${r.eq}</p>`:""}<h4>Zutaten</h4><ul>${r.ingredients.map(i=>`<li>${i}</li>`).join("")}</ul>
+      <h4>Zubereitung</h4><ol>${r.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+      ${r.air?`<p class="eq">🌀 Airfryer: ${r.air}</p>`:""}
+      ${r.tip?`<div class="tip">💡 ${r.tip}</div>`:""}`;
+}
+function favLabel(on){return on?"⭐ Im Kochbuch":"☆ Kam gut an"}
+function noteBox(key,ph){
+  return `<label class="fld"><span>Eure Notiz</span><textarea data-n="${key}" rows="2" placeholder="${ph}">${esc(book.notes[key]||"")}</textarea></label>`;
+}
+function photoBox(key){
+  const p=photos[key];
+  return p
+    ?`<img class="dish" src="${p}" alt="Foto vom fertigen Gericht"><div class="prow"><button class="fav" data-pick="${key}">Anderes Foto</button><button class="fav" data-pdel="${key}">Foto entfernen</button></div>`
+    :`<p class="hint">Hat es geschmeckt? Hängt ein Foto vom fertigen Gericht an.</p><button class="fav" data-pick="${key}">📷 Foto hinzufügen</button>`;
+}
+document.getElementById("recipeList").innerHTML=Object.entries(RECIPES).map(([id,r])=>{
+  const on=!!book.favs[id];
+  return `
+  <details class="recipe" id="r-${id}">
+    <summary><span class="ri">${(RECIPES[id].ico||RICON[id]||"🍴")}</span><span class="rt">${r.title}<span class="meta">${r.time}, ${r.portions}</span></span></summary>
+    <div class="rbody">
+      ${recipeBody(r)}
+      ${noteBox(id,"z. B. weniger Salz, die Kinder wollten extra Käse")}
+      <button class="fav${on?" on":""}" data-f="${id}">${favLabel(on)}</button>
+      <div class="pbox" data-pk="${id}"${on?"":" hidden"}>${on?photoBox(id):""}</div>
+    </div>
+  </details>`}).join("");
+document.getElementById("recipeList").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-f]");if(!b)return;
+  const id=b.dataset.f;
+  if(book.favs[id])delete book.favs[id];else book.favs[id]={};
+  saveBook();syncFavButtons();renderBook();
+});
+function syncFavButtons(){
+  document.querySelectorAll("#recipeList button[data-f]").forEach(b=>{
+    const id=b.dataset.f,on=!!book.favs[id];
+    b.classList.toggle("on",on);b.textContent=favLabel(on);
+    const box=document.querySelector(`#recipeList .pbox[data-pk="${id}"]`);
+    box.hidden=!on;box.innerHTML=on?photoBox(id):"";
+  });
+}
+function showRecipe(id){
+  openTab("recipes");
+  document.querySelectorAll("details.recipe").forEach(d=>d.open=false);
+  const el=document.getElementById("r-"+id);
+  el.open=true;
+  el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+let extra=[];
+try{extra=JSON.parse(localStorage.getItem("einkauf-extra")||"[]")}catch(e){}
+const saveExtra=()=>{try{localStorage.setItem("einkauf-extra",JSON.stringify(extra))}catch(e){}};
+function allList(){return extra.length?Object.assign({},LIST,{"Eigene Einträge":extra}):LIST}
+let state={};
+try{state=JSON.parse(localStorage.getItem("einkauf")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("einkauf",JSON.stringify(state))}catch(e){}};
+const groupsEl=document.getElementById("groups");
+function render(){
+  groupsEl.innerHTML=Object.entries(allList()).map(([g,items])=>`<div class="group"><h3>${g}</h3>${items.map(i=>`<label class="${state[i]?"done":""}"><input type="checkbox" data-i="${i}" ${state[i]?"checked":""}><span>${i}</span>${g==="Eigene Einträge"?`<button type="button" class="x" data-xdel="${i}" aria-label="Eintrag löschen">✕</button>`:""}</label>`).join("")}</div>`).join("");
+  groupsEl.querySelectorAll("input").forEach(c=>c.onchange=()=>{state[c.dataset.i]=c.checked;save();render()});
+  const total=Object.values(allList()).flat().length,done=Object.values(state).filter(Boolean).length;
+  document.getElementById("count").textContent=`${done} von ${total} erledigt`;
+}
+document.getElementById("reset").onclick=()=>{state={};save();render()};
+render();
+
+const bookEl=document.getElementById("bookList");
+function ownToRecipe(o){return {title:esc(o.title),ingredients:o.ingredients.map(esc),steps:o.steps.map(esc),time:"Eigenes Rezept",portions:""}}
+function renderBook(){
+  const open=new Set([...bookEl.querySelectorAll("details[open]")].map(d=>d.dataset.k));
+  const items=[
+    ...Object.keys(book.favs).filter(id=>RECIPES[id]).map(id=>({key:id,r:RECIPES[id],ico:(RECIPES[id].ico||RICON[id]||"🍴"),own:false})),
+    ...book.own.map(o=>({key:"o"+o.uid,r:ownToRecipe(o),ico:"📝",own:true}))
+  ];
+  document.getElementById("bookCount").textContent=items.length?`${items.length} Lieblingsgericht${items.length===1?"":"e"}`:"";
+  bookEl.innerHTML=items.length?items.map(it=>`
+    <details class="recipe" data-k="${it.key}"${open.has(it.key)?" open":""}>
+      <summary>${photos[it.key]?`<img class="thumb" src="${photos[it.key]}" alt="">`:`<span class="ri">${it.ico}</span>`}<span class="rt">${it.r.title}<span class="meta">${it.r.time}${it.r.portions?", "+it.r.portions:""}</span></span></summary>
+      <div class="rbody">
+        <div class="pbox" data-pk="${it.key}">${photoBox(it.key)}</div>
+        ${recipeBody(it.r)}
+        ${noteBox(it.key,"z. B. Lieblingsessen vom Großen, mit extra Käse")}
+        <button class="fav" data-rm="${it.key}">${it.own?"Aus dem Kochbuch löschen":"Aus dem Kochbuch entfernen"}</button>
+      </div>
+    </details>`).join(""):`
+    <div class="empty">
+      <div class="big">📖</div>
+      <h3>Euer Kochbuch ist noch leer</h3>
+      <p>Öffne ein Rezept und tippe auf „Kam gut an“. Dann landet es hier, und ihr könnt ein Foto und eine Notiz dazu speichern.</p>
+      <button class="fav on" data-go="recipes">Zu den Rezepten</button>
+    </div>`;
+}
+document.addEventListener("input",e=>{
+  const t=e.target.closest&&e.target.closest("textarea[data-n]");if(!t)return;
+  const k=t.dataset.n;
+  book.notes[k]=t.value;saveBook();
+  document.querySelectorAll(`textarea[data-n="${k}"]`).forEach(o=>{if(o!==t)o.value=t.value});
+});
+bookEl.addEventListener("click",e=>{
+  const go=e.target.closest("[data-go]");if(go){openTab(go.dataset.go);return}
+  const rm=e.target.closest("[data-rm]");if(!rm)return;
+  const k=rm.dataset.rm;
+  if(k[0]==="o"){
+    if(!confirm("Dieses Gericht aus dem Kochbuch löschen?"))return;
+    book.own=book.own.filter(o=>"o"+o.uid!==k);
+    delete book.notes[k];
+    if(photos[k]){delete photos[k];savePhotos()}
+  }else delete book.favs[k];
+  saveBook();syncFavButtons();renderBook();
+});
+
+/* Fotos: verkleinern und im Browser speichern */
+function shrink(file,max=900){
+  return new Promise((res,rej)=>{
+    const img=new Image(),url=URL.createObjectURL(file);
+    img.onload=()=>{
+      const sc=Math.min(1,max/Math.max(img.width,img.height));
+      const c=document.createElement("canvas");
+      c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL("image/jpeg",.78));
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error("Bild nicht lesbar"))};
+    img.src=url;
+  });
+}
+const picker=document.createElement("input");
+picker.type="file";picker.accept="image/*";picker.hidden=true;
+document.body.appendChild(picker);
+let pickKey=null;
+function afterPhoto(k){
+  document.querySelectorAll(`#recipeList .pbox[data-pk="${k}"]`).forEach(b=>{b.innerHTML=photoBox(k)});
+  renderBook();
+}
+document.addEventListener("click",e=>{
+  const pk=e.target.closest("[data-pick]");
+  if(pk){pickKey=pk.dataset.pick;picker.value="";picker.click();return}
+  const pd=e.target.closest("[data-pdel]");
+  if(pd){const k=pd.dataset.pdel;delete photos[k];savePhotos();afterPhoto(k)}
+});
+picker.onchange=async()=>{
+  const f=picker.files[0];if(!f||!pickKey)return;
+  const k=pickKey,prev=photos[k];
+  try{photos[k]=await shrink(f)}catch(err){alert("Das Bild konnte nicht gelesen werden. Bitte versucht ein anderes Foto.");return}
+  if(!savePhotos()){if(prev)photos[k]=prev;else delete photos[k]}
+  afterPhoto(k);
+};
+
+document.getElementById("ownForm").onsubmit=e=>{
+  e.preventDefault();
+  const f=e.target,lines=s=>s.split("\n").map(x=>x.trim()).filter(Boolean);
+  book.own.push({uid:Date.now(),title:f.elements.dish.value.trim(),ingredients:lines(f.elements.ing.value),steps:lines(f.elements.steps.value)});
+  saveBook();f.reset();document.getElementById("addForm").open=false;renderBook();
+};
+renderBook();
+
+/* ---------- Auswahl: 3 Pläne pro Termin (Dienstag und Donnerstag) ---------- */
+const WD=["So","Mo","Di","Mi","Do","Fr","Sa"],WDL=["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
+const fmtD=d=>d.getDate()+"."+(d.getMonth()+1)+".";
+const APPTS=APPT_DATES.map((s,i)=>{
+  const d=new Date(s+"T12:00:00"),n=d.getDay()===2?2:5,days=[];
+  for(let k=1;k<=n;k++){const x=new Date(d);x.setDate(d.getDate()+k);days.push(x)}
+  return {i,d,days,key:s};
+});
+const TITLES={A:["Schnell und einfach","Unkompliziert","Alltags-Favoriten"],B:["Herbst-Gemüse","Kohl und Wurzeln","Saison-Küche"],C:["Mit Pilzen","Herbst mit Pilzen","Pilz-Küche"]};
+const TAGS={A:"Schnell, unkompliziert und alltagstauglich",B:"Viel Saisongemüse und Kohl",C:"Mit Pilzen. Fein gehackt fallen sie kaum auf."};
+function dish(id){
+  const rid=ALIAS[id]||id,r=RECIPES[rid];
+  return {rid:r?rid:null,name:r?r.title:DISHES[id][0],fl:FLAGS[id]||FLAGS[rid]||""};
+}
+const PLANS=PLANSRAW.map((trio,i)=>trio.map((s,pi)=>{
+  const kind="ABC"[pi];
+  return {kind,title:TITLES[kind][i%3],tag:TAGS[kind],days:s.split("|").map(x=>x.split(" ").map(dish))};
+}));
+let choice={};
+try{choice=JSON.parse(localStorage.getItem("auswahl")||"{}")}catch(e){}
+const saveChoice=()=>{try{localStorage.setItem("auswahl",JSON.stringify(choice))}catch(e){}};
+function nextAppt(){
+  const t=new Date();t.setHours(0,0,0,0);
+  const i=APPTS.findIndex(a=>{const d=new Date(a.d);d.setHours(0,0,0,0);return d>=t});
+  return i<0?APPTS.length-1:i;
+}
+let cur=nextAppt();
+const chooseEl=document.getElementById("chooseBody");
+function seasonText(i){return SEASON[i<3?0:i<7?1:2]}
+function renderChoose(scrollChip){
+  const a=APPTS[cur];
+  const open=new Set([...chooseEl.querySelectorAll("details[open]")].map(d=>d.dataset.p));
+  const chips=APPTS.map(x=>`<button data-ai="${x.i}" class="${x.i===cur?"active":""}">${WD[x.d.getDay()]} ${fmtD(x.d)}${choice[x.key]!=null?" ✓":""}</button>`).join("");
+  const range=a.days.map(x=>WD[x.getDay()]+" "+fmtD(x)).join(", ");
+  const cards=PLANS[cur].map((p,pi)=>{
+    const chosen=choice[a.key]===pi;
+    const pilz=p.days.map((dm,j)=>dm.map((m,k)=>{const sl=slotOf(`a|${a.key}|${pi}|${j}|${k}`,{text:m.name,rid:m.rid});return sl.edited?textFlags(sl.text,sl.rid):m.fl})).flat().filter(f=>f.includes("p")).length;
+    const days=p.days.map((dm,j)=>{
+      const dt=a.days[j],labels=dm.length===2?["Frühstück","Abendessen"]:["Frühstück","Mittagessen","Snack","Abendessen"];
+      return `<div class="pday"><h4>${WDL[dt.getDay()]}, ${fmtD(dt)}${[2,3,4].includes(dt.getDay())?`<span class="two">für 2 Personen</span>`:""}</h4><ul>${dm.map((m,k)=>{
+        const key=`a|${a.key}|${pi}|${j}|${k}`,sl=slotOf(key,{text:m.name,rid:m.rid}),fl=sl.edited?textFlags(sl.text,sl.rid):m.fl;
+        return `<li><small>${labels[k]}${sl.edited?" ✎ geändert":""}</small>${escE(sl.text)}${fl.includes("p")?" 🍄":""}${sl.rid?` <a data-r="${sl.rid}">Rezept</a>`:""}${editMode?(openEditor===key?editorHTML(key,sl):` <button type="button" class="fav sm" data-edit="${escE(key)}">Ändern</button>`):""}</li>`}).join("")}</ul></div>`;
+    }).join("");
+    return `<article class="pcard${chosen?" chosen":""}">
+      <h3>${String.fromCharCode(65+pi)}: ${p.title}${pilz?`<span class="badge">🍄 ${pilz}× Pilze</span>`:""}</h3>
+      <p class="ptag">${p.tag}</p>
+      <details data-p="${pi}"${open.has(String(pi))?" open":""}><summary>Alle Tage ansehen</summary>${days}</details>
+      <button class="fav${chosen?" on":""}" data-choose="${cur}:${pi}">${chosen?"✓ Gewählt":"Diesen Plan wählen"}</button>
+    </article>`;
+  }).join("");
+  chooseEl.innerHTML=`<div class="appts" id="appts">${chips}</div>
+    <h2 class="dayh">${WDL[a.d.getDay()]}, ${fmtD(a.d)}</h2>
+    <p class="lead">Plan für ${range}</p>
+    <div class="bar"><span></span><span class="bgrp"><button type="button" class="etoggle fav${editMode?" on":""}">${editMode?"✓ Fertig":"✏️ Bearbeiten"}</button>${editMode?`<button type="button" class="fav" data-resetall>Alles zurücksetzen</button>`:""}</span></div>
+    <div class="season">🍎 ${seasonText(cur)}</div>
+    ${cards}
+    <p class="note">Jeder Plan gilt bis zum nächsten Termin. Von Dienstag bis Donnerstag gibt es nur Frühstück und Abendessen, für 2 Personen und ohne Rücksicht auf die Kinder, also gern würziger. Gerichte mit 🍄 enthalten Pilze.</p>`;
+  if(scrollChip){const c=chooseEl.querySelector(".appts .active");if(c)c.scrollIntoView({inline:"center",block:"nearest"})}
+}
+chooseEl.addEventListener("click",e=>{
+  const ap=e.target.closest("[data-ai]");
+  if(ap){cur=+ap.dataset.ai;renderChoose(true);return}
+  const ch=e.target.closest("[data-choose]");
+  if(ch){
+    const [i,p]=ch.dataset.choose.split(":"),key=APPTS[+i].key;
+    if(choice[key]===+p)delete choice[key];else choice[key]=+p;
+    saveChoice();renderChoose();return;
+  }
+  const r=e.target.closest("a[data-r]");
+  if(r)showRecipe(r.dataset.r);
+});
+renderChoose(true);
+
+/* ---------- Rezeptsuche ---------- */
+document.getElementById("rsearch").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll("#recipeList details.recipe").forEach(d=>{d.hidden=!!q&&!d.textContent.toLowerCase().includes(q)});
+});
+
+/* ---------- Eigene Einkaufseinträge ---------- */
+document.getElementById("addItem").onsubmit=e=>{
+  e.preventDefault();
+  const inp=document.getElementById("newItem"),v=inp.value.replace(/[<>"&]/g,"").trim();
+  if(!v)return;
+  if(!extra.includes(v)&&!Object.values(LIST).flat().includes(v)){extra.push(v);saveExtra()}
+  inp.value="";render();
+};
+groupsEl.addEventListener("click",e=>{
+  const x=e.target.closest("[data-xdel]");if(!x)return;
+  e.preventDefault();
+  const v=x.dataset.xdel;
+  extra=extra.filter(i=>i!==v);delete state[v];saveExtra();save();render();
+});
+syncEditUI();
+
+/* ---------- Geschenke: Zustand (wird auch von der Einkaufsliste gebraucht) ---------- */
+let gifts=[];
+try{gifts=JSON.parse(localStorage.getItem("geschenke")||"[]")}catch(e){}
+const saveGifts=()=>{try{localStorage.setItem("geschenke",JSON.stringify(gifts))}catch(e){}};
+const priceOf=g=>{const n=parseFloat(String(g.price||"").replace(",","."));return isFinite(n)&&n>0?n:0};
+const eur=n=>n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+
+/* ---------- Rezepte zum Einkaufen (an und ab wählbar) ---------- */
+let recSel=[];
+try{recSel=JSON.parse(localStorage.getItem("einkauf-rezepte")||"[]")}catch(e){}
+const saveRec=()=>{try{localStorage.setItem("einkauf-rezepte",JSON.stringify(recSel))}catch(e){}};
+const giftGroupEl=document.getElementById("giftGroup"),recGroupsEl=document.getElementById("recipeGroups"),recPickEl=document.getElementById("recipePicker");
+function mergeWhen(list){
+  const m=new Map();
+  list.forEach(x=>{if(!m.has(x.id))m.set(x.id,[]);m.get(x.id).push(x.when)});
+  return [...m.entries()].map(([id,w])=>({id,when:w.join(", ")}));
+}
+/* Gerichte der Wochenliste: aktueller Plan (mit euren Änderungen) und im Reiter Auswahl gewählte Pläne */
+function weekGroups(){
+  const seen=new Set(),groups=[],cur=[];
+  Object.keys(PLAN).forEach(d=>PLAN[d].forEach(([text,rid],i)=>{
+    const sl=slotOf("p|"+d+"|"+i,{text,rid});
+    if(sl.rid&&RECIPES[sl.rid])cur.push({id:sl.rid,when:SHORT[d]+" "+LABELS[i]});
+  }));
+  groups.push({title:"Diese Woche, Freitag bis Dienstag",items:mergeWhen(cur)});
+  APPTS.forEach(a=>{
+    const pi=choice[a.key];if(pi==null||!PLANS[a.i][pi])return;
+    const items=[];
+    PLANS[a.i][pi].days.forEach((dm,j)=>dm.forEach((m,k)=>{
+      const sl=slotOf(`a|${a.key}|${pi}|${j}|${k}`,{text:m.name,rid:m.rid});
+      if(sl.rid&&RECIPES[sl.rid])items.push({id:sl.rid,when:WD[a.days[j].getDay()]+" "+(dm.length===2?["Frühstück","Abendessen"][k]:LABELS[k])});
+    }));
+    groups.push({title:"Gewählter Plan ab "+WD[a.d.getDay()]+" "+fmtD(a.d),items:mergeWhen(items)});
+  });
+  return groups.map(g=>({title:g.title,items:g.items.filter(x=>!seen.has(x.id)&&seen.add(x.id))})).filter(g=>g.items.length);
+}
+function renderRecipes(){
+  const ids=recSel.filter(id=>RECIPES[id]);
+  recGroupsEl.innerHTML=ids.map(id=>{
+    const r=RECIPES[id];
+    return `<div class="group"><h3 class="rh"><span>${r.ico||"🍴"} ${r.title}</span><button type="button" class="x" data-rdel="${id}" aria-label="Gericht von der Liste entfernen">✕</button></h3><p class="gsub">${r.portions}</p>${r.ingredients.map((ing,k)=>{
+      const key="r:"+id+":"+k;
+      return `<label class="${state[key]?"done":""}"><input type="checkbox" data-rk="${key}" ${state[key]?"checked":""}><span>${ing}</span></label>`;
+    }).join("")}</div>`;
+  }).join("");
+  const wg=weekGroups();
+  recPickEl.innerHTML=wg.length?wg.map(g=>`<div class="group"><h3>${g.title}</h3>${g.items.map(x=>{
+    const r=RECIPES[x.id],on=recSel.includes(x.id);
+    return `<label class="${on?"sel":""}"><input type="checkbox" data-rp="${x.id}" ${on?"checked":""}><span>${r.ico||"🍴"} ${r.title}<small class="meta">${x.when}, ${r.portions}</small></span></label>`;
+  }).join("")}</div>`).join(""):`<div class="group"><p class="gsub">Auf deiner Wochenliste steht gerade kein Gericht mit Rezept. Im Tab Plan kannst du Gerichte ändern.</p></div>`;
+  const gl=gifts.filter(g=>g.onList);
+  giftGroupEl.innerHTML=gl.length?`<div class="group"><h3>🎁 Geschenke</h3>${gl.map(g=>{
+    const key="g:"+g.id,p=priceOf(g);
+    return `<label class="${state[key]?"done":""}"><input type="checkbox" data-gk="${key}" ${state[key]?"checked":""}><span>${escE(g.idea)}<small class="meta">für ${escE(g.who)}${p?", "+eur(p):""}${g.shop?", "+escE(g.shop):""}</small></span><button type="button" class="x" data-goff="${g.id}" aria-label="Von der Einkaufsliste entfernen">✕</button></label>`;
+  }).join("")}</div>`:"";
+  const nSel=ids.length;
+  document.getElementById("recCount").textContent=nSel?`${nSel} Rezept${nSel===1?"":"e"} gewählt`:"Noch kein Rezept gewählt";
+  document.getElementById("recClear").hidden=!nSel;
+  // Gesamtzähler: Grundliste plus Rezeptzutaten
+  const base=Object.values(allList()).flat();
+  const recItems=ids.flatMap(id=>RECIPES[id].ingredients.map((_,k)=>"r:"+id+":"+k));
+  const giftItems=gl.map(g=>"g:"+g.id);
+  const total=base.length+recItems.length+giftItems.length,done=base.filter(i=>state[i]).length+recItems.filter(k=>state[k]).length+giftItems.filter(k=>state[k]).length;
+  document.getElementById("count").textContent=`${done} von ${total} erledigt`;
+}
+const _renderBase=render;
+render=function(){_renderBase();renderRecipes()};
+giftGroupEl.addEventListener("change",e=>{
+  const c=e.target.closest("input[data-gk]");if(!c)return;
+  state[c.dataset.gk]=c.checked;save();render();
+});
+giftGroupEl.addEventListener("click",e=>{
+  const x=e.target.closest("[data-goff]");if(!x)return;
+  e.preventDefault();
+  const g=gifts.find(i=>i.id===x.dataset.goff);
+  if(g){g.onList=false;delete state["g:"+g.id];saveGifts();save();render();renderGifts()}
+});
+recGroupsEl.addEventListener("change",e=>{
+  const c=e.target.closest("input[data-rk]");if(!c)return;
+  state[c.dataset.rk]=c.checked;save();render();
+});
+recPickEl.addEventListener("change",e=>{
+  const c=e.target.closest("input[data-rp]");if(!c)return;
+  const id=c.dataset.rp,top=c.getBoundingClientRect().top;
+  if(c.checked){if(!recSel.includes(id))recSel.push(id)}else recSel=recSel.filter(x=>x!==id);
+  saveRec();render();
+  const again=recPickEl.querySelector(`input[data-rp="${id}"]`);
+  if(again)window.scrollBy(0,again.getBoundingClientRect().top-top);
+});
+recGroupsEl.addEventListener("click",e=>{
+  const x=e.target.closest("[data-rdel]");if(!x)return;
+  recSel=recSel.filter(id=>id!==x.dataset.rdel);saveRec();render();
+});
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.tab==="list")render()}));
+document.getElementById("recClear").onclick=()=>{recSel=[];saveRec();render()};
+render();
+
+/* ---------- Geschenkideen ---------- */
+const STEPS=[["b","🛒","Bestellt"],["g","📦","Geliefert"],["v","🎁","Verpackt"]];
+let giftFilter="";
+const giftListEl=document.getElementById("giftList"),giftFilterEl=document.getElementById("giftFilter");
+function linkHtml(shop){
+  if(!shop)return "";
+  if(/^https?:\/\//i.test(shop)){
+    let host=shop;try{host=new URL(shop).hostname.replace(/^www\./,"")}catch(e){}
+    return `<a class="glink" href="${escE(shop)}" target="_blank" rel="noopener noreferrer">${escE(host)}</a>`;
+  }
+  return `<span class="gshop">${escE(shop)}</span>`;
+}
+function renderGifts(){
+  const persons=[...new Set(gifts.map(g=>g.who))].sort((a,b)=>a.localeCompare(b,"de"));
+  if(giftFilter&&!persons.includes(giftFilter))giftFilter="";
+  document.getElementById("whoList").innerHTML=persons.map(p=>`<option value="${escE(p)}">`).join("");
+  giftFilterEl.innerHTML=gifts.length?[`<button type="button" data-gf="" class="${giftFilter===""?"active":""}">Alle (${gifts.length})</button>`].concat(persons.map(p=>`<button type="button" data-gf="${escE(p)}" class="${giftFilter===p?"active":""}">${escE(p)} (${gifts.filter(g=>g.who===p).length})</button>`)).join(""):"";
+  const shown=gifts.filter(g=>!giftFilter||g.who===giftFilter);
+  const card=g=>{
+    const s=g.s||{},all=STEPS.every(([k])=>s[k]);
+    return `<article class="gcard${all?" done":""}">
+      <div class="ghead"><h4>${escE(g.idea)}</h4><button type="button" class="x" data-gdel="${g.id}" aria-label="Idee löschen">✕</button></div>
+      <p class="gmeta"><span class="who">🎁 für ${escE(g.who)}</span>${priceOf(g)?`<span>${eur(priceOf(g))}</span>`:""}${linkHtml(g.shop)}${all?`<span class="fin">Fertig</span>`:""}</p>
+      <div class="onlist"><button type="button" class="fav sm${g.onList?" on":""}" data-gl="${g.id}">${g.onList?"✓ Auf der Einkaufsliste":"🛒 Auf die Einkaufsliste"}</button></div>
+      <div class="steps" role="group" aria-label="Status">${STEPS.map(([k,ic,lab])=>`<button type="button" class="st${s[k]?" on":""}" data-gs="${g.id}:${k}" aria-pressed="${s[k]?"true":"false"}"><i>${ic}</i><span>${lab}</span></button>`).join("")}</div>
+    </article>`;
+  };
+  let html="";
+  if(!shown.length){
+    html=`<div class="empty"><div class="big">🎁</div><h3>${gifts.length?"Keine Ideen für diese Person":"Noch keine Geschenkideen"}</h3><p>${gifts.length?"Wähle oben „Alle“ oder trage eine neue Idee ein.":"Trage oben die erste Idee ein, mit der Person, für die sie gedacht ist."}</p></div>`;
+  }else{
+    const who=giftFilter?[giftFilter]:persons;
+    html=who.map(p=>{
+      const list=shown.filter(g=>g.who===p);
+      const sum=list.reduce((n,g)=>n+priceOf(g),0);
+      return `<h3 class="gwho">${escE(p)}<span class="gcount">${list.length} ${list.length===1?"Idee":"Ideen"}${sum?`, ${eur(sum)}`:""}</span>${list.some(g=>!g.onList)?`<button type="button" class="fav sm" data-gall="${escE(p)}">🛒 Alle auf die Einkaufsliste</button>`:""}</h3>${list.map(card).join("")}`;
+    }).join("");
+    const total=shown.reduce((n,g)=>n+priceOf(g),0);
+    const cnt=k=>shown.filter(g=>(g.s||{})[k]).length;
+    html+=`<p class="note">${STEPS.map(([k,ic,lab])=>`${ic} ${lab}: ${cnt(k)} von ${shown.length}`).join(" &nbsp; ")}${total?` &nbsp; Summe: ${eur(total)}`:""}</p>`;
+  }
+  giftListEl.innerHTML=html;
+}
+document.getElementById("giftForm").onsubmit=e=>{
+  e.preventDefault();
+  const f=e.target.elements,clean=v=>v.replace(/[<>]/g,"").trim();
+  const idea=clean(f.idea.value),who=clean(f.who.value);
+  if(!idea||!who)return;
+  gifts.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),idea,who,price:clean(f.price.value),shop:clean(f.shop.value),s:{}});
+  saveGifts();
+  f.idea.value="";f.price.value="";f.shop.value="";
+  renderGifts();f.idea.focus();
+};
+giftFilterEl.addEventListener("click",e=>{
+  const b=e.target.closest("button[data-gf]");if(!b)return;
+  giftFilter=b.dataset.gf;renderGifts();
+});
+giftListEl.addEventListener("click",e=>{
+  const st=e.target.closest("[data-gs]");
+  if(st){
+    const [id,k]=st.dataset.gs.split(":"),g=gifts.find(x=>x.id===id);
+    if(g){g.s=g.s||{};g.s[k]=!g.s[k];saveGifts();renderGifts()}
+    return;
+  }
+  const gl=e.target.closest("[data-gl]");
+  if(gl){
+    const g=gifts.find(x=>x.id===gl.dataset.gl);
+    if(g){g.onList=!g.onList;if(!g.onList)delete state["g:"+g.id];saveGifts();save();renderGifts();render()}
+    return;
+  }
+  const ga=e.target.closest("[data-gall]");
+  if(ga){
+    gifts.forEach(g=>{if(g.who===ga.dataset.gall)g.onList=true});
+    saveGifts();renderGifts();render();return;
+  }
+  const del=e.target.closest("[data-gdel]");
+  if(del){
+    const g=gifts.find(x=>x.id===del.dataset.gdel);
+    if(g&&confirm(`Idee „${g.idea}“ löschen?`)){gifts=gifts.filter(x=>x.id!==g.id);delete state["g:"+g.id];saveGifts();save();renderGifts();render()}
+  }
+});
+renderGifts();
+
+</script>
+</body>
+</html>
