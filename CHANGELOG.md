@@ -1,7 +1,5 @@
-## Version 1.0.1 vom 2.10.2026
-
+## 1.0.1 vom 2.10.2026
 Fehlerkorrekturen nach einer Gesamtprüfung.
-
 - Geschenke: Preise mit Tausenderpunkt (z. B. 1.299,00) werden jetzt richtig gelesen, negative Eingaben zählen nicht mehr.
 - Einkaufsliste: Käse auf 800 g und Zwiebeln auf 4 erhöht, damit die Mengen zu den Rezepten passen.
 - Einkaufsliste: Hinweis, dass die Grundliste die Gerichte der Woche schon enthält, damit Zutaten nicht doppelt gekauft werden.
