@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="1.2.0">
+<meta name="version" content="1.3.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -152,6 +152,9 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
 .onlist button.fav{margin-top:0}
 .gwho button.fav.sm{margin:0 0 0 auto}
 .group label .x{flex:none}
+.fzpick{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;font-weight:700;color:var(--ink);background:transparent;border:0;border-top:1px dashed var(--line);padding:9px 0;cursor:pointer}
+.fzpick:first-of-type{border-top:0}
+.fzpick>span:first-child{font-size:1.5rem;line-height:1;flex:none}
 .rh{display:flex;align-items:flex-start;gap:8px}.rh span{flex:1}
 .ver{max-width:760px;margin:0 auto;padding:0 16px 28px;text-align:center;color:var(--muted);font-size:.8rem;font-weight:700}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -161,7 +164,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
 </head>
 <body>
 <header class="top"><h1>Felix App 🌞</h1><p>Essensplan, Einkauf und Geschenke für die Familie.</p></header>
-<nav><button data-tab="plan" class="active"><i>📅</i><span>Plan</span></button><button data-tab="choose"><i>🗓️</i><span>Auswahl</span></button><button data-tab="recipes"><i>👩‍🍳</i><span>Rezepte</span></button><button data-tab="book"><i>📖</i><span>Kochbuch</span></button><button data-tab="list"><i>🛒</i><span>Einkauf</span></button><button data-tab="cost"><i>💶</i><span>Kosten</span></button><button data-tab="gifts"><i>🎁</i><span>Geschenke</span></button></nav>
+<nav><button data-tab="plan" class="active"><i>📅</i><span>Plan</span></button><button data-tab="choose"><i>🗓️</i><span>Auswahl</span></button><button data-tab="recipes"><i>👩‍🍳</i><span>Rezepte</span></button><button data-tab="book"><i>📖</i><span>Kochbuch</span></button><button data-tab="list"><i>🛒</i><span>Einkauf</span></button><button data-tab="cost"><i>💶</i><span>Kosten</span></button><button data-tab="gifts"><i>🎁</i><span>Geschenke</span></button><button data-tab="fun"><i>🎨</i><span>Freizeit</span></button></nav>
 <main>
   <section id="plan" class="active">
     <div class="bar"><span id="editHint"></span><span class="bgrp"><button type="button" class="etoggle fav">✏️ Bearbeiten</button><button type="button" class="fav" data-resetall hidden>Alles zurücksetzen</button></span></div>
@@ -215,6 +218,24 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     <p class="note">Grobe Schätzwerte, keine tagesaktuellen Preise. Mit Eigenmarken und Wochenangeboten lässt sich bei Rewe etwas sparen. Die Schätzung gilt für den ursprünglichen Plan von Freitag bis Dienstag. Änderungen und Gerichte aus der Auswahl sind nicht eingerechnet.</p>
     <p class="note"><b>Lidl</b> ist unsere Ergänzung: Preislich meist nah an Aldi, mit großer Obst- und Gemüseauswahl und frischem Brot aus der Backstation.</p>
   </section>
+  <section id="fun">
+    <div class="season" id="fzDates"></div>
+    <div class="group" id="fzWeek"></div>
+    <div class="appts" id="fzChips"></div>
+    <div class="bar"><span id="fzCount"></span></div>
+    <div id="fzList"></div>
+    <details class="recipe addform" id="fzAdd">
+      <summary><span class="ri">➕</span><span class="rt">Eigene Idee hinzufügen</span></summary>
+      <form id="fzForm" class="rbody">
+        <label class="fld"><span>Art</span><select name="k" class="search" style="margin:4px 0 0"><option value="b">Basteln</option><option value="u">Unternehmung</option></select></label>
+        <label class="fld"><span>Name der Idee</span><input name="t" required maxlength="80"></label>
+        <label class="fld"><span>Beschreibung (optional)</span><textarea name="d" rows="3" maxlength="500"></textarea></label>
+        <label class="fld"><span>Material zum Besorgen (eins pro Zeile, optional)</span><textarea name="buy" rows="3"></textarea></label>
+        <button type="submit" class="fav on">Idee speichern</button>
+      </form>
+    </details>
+    <p class="note">Die Ideen sind für Kinder von etwa 4 bis 9 Jahren gedacht und passen zu Herbst und November. Bei Messern, Heißkleber, Backofen und Kerzen helfen Erwachsene. Öffnungszeiten und Preise bitte vorher prüfen. Eure Häkchen, Notizen und eigenen Ideen werden nur in diesem Browser gespeichert.</p>
+  </section>
   <section id="gifts">
     <form id="giftForm" class="gform">
       <label class="fld"><span>Geschenkidee</span><input name="idea" required maxlength="80" placeholder="z. B. Bauklötze aus Holz"></label>
@@ -231,7 +252,7 @@ button.fav.sm{margin-top:6px;padding:4px 14px;font-size:.88rem}
     <p class="note">Tippe bei einer Idee auf 🛒, 📦 oder 🎁, um den Stand zu markieren. Die Ideen werden nur in diesem Browser gespeichert.</p>
   </section>
 </main>
-<footer class="ver">Felix App, Version 1.2.0 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 1.3.0 vom 2.10.2026</footer>
 <script>
 
 
@@ -1264,6 +1285,144 @@ giftListEl.addEventListener("click",e=>{
   }
 });
 renderGifts();
+
+/* ---------- Freizeit: Basteln und Unternehmungen ---------- */
+/* k: b = Basteln, u = Unternehmung. wo: drinnen oder draußen. wet: geht auch bei Regen. buy: muss man oft kaufen, have: meist vorhanden oder gesammelt. */
+const FZ=[
+ {id:"b1",k:"b",ico:"🍂",t:"Blätter-Drucke",d:"Bunte Blätter mit Farbe bestreichen und auf Papier abdrucken. Aus den Abdrücken werden Bäume, Igel oder Eulen.",time:"30 Min.",age:"ab 4",wo:"drinnen",wet:true,cost:"günstig",buy:["Fingerfarbe oder Wasserfarben","Malpapier"],have:["bunte Blätter vom Spaziergang","Pinsel","Zeitung als Unterlage"],tip:"Frische, leicht feuchte Blätter drucken am besten. Die Adern geben schöne Muster."},
+ {id:"b2",k:"b",ico:"🌰",t:"Kastanienmännchen und -tiere",d:"Aus Kastanien, Eicheln und Zahnstochern entstehen Männchen, Igel und Spinnen. Die Löcher vorbohren übernimmt ein Erwachsener.",time:"30 Min.",age:"ab 5",wo:"drinnen",wet:true,cost:"günstig",buy:["Knete oder Modelliermasse","Wackelaugen"],have:["Kastanien und Eicheln","Zahnstocher","Handbohrer oder dicke Nadel"],tip:"Kastanien vorher auf Löcher und Maden prüfen. Frische Kastanien lassen sich am leichtesten bohren."},
+ {id:"b3",k:"b",ico:"🏮",t:"Windlicht aus dem Marmeladenglas",d:"Ein Glas mit Transparentpapier-Schnipseln bekleben, bis es bunt leuchtet. Mit einem LED-Teelicht wird es gemütlich.",time:"40 Min.",age:"ab 5",wo:"drinnen",wet:true,cost:"günstig",buy:["Transparentpapier","Bastelkleber oder Kleister","LED-Teelichter"],have:["leere Marmeladengläser","Schere","Pinsel"],tip:"Mit LED-Lichtern statt echten Kerzen ist es für Kinder sicher."},
+ {id:"b4",k:"b",ico:"🏮",t:"Laterne für St. Martin",d:"Eine Laterne aus Tonpapier und Transparentpapier mit eigenem Motiv. Passt zum Laternenumzug am 11. November.",time:"60 Min.",age:"ab 6",wo:"drinnen",wet:true,cost:"günstig",buy:["Tonpapier","Transparentpapier","LED-Licht für Laternen","Laternenstab"],have:["Schere","Kleber","Draht oder Schnur"],tip:"Früh anfangen, damit die Laterne bis zum Umzug fertig ist. Das Motiv vorher auf Papier skizzieren."},
+ {id:"b5",k:"b",ico:"🍁",t:"Herbstkranz aus Blättern und Zweigen",d:"Auf einen Pappring werden Blätter, Zweige, Beeren und Zapfen geklebt. Der Kranz hängt dann an der Tür oder am Fenster.",time:"45 Min.",age:"ab 6",wo:"drinnen",wet:true,cost:"günstig",buy:["Heißkleber-Patronen oder Bastelkleber","Band zum Aufhängen"],have:["Pappe für den Ring","Blätter, Zweige, Zapfen","Schere"],tip:"Heißkleber nur durch Erwachsene. Die Kinder legen das Muster vorher aus."},
+ {id:"b6",k:"b",ico:"⭐",t:"Salzteig-Anhänger",d:"Teig aus Mehl, Salz und Wasser kneten, ausstechen, trocknen und bemalen. Als Schmuck oder Geschenk.",time:"60 Min. plus Trocknen",age:"ab 5",wo:"drinnen",wet:true,cost:"günstig",buy:["Ausstechformen","Acrylfarben oder Wasserfarben","Band"],have:["2 Tassen Mehl","1 Tasse Salz","1 Tasse Wasser","Strohhalm für das Loch"],tip:"Im Backofen bei etwa 100 bis 120 °C zwei bis drei Stunden trocknen, zwischendurch wenden. Der Teig ist nicht zum Essen."},
+ {id:"b7",k:"b",ico:"🦉",t:"Tannenzapfen-Eulen",d:"Aus Zapfen, Filz und Wackelaugen entstehen kleine Eulen, die auf dem Fensterbrett sitzen.",time:"30 Min.",age:"ab 5",wo:"drinnen",wet:true,cost:"günstig",buy:["Filz","Wackelaugen","Bastelkleber"],have:["Tannenzapfen","Schere"],tip:"Zapfen vorher bei 100 °C im Ofen 20 Minuten erwärmen, dann sind keine Krabbeltiere mehr drin."},
+ {id:"b8",k:"b",ico:"👻",t:"Gespenster-Girlande",d:"Aus weißem Papier werden Gespenster geschnitten, mit Gesichtern bemalt und an eine Schnur gehängt. Passt zu Halloween.",time:"30 Min.",age:"ab 4",wo:"drinnen",wet:true,cost:"günstig",buy:["weißes Tonpapier","Wolle oder Schnur"],have:["Filzstifte","Schere","Klebestreifen"],tip:"Mit einer Schablone schneiden alle Kinder gleich große Gespenster."},
+ {id:"b9",k:"b",ico:"🖍️",t:"Blätter-Frottage",d:"Ein Blatt unter Papier legen und mit Wachsmalstiften darüberrubbeln. Das Blattmuster erscheint wie von Zauberhand.",time:"15 Min.",age:"ab 4",wo:"drinnen",wet:true,cost:"kostenlos",buy:[],have:["Blätter","dünnes Papier","Wachsmalstifte ohne Papierhülle"],tip:"Die Stifte flach halten und seitlich rubbeln."},
+ {id:"b10",k:"b",ico:"🐦",t:"Vogelfutter-Anhänger",d:"Körner mit geschmolzenem Fett mischen, in Formen füllen und aufhängen. Im Winter freuen sich die Vögel.",time:"45 Min. plus Kühlen",age:"ab 5",wo:"drinnen",wet:true,cost:"günstig",buy:["Kokosfett","Vogelfutter oder Körnermischung","Ausstechformen"],have:["Schnur","Kochtopf"],tip:"Das Fett nur Erwachsene schmelzen lassen. Am besten über Nacht kühl stellen."},
+ {id:"b11",k:"b",ico:"🎁",t:"Adventskalender selber basteln",d:"24 kleine Tüten oder Schachteln bemalen, nummerieren und füllen. Der Kalender beginnt am 1. Dezember.",time:"90 Min.",age:"ab 6",wo:"drinnen",wet:true,cost:"mittel",buy:["24 kleine Papiertüten oder Schachteln","Zahlenaufkleber","Wäscheklammern","Kleinigkeiten zum Füllen"],have:["Schnur","Stifte"],tip:"Neben Süßem passen kleine Aufgaben, zum Beispiel Zusammen ein Lied singen."},
+ {id:"b12",k:"b",ico:"🧶",t:"Fensterbilder aus Transparentpapier",d:"Aus schwarzem Tonpapier einen Rahmen mit Ausschnitten schneiden und Transparentpapier dahinterkleben. Das Licht macht daraus ein buntes Bild.",time:"45 Min.",age:"ab 7",wo:"drinnen",wet:true,cost:"günstig",buy:["schwarzes Tonpapier","Transparentpapier"],have:["Bastelmesser oder Schere","Kleber"],tip:"Das Ausschneiden mit dem Bastelmesser übernimmt ein Erwachsener."},
+ {id:"u1",k:"u",ico:"🪁",t:"Drachen steigen lassen",d:"An einem windigen Tag auf ein freies Feld oder eine Wiese. Wer keinen Drachen hat, bastelt einen aus Papier und Holzstäbchen.",time:"1 bis 2 Std.",age:"ab 5",wo:"draußen",wet:false,cost:"günstig",buy:["Drachen oder Material für einen Drachen"],have:["warme Jacke","Mütze"],tip:"Weit weg von Bäumen und Stromleitungen starten. Der Wind sollte ordentlich wehen, aber nicht stürmen."},
+ {id:"u2",k:"u",ico:"🌲",t:"Waldspaziergang mit Schatzsuche",d:"Eine Liste mit Fundstücken mitnehmen: Kastanie, Eichel, rotes Blatt, Stock, Feder, Moos. Wer alles hat, ist Schatzmeister.",time:"2 Std.",age:"ab 4",wo:"draußen",wet:false,cost:"kostenlos",buy:[],have:["Stoffbeutel","Gummistiefel","Brotdose und Getränk"],tip:"Pilze nur anschauen und fotografieren, nicht pflücken oder essen."},
+ {id:"u3",k:"u",ico:"🏮",t:"Laternenumzug am 11. November",d:"Viele Kitas, Schulen und Gemeinden laden zum St.-Martins-Umzug ein. Mit selbst gebastelter Laterne ist er am schönsten.",time:"1 bis 2 Std.",age:"für alle",wo:"draußen",wet:false,cost:"kostenlos",buy:[],have:["Laterne","warme Kleidung"],tip:"Termin und Treffpunkt rechtzeitig bei Schule, Kita oder Gemeinde erfragen. Der 11. November ist 2026 ein Mittwoch."},
+ {id:"u4",k:"u",ico:"🏊",t:"Schwimmbad oder Therme",d:"Wenn es draußen nass und kalt ist, tut ein Besuch im warmen Wasser gut. Rutschen, Wellen oder Sprungturm machen auch dem älteren Kind Spaß.",time:"2 bis 3 Std.",age:"ab 5",wo:"drinnen",wet:true,cost:"mittel",buy:[],have:["Badesachen","Handtücher","Haarbürste"],tip:"Am Wochenende vormittags ist es oft voller. Schwimmhilfen für das jüngere Kind einpacken."},
+ {id:"u5",k:"u",ico:"🏛️",t:"Museum oder Kindermuseum",d:"Naturkunde, Technik oder ein Mitmach-Museum für Kinder: Bei schlechtem Wetter eine gute Wahl.",time:"2 bis 3 Std.",age:"ab 5",wo:"drinnen",wet:true,cost:"mittel",buy:[],have:["Rucksack mit Getränken","Notizblock"],tip:"Vorher auf der Webseite nach Kinderführungen und Mitmach-Stationen schauen."},
+ {id:"u6",k:"u",ico:"🦁",t:"Zoo oder Tierpark",d:"Im Herbst ist es ruhiger, und viele Tiere sind aktiv. Ein Rundgang mit Rätselbogen hält auch das ältere Kind bei der Sache.",time:"3 bis 4 Std.",age:"für alle",wo:"draußen",wet:false,cost:"mittel",buy:[],have:["wetterfeste Kleidung","Proviant"],tip:"Fütterungszeiten vorher heraussuchen und den Besuch darauf legen."},
+ {id:"u7",k:"u",ico:"🧗",t:"Kletterhalle oder Indoor-Spielplatz",d:"Austoben bei jedem Wetter. Je nach Halle gibt es Bereiche für das jüngere Kind und Herausforderungen für das ältere.",time:"2 bis 3 Std.",age:"ab 4",wo:"drinnen",wet:true,cost:"mittel",buy:[],have:["Sportsachen","Socken (oft Pflicht)"],tip:"Nach Anmeldung oder Kinderkurs fragen, manche Hallen haben Schnupperangebote."},
+ {id:"u8",k:"u",ico:"📚",t:"Bibliothek und Vorlesen",d:"Bücher ausleihen, ein neues Lieblingsbuch finden und zu Hause mit Decke und Kakao vorlesen.",time:"1 bis 2 Std.",age:"für alle",wo:"drinnen",wet:true,cost:"kostenlos",buy:[],have:["Büchereiausweis","Tasche"],tip:"Viele Bibliotheken bieten Vorlesestunden für Kinder an."},
+ {id:"u9",k:"u",ico:"🍎",t:"Obsthof und Apfelernte",d:"Auf einem Obsthof Äpfel pflücken, frischen Saft probieren und einen Korb mit nach Hause nehmen. Daraus lässt sich Apfelmus oder Kuchen machen.",time:"2 bis 3 Std.",age:"für alle",wo:"draußen",wet:false,cost:"günstig",buy:[],have:["Körbe oder Taschen","Gummistiefel"],tip:"Die Pflücksaison endet meist im Oktober. Öffnungszeiten vorher prüfen."},
+ {id:"u10",k:"u",ico:"☔",t:"Pfützen-Tour",d:"Regenjacke, Gummistiefel und los. Wer springt am höchsten, wer baut das größte Schiff aus Blättern?",time:"1 Std.",age:"für alle",wo:"draußen",wet:true,cost:"kostenlos",buy:[],have:["Regenjacke","Gummistiefel","Wechselkleidung"],tip:"Danach gibt es heißen Tee oder Kakao und trockene Socken."},
+ {id:"u11",k:"u",ico:"🔦",t:"Taschenlampen-Rallye",d:"Wenn es abends früh dunkel wird: Mit Taschenlampen im Garten, Hof oder Wohnzimmer Hinweise suchen und kleine Rätsel lösen.",time:"45 Min.",age:"ab 5",wo:"draußen",wet:false,cost:"kostenlos",buy:[],have:["Taschenlampen","Zettel mit Hinweisen"],tip:"Drinnen geht es genauso gut, dann bei Regen auch mit Decken und Kissen."},
+ {id:"u12",k:"u",ico:"🧁",t:"Gemeinsam backen",d:"Waffeln, Muffins oder Apfelkuchen: Die Kinder wiegen ab, rühren und verzieren. Danach gibt es etwas Warmes zur Belohnung.",time:"1 bis 2 Std.",age:"ab 4",wo:"drinnen",wet:true,cost:"günstig",buy:[],have:["Backzutaten","Schürzen"],tip:"Ein einfaches Rezept aus dem Tab Rezepte oder der eigenen Sammlung nehmen."},
+ {id:"u13",k:"u",ico:"🎳",t:"Minigolf oder Bowling",d:"Ein Spiel für alle, bei dem auch das jüngere Kind gut mitmachen kann. Bowling geht bei jedem Wetter, Minigolf eher bei Sonne.",time:"1 bis 2 Std.",age:"ab 5",wo:"drinnen",wet:true,cost:"mittel",buy:[],have:[],tip:"Bei Bowling nach Bahnen mit Bande fragen, dann landen weniger Kugeln im Aus."},
+ {id:"u14",k:"u",ico:"🎭",t:"Kindertheater oder Kino",d:"Ein Kindertheaterstück oder ein Familienfilm. Im November gibt es oft Vorstellungen rund um Laternen und Märchen.",time:"2 Std.",age:"ab 5",wo:"drinnen",wet:true,cost:"mittel",buy:[],have:[],tip:"Altersfreigabe und Dauer vorher prüfen. Für das jüngere Kind nicht zu lang."}
+];
+const FZ_TERMINE=[["Samstag, 31.10.","Halloween: Gespenster-Girlande basteln oder eine kleine Gruselrunde mit Taschenlampe."],["Mittwoch, 11.11.","Sankt Martin: Laternenumzug, Laterne vorher basteln."],["Sonntag, 29.11.","Erster Advent: Adventskalender ab 1. Dezember vorbereiten."]];
+let fz={done:{},fav:{},own:[],listed:{},notes:{}};
+try{const s=JSON.parse(localStorage.getItem("freizeit")||"{}");["done","fav","listed","notes"].forEach(k=>{if(s[k]&&typeof s[k]==="object"&&!Array.isArray(s[k]))fz[k]=s[k]});if(Array.isArray(s.own))fz.own=s.own.filter(o=>o&&o.id&&o.t)}catch(e){}
+const saveFz=()=>{try{localStorage.setItem("freizeit",JSON.stringify(fz))}catch(e){}};
+let fzFilter="";
+const FZ_FILTERS=[["","Alle"],["b","🎨 Basteln"],["u","🌳 Unternehmungen"],["wet","☔ Bei Regen"],["fav","⭐ Gemerkt"],["done","✓ Gemacht"]];
+const fzEl=document.getElementById("fzList"),fzChips=document.getElementById("fzChips");
+const fzAll=()=>[...FZ,...fz.own.map(o=>({id:o.id,k:o.k==="u"?"u":"b",ico:o.k==="u"?"🌳":"🎨",t:o.t,d:o.d||"",time:"",age:"",wo:"",wet:false,cost:"",buy:o.buy||[],have:[],tip:"",own:true}))];
+function fzMatch(i){
+  if(!fzFilter)return true;
+  if(fzFilter==="b"||fzFilter==="u")return i.k===fzFilter;
+  if(fzFilter==="wet")return i.wet;
+  if(fzFilter==="fav")return !!fz.fav[i.id];
+  if(fzFilter==="done")return !!fz.done[i.id];
+  return true;
+}
+function renderFz(){
+  const open=new Set([...fzEl.querySelectorAll("details[open]")].map(d=>d.dataset.k));
+  const all=fzAll(),shown=all.filter(fzMatch);
+  const nDone=all.filter(i=>fz.done[i.id]).length;
+  fzChips.innerHTML=FZ_FILTERS.map(([k,l])=>`<button type="button" data-fzf="${k}" class="${fzFilter===k?"active":""}">${l}</button>`).join("");
+  document.getElementById("fzCount").textContent=`${nDone} von ${all.length} Ideen gemacht`;
+  const card=i=>{
+    const meta=[i.time,i.age,i.wo,i.cost].filter(Boolean).join(", ");
+    const listed=!!fz.listed[i.id];
+    return `<details class="recipe fz" data-k="${i.id}"${open.has(i.id)?" open":""}>
+      <summary><span class="ri">${i.ico}</span><span class="rt">${escE(i.t)}${fz.done[i.id]?" ✓":""}${fz.fav[i.id]?" ⭐":""}<span class="meta">${i.k==="b"?"Basteln":"Unternehmung"}${meta?", "+escE(meta):""}${i.wet?", auch bei Regen":""}</span></span></summary>
+      <div class="rbody">
+        ${i.d?`<p>${escE(i.d)}</p>`:""}
+        ${i.buy.length?`<h4>Material zum Besorgen</h4><ul>${i.buy.map(x=>`<li>${escE(x)}</li>`).join("")}</ul>`:""}
+        ${i.have.length?`<h4>Meist schon da</h4><ul>${i.have.map(x=>`<li>${escE(x)}</li>`).join("")}</ul>`:""}
+        ${i.tip?`<div class="tip">💡 ${escE(i.tip)}</div>`:""}
+        <div class="prow">
+          <button type="button" class="fav${fz.done[i.id]?" on":""}" data-fzdone="${i.id}">${fz.done[i.id]?"✓ Gemacht":"Als gemacht abhaken"}</button>
+          <button type="button" class="fav${fz.fav[i.id]?" on":""}" data-fzfav="${i.id}">${fz.fav[i.id]?"⭐ Gemerkt":"☆ Merken"}</button>
+          ${i.buy.length?`<button type="button" class="fav${listed?" on":""}" data-fzlist="${i.id}">${listed?"✓ Material auf der Einkaufsliste":"🛒 Material auf die Einkaufsliste"}</button>`:""}
+          ${i.own?`<button type="button" class="fav" data-fzdel="${i.id}">Löschen</button>`:""}
+        </div>
+        <label class="fld"><span>Eure Notiz</span><textarea data-fzn="${i.id}" rows="2" placeholder="z. B. hat dem älteren Kind gefallen, nächstes Mal mehr Farbe">${escE(fz.notes[i.id]||"")}</textarea></label>
+      </div>
+    </details>`;
+  };
+  fzEl.innerHTML=shown.length?shown.map(card).join(""):`<div class="empty"><div class="big">🎨</div><h3>Hier ist noch nichts</h3><p>${fzFilter==="fav"?"Tippe bei einer Idee auf „Merken“.":fzFilter==="done"?"Hake eine Idee als gemacht ab, dann erscheint sie hier.":"Für diese Auswahl gibt es keine Ideen."}</p></div>`;
+}
+fzChips.addEventListener("click",e=>{const b=e.target.closest("[data-fzf]");if(!b)return;fzFilter=b.dataset.fzf;renderFz()});
+fzEl.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  const d=t.dataset;
+  if(d.fzdone){fz.done[d.fzdone]=!fz.done[d.fzdone];if(!fz.done[d.fzdone])delete fz.done[d.fzdone];saveFz();renderFz();return}
+  if(d.fzfav){fz.fav[d.fzfav]=!fz.fav[d.fzfav];if(!fz.fav[d.fzfav])delete fz.fav[d.fzfav];saveFz();renderFz();return}
+  if(d.fzlist){
+    const i=fzAll().find(x=>x.id===d.fzlist);if(!i)return;
+    if(fz.listed[i.id]){
+      (fz.listed[i.id]||[]).forEach(v=>{extra=extra.filter(x=>x!==v);delete state[v]});
+      delete fz.listed[i.id];
+    }else{
+      const added=[];
+      i.buy.forEach(v=>{if(!extra.includes(v)){extra.push(v);added.push(v)}});
+      fz.listed[i.id]=added;
+    }
+    saveExtra();save();saveFz();render();renderFz();return;
+  }
+  if(d.fzdel){
+    if(!confirm("Diese Idee löschen?"))return;
+    fz.own=fz.own.filter(o=>o.id!==d.fzdel);delete fz.done[d.fzdel];delete fz.fav[d.fzdel];delete fz.notes[d.fzdel];delete fz.listed[d.fzdel];
+    saveFz();renderFz();
+  }
+});
+fzEl.addEventListener("input",e=>{const t=e.target.closest("textarea[data-fzn]");if(!t)return;fz.notes[t.dataset.fzn]=t.value;saveFz()});
+document.getElementById("fzForm").onsubmit=e=>{
+  e.preventDefault();
+  const f=e.target.elements,clean=v=>v.replace(/[<>]/g,"").trim();
+  const t=clean(f.t.value);if(!t)return;
+  const buy=f.buy.value.split("\n").map(clean).filter(Boolean);
+  fz.own.push({id:"o"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),k:f.k.value==="u"?"u":"b",t,d:clean(f.d.value),buy});
+  saveFz();e.target.reset();document.getElementById("fzAdd").open=false;
+  fzFilter="";renderFz();
+};
+document.getElementById("fzDates").innerHTML=FZ_TERMINE.map(([d,t])=>`<p><b>${d}</b> ${t}</p>`).join("");
+renderFz();
+
+/* ---------- Ideen der Woche: jeden Montag eine neue Auswahl von 5 Ideen ---------- */
+function fzMonday(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate(),12);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+function fzWeekPick(d){
+  const b=FZ.filter(i=>i.k==="b"),u=FZ.filter(i=>i.k==="u");
+  const w=Math.max(0,Math.round((fzMonday(d)-new Date(2026,8,28,12))/604800000));
+  let bi=0,ui=0,pick=[];
+  for(let k=0;k<=w;k++){
+    const nb=k%2===0?3:2,nu=5-nb;
+    pick=[];
+    for(let j=0;j<nb;j++)pick.push(b[(bi+j)%b.length]);
+    for(let j=0;j<nu;j++)pick.push(u[(ui+j)%u.length]);
+    bi+=nb;ui+=nu;
+  }
+  return pick;
+}
+function renderFzWeek(){
+  const m=fzMonday(new Date()),pick=fzWeekPick(new Date());
+  document.getElementById("fzWeek").innerHTML=`<h3>Ideen der Woche</h3><p class="gsub">Neue Auswahl jeden Montag, diese Woche seit Montag, ${m.getDate()}.${m.getMonth()+1}.</p>`+pick.map(i=>`<button type="button" class="fzpick" data-fzgo="${i.id}"><span>${i.ico}</span><span>${escE(i.t)}<small class="meta">${i.k==="b"?"Basteln":"Unternehmung"}${i.time?", "+escE(i.time):""}</small></span></button>`).join("");
+}
+document.getElementById("fzWeek").addEventListener("click",e=>{
+  const b=e.target.closest("[data-fzgo]");if(!b)return;
+  fzFilter="";renderFz();
+  const el=fzEl.querySelector(`details[data-k="${b.dataset.fzgo}"]`);
+  if(el){el.open=true;el.scrollIntoView({behavior:"smooth",block:"start"})}
+});
+renderFzWeek();
 
 </script>
 </body>

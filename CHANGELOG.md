@@ -3,6 +3,15 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 1.3.0 vom 2.10.2026
+Neuer Reiter Freizeit mit Basteln und Unternehmungen.
+- 26 Ideen für Kinder von etwa 4 bis 9 Jahren, passend zu Herbst und November (12 zum Basteln, 14 Unternehmungen).
+- Ideen der Woche: Jeden Montag wechselt eine Auswahl von 5 Ideen, gemischt aus Basteln und Unternehmungen.
+- Filter: Basteln, Unternehmungen, bei Regen, gemerkt, gemacht.
+- Je Idee: Beschreibung, Material zum Besorgen, was meist schon da ist, Tipp, Notiz, als gemacht abhaken, merken.
+- Das Material lässt sich mit einem Tipp auf die Einkaufsliste setzen und wieder entfernen.
+- Eigene Ideen hinzufügen und löschen. Termine: Halloween, St. Martin, erster Advent.
+
 ## 1.2.0 vom 2.10.2026
 Die Einkaufsliste ist nach Zutaten statt nach Gerichten sortiert.
 - Gleiche Zutaten aus verschiedenen Gerichten werden zusammengerechnet (zum Beispiel Eier: 15).
