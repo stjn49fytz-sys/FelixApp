@@ -1,3 +1,8 @@
+# Felix App, Änderungsprotokoll
+
+Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
+Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
+
 ## 1.0.1 vom 2.10.2026
 Fehlerkorrekturen nach einer Gesamtprüfung.
 - Geschenke: Preise mit Tausenderpunkt (z. B. 1.299,00) werden jetzt richtig gelesen, negative Eingaben zählen nicht mehr.
@@ -7,11 +12,6 @@ Fehlerkorrekturen nach einer Gesamtprüfung.
 - Rezepte: Hinweistext nennt jetzt auch die Rezepte für 2 Personen. Linsen-Curry zeigt den Airfryer für das Naan.
 - Plan: Der Tipp zum Nudelauflauf verschwindet, wenn Sonntag oder Montag geändert wurde.
 - Kosten: Hinweis, dass die Schätzung nur für den ursprünglichen Plan Freitag bis Dienstag gilt.
-
-# Felix App, Änderungsprotokoll
-
-Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
-Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
 ## 1.0.0 vom 2.10.2026
 Erster versionierter Stand.
