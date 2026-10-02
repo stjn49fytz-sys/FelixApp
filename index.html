@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.2.1">
+<meta name="version" content="2.3.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -576,6 +576,23 @@ input[type=checkbox]:checked::after{font-size:18px}
 :root[data-v="rock"] .day-h{font-size:1.4rem}
 :root[data-v="gothic"] .cal-d{border:1px solid var(--spot);border-radius:14px}
 :root[data-v="gothic"] .day-h{font-size:1.4rem;text-align:center;font-weight:400}
+
+/* Mini-Schritte, Wenn-dann, Uhrzeit */
+.tk-wd,.tk-time{margin:10px 0 0;font-weight:700}
+.tk-steps{margin-top:16px;padding-top:14px;border-top:2px dashed var(--line)}
+.tk-st-h{margin:0 0 6px;font-weight:800;font-size:.95rem}
+.tk-st{list-style:none;padding:0;margin:6px 0 10px}
+.tk-st li{display:flex;align-items:center;gap:12px;padding:6px 0}
+.tk-st li span{flex:1;min-width:0;overflow-wrap:anywhere}
+.tk-st li span.is-done{text-decoration:line-through;color:var(--muted)}
+.tk-stform{display:flex;gap:8px;flex-wrap:wrap}
+.tk-stform .field{flex:1 1 180px;font-size:16px}
+.tk-edit{margin-top:14px;padding-top:12px;border-top:2px dashed var(--line)}
+.tk-edit .field{font-size:16px;min-height:46px}
+.tk-edit-b{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.tk-opt{margin-top:10px}
+.tk-opt summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700;color:var(--muted)}
+.tk-opt .field{font-size:16px;min-height:46px}
 @media print{nav,.days,.bar button,.meal a{display:none}section{display:block!important}body{background:#fff;color:#000}.meal,details.recipe{transform:none!important;break-inside:avoid}}
 </style>
 </head>
@@ -696,7 +713,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.2.1 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 2.3.0 vom 2.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -1959,12 +1976,14 @@ function dueClass(t){
 }
 
 /* ---------- Zustand ---------- */
-const state={variant:'reward',tasks:[],loading:false,showDone:false,editDate:null,skipOrder:[],pinned:null,more:false,praise:null,praiseN:0,burst:0,calDay:null};
+const state={variant:'reward',tasks:[],loading:false,showDone:false,editDate:null,skipOrder:[],pinned:null,more:false,praise:null,praiseN:0,burst:0,calDay:null,editPlan:null};
 const find=id=>state.tasks.find(t=>t.id===id);
 function norm(id,d){
   if(!d||typeof d!=='object')return null;
   const due=typeof d.due==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d.due)?d.due:null;
-  return {id:String(id),title:String(d.title||'').slice(0,200),due:due,done:!!d.done,doneAt:+d.doneAt||0,createdAt:+d.createdAt||0,triaged:!!d.triaged};
+  const steps=Array.isArray(d.steps)?d.steps.slice(0,12).map((s,i)=>({id:String((s&&s.id)||('s'+i)),t:String((s&&s.t)||'').slice(0,100),done:!!(s&&s.done)})).filter(s=>s.t):[];
+  const time=typeof d.time==='string'&&/^\d{2}:\d{2}$/.test(d.time)&&due?d.time:'';
+  return {id:String(id),title:String(d.title||'').slice(0,200),due:due,time:time,wenn:String(d.wenn||'').slice(0,100),steps:steps,done:!!d.done,doneAt:+d.doneAt||0,createdAt:+d.createdAt||0,triaged:!!d.triaged};
 }
 function saveLocal(){lsSet(LS_T,JSON.stringify(state.tasks))}
 function add(task){
@@ -1978,7 +1997,7 @@ function restore(t){state.tasks.push(t);saveLocal();renderContent()}
 function groups(){
   const today=todayISO();
   const open=state.tasks.filter(t=>!t.done);
-  const byDue=(a,b)=>(a.due||'9999').localeCompare(b.due||'9999')||(a.createdAt||0)-(b.createdAt||0);
+  const byDue=(a,b)=>(a.due||'9999').localeCompare(b.due||'9999')||(a.time||'99:99').localeCompare(b.time||'99:99')||(a.createdAt||0)-(b.createdAt||0);
   return {
     open:open,
     overdue:open.filter(t=>t.due&&t.due<today).sort(byDue),
@@ -2003,16 +2022,25 @@ function focusQueue(){
 const CHECK='<svg viewBox="0 0 12 12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2l2.4 2.4 4.6-5"/></svg>';
 const XICON='<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
 const chk=t=>'<button type="button" class="chk" role="checkbox" aria-checked="'+(t.done?'true':'false')+'" aria-label="Erledigt: '+esc(t.title)+'" data-act="toggle" data-id="'+esc(t.id)+'">'+CHECK+'</button>';
+function leftText(t){
+  if(!t.time||!t.due)return '';
+  const p=ymd(t.due),hm=t.time.split(':').map(Number),ts=new Date(p[0],p[1],p[2],hm[0],hm[1]).getTime(),diff=ts-Date.now();
+  const m=Math.round(Math.abs(diff)/60000),hh=Math.floor(m/60),r=m%60,d=Math.floor(hh/24);
+  const s=d>=1?d+(d===1?' Tag ':' Tage ')+(hh%24)+' Std':hh>=1?hh+' Std '+r+' Min':r+' Min';
+  return diff>0?'noch '+s:'seit '+s+' überfällig';
+}
 function dueHTML(t){
-  if(state.editDate===t.id)return '<span class="date-edit"><input type="date" class="d-in" data-id="'+esc(t.id)+'" value="'+esc(t.due||'')+'" aria-label="Neues Datum">'
+  if(state.editDate===t.id)return '<span class="date-edit"><input type="date" class="d-in" data-id="'+esc(t.id)+'" value="'+esc(t.due||'')+'" aria-label="Neues Datum">'+(t.due?'<input type="time" class="d-in t-in" data-id="'+esc(t.id)+'" value="'+esc(t.time||'')+'" aria-label="Uhrzeit">':'')
     +'<button type="button" class="link" data-act="nodate" data-id="'+esc(t.id)+'">Ohne Datum</button>'
     +'<button type="button" class="link" data-act="canceldate">Abbrechen</button></span>';
-  if(t.due)return '<button type="button" class="due '+dueClass(t)+'" data-act="date" data-id="'+esc(t.id)+'" aria-label="Datum ändern, aktuell '+esc(label(t.due))+'">'+esc(label(t.due))+'</button>';
+  if(t.due)return '<button type="button" class="due '+dueClass(t)+'" data-act="date" data-id="'+esc(t.id)+'" aria-label="Datum ändern, aktuell '+esc(label(t.due))+'">'+esc(label(t.due)+(t.time?', '+t.time+' Uhr':''))+'</button>';
   if(!t.done)return '<button type="button" class="due none" data-act="date" data-id="'+esc(t.id)+'" aria-label="Datum setzen">Datum</button>';
   return '';
 }
 function item(t,mv){
-  const meta=dueHTML(t)
+  const ns=t.steps.length,nd=t.steps.filter(s=>s.done).length;
+  const meta=dueHTML(t)+(ns?'<span class="tag">'+nd+'/'+ns+' Schritte</span>':'')+(t.wenn&&!t.done?'<span class="tag">Wenn '+esc(t.wenn)+'</span>':'')
+    +(!t.done?'<button type="button" class="link" data-act="pin" data-id="'+esc(t.id)+'">Details</button>':'')
     +(mv&&!t.done?'<button type="button" class="mv" data-act="moveto" data-id="'+esc(t.id)+'" data-days="'+(mv==='tomorrow'?1:0)+'">'+(mv==='tomorrow'?'Auf morgen':'Auf heute')+'</button>':'');
   return '<li class="task big'+(t.done?' is-done':'')+'">'+chk(t)
     +'<div class="t-main"><span class="t-title">'+esc(t.title)+'</span>'+(meta?'<span class="t-meta">'+meta+'</span>':'')+'</div>'
@@ -2062,6 +2090,8 @@ function chromeReward(){
    +'<button type="submit" class="btn-solid">Hinzufügen</button></div>'
    +'<div class="chips" role="group" aria-label="Wann?">'+chip(0,'Heute')+chip(1,'Morgen')+chip(7,'In 1 Woche')+chip('none','Irgendwann')+'</div>'
    +'<label class="fk-date" for="f-due">Anderes Datum <input id="f-due" type="date" class="field date"></label>'
+   +'<details class="tk-opt"><summary>Uhrzeit und Wenn-dann (optional)</summary><label class="fk-date" for="f-time">Uhrzeit <input id="f-time" type="time" class="field date"></label>'
+   +'<label class="fk-date" for="f-wenn">Wenn … <input id="f-wenn" type="text" class="field" maxlength="100" placeholder="z. B. nach dem Frühstück"></label></details>'
    +'<p class="cal-hint" id="f-hint" aria-live="polite"></p></form></div>';
 }
 function goalHTML(v,dt,GOAL){
@@ -2070,6 +2100,20 @@ function goalHTML(v,dt,GOAL){
   if(v==='rock'){let b='';for(let i=0;i<GOAL;i++)b+='<span class="rk-bar'+(i<n?' on':'')+'" style="height:'+(45+i*27)+'%"></span>';return '<div class="rw-goal" role="img" aria-label="'+aria+'"><div class="rk-meter">'+b+'</div><span class="rw-goal-t">'+n+'/'+GOAL+' heute</span></div>'}
   const C=2*Math.PI*40,pct=n/GOAL;
   return '<svg class="rw-ring" viewBox="0 0 100 100" role="img" aria-label="'+aria+'"><circle class="track" cx="50" cy="50" r="40"/><circle class="prog" cx="50" cy="50" r="40" transform="rotate(-90 50 50)" stroke-dasharray="'+(pct*C).toFixed(1)+' '+C.toFixed(1)+'"/><text x="50" y="58">'+n+'/'+GOAL+'</text></svg>';
+}
+function heroExtra(h){
+  const id=esc(h.id),ns=h.steps.length,nd=h.steps.filter(s=>s.done).length;
+  let o='';
+  if(h.wenn)o+='<p class="tk-wd"><b>Wenn</b> '+esc(h.wenn)+', <b>dann</b> '+esc(h.title)+'</p>';
+  if(h.time&&h.due)o+='<p class="tk-time">Um '+esc(h.time)+' Uhr · <span data-left="'+id+'">'+esc(leftText(h))+'</span></p>';
+  o+='<div class="tk-steps"><p class="tk-st-h">Kleine Schritte'+(ns?' · '+nd+' von '+ns+' geschafft':'')+'</p>';
+  if(ns)o+='<ul class="tk-st">'+h.steps.map(s=>'<li><button type="button" class="chk" role="checkbox" aria-checked="'+(s.done?'true':'false')+'" aria-label="Schritt erledigt: '+esc(s.t)+'" data-act="stepdone" data-id="'+id+'" data-sid="'+esc(s.id)+'">'+CHECK+'</button><span class="'+(s.done?'is-done':'')+'">'+esc(s.t)+'</span><button type="button" class="del" data-act="stepdel" data-id="'+id+'" data-sid="'+esc(s.id)+'" aria-label="Schritt löschen: '+esc(s.t)+'">'+XICON+'</button></li>').join('')+'</ul>';
+  o+='<form class="tk-stform" id="stform" data-id="'+id+'" autocomplete="off"><input class="field" id="f-step" type="text" maxlength="100" placeholder="'+(ns?'Noch ein kleiner Schritt':'Ersten kleinen Schritt aufschreiben')+'" aria-label="Neuer Schritt"><button type="submit" class="btn-ghost sm">+ Schritt</button></form></div>';
+  if(state.editPlan===h.id)o+='<div class="tk-edit"><label class="fk-date" for="e-wenn">Wenn … <input id="e-wenn" type="text" class="field" maxlength="100" value="'+esc(h.wenn)+'" placeholder="z. B. nach dem Frühstück"></label>'
+    +(h.due?'<label class="fk-date" for="e-time">Uhrzeit <input id="e-time" type="time" class="field date" value="'+esc(h.time)+'"></label>':'<p class="fk-meta">Für eine Uhrzeit braucht die Aufgabe einen Tag.</p>')
+    +'<div class="tk-edit-b"><button type="button" class="btn-solid" data-act="saveplan" data-id="'+id+'">Speichern</button><button type="button" class="link" data-act="cancelplan">Abbrechen</button></div></div>';
+  else o+='<button type="button" class="link" data-act="editplan" data-id="'+id+'">'+(h.wenn||h.time?'Wenn-dann und Uhrzeit ändern':'Wenn-dann und Uhrzeit festlegen')+'</button>';
+  return o;
 }
 function calStrip(){
   const t=todayISO();
@@ -2106,7 +2150,7 @@ function fillReward(){
   if(state.burst&&Date.now()-state.burst<1500)hero+=confetti();
   if(state.loading)hero+='<div class="rw-card"><p class="fk-meta">Aufgaben werden geladen …</p></div>';
   else if(h){
-    hero+='<div class="rw-card"><span class="fk-kicker">'+S.kicker+'</span><h2 class="fk-task">'+esc(h.title)+'</h2><p class="fk-meta">'+esc(softLabel(h))+(dt>=GOAL?' · Tagesziel schon erreicht':' · noch '+(GOAL-dt)+' bis zum Tagesziel')+'</p>'+(state.editDate===h.id?dueHTML(h):'<button type="button" class="link" data-act="date" data-id="'+esc(h.id)+'">Datum ändern</button>')
+    hero+='<div class="rw-card"><span class="fk-kicker">'+S.kicker+'</span><h2 class="fk-task">'+esc(h.title)+'</h2><p class="fk-meta">'+esc(softLabel(h))+(dt>=GOAL?' · Tagesziel schon erreicht':' · noch '+(GOAL-dt)+' bis zum Tagesziel')+'</p>'+heroExtra(h)+(state.editDate===h.id?dueHTML(h):'<button type="button" class="link" data-act="date" data-id="'+esc(h.id)+'">Datum ändern</button>')
       +'<button type="button" class="rw-go" data-act="toggle" data-id="'+esc(h.id)+'">'+S.go+'</button>'
       +(q.length>1?'<button type="button" class="btn-ghost" data-act="skip" data-id="'+esc(h.id)+'">Später</button>':'')+'</div>';
   }else{
@@ -2167,30 +2211,50 @@ shell.addEventListener('click',e=>{
     case 'showdone':state.showDone=!state.showDone;renderContent();break;
     case 'skip':state.skipOrder=state.skipOrder.filter(x=>x!==id).concat(id);renderContent();break;
     case 'more':state.more=!state.more;renderContent();break;
+    case 'pin':if(t){state.pinned=id;state.editPlan=null;renderContent();const hw=$('#rw-hero');if(hw&&hw.scrollIntoView)hw.scrollIntoView({block:'start'})}break;
+    case 'editplan':state.editPlan=id;renderContent();{const w=$('#e-wenn');if(w)w.focus()}break;
+    case 'cancelplan':state.editPlan=null;renderContent();break;
+    case 'saveplan':if(t){const w=$('#e-wenn'),tm=$('#e-time');state.editPlan=null;patch(id,{wenn:(w?w.value:'').trim().slice(0,100),time:t.due&&tm?tm.value:''})}break;
+    case 'stepdone':if(t){const sid=b.dataset.sid,s=t.steps.find(x=>x.id===sid);if(!s)break;const now=!s.done;
+      patch(id,{steps:t.steps.map(x=>x.id===sid?Object.assign({},x,{done:now}):x)});
+      if(window.PTS){if(now)PTS.award('step:'+id+':'+sid,2,'Schritt geschafft');else PTS.revoke('step:'+id+':'+sid)}}break;
+    case 'stepdel':if(t){const sid=b.dataset.sid;patch(id,{steps:t.steps.filter(x=>x.id!==sid)});if(window.PTS)PTS.revoke('step:'+id+':'+sid)}break;
     case 'calday':{state.calDay=b.dataset.day||null;const f=$('#f-due');if(f&&state.calDay)f.value=state.calDay;syncChips();renderContent();break}
   }
 });
 shell.addEventListener('change',e=>{
   const i=e.target.closest('.d-in');
+  if(i&&i.classList.contains('t-in')){state.editDate=null;patch(i.dataset.id,{time:i.value||''});return}
   if(i){state.editDate=null;patch(i.dataset.id,{due:i.value||null,triaged:true});}
 });
 shell.addEventListener('input',e=>{if(e.target.id==='f-due')syncChips()});
 shell.addEventListener('submit',e=>{
+  if(e.target.id==='stform'){
+    e.preventDefault();
+    const inp=$('#f-step'),txt=inp.value.trim(),tid=e.target.dataset.id,t=find(tid);
+    if(!txt||!t){inp.focus();return}
+    patch(tid,{steps:t.steps.concat([{id:'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t:txt.slice(0,100),done:false}]).slice(0,12)});
+    const n=$('#f-step');if(n)n.focus();
+    return;
+  }
   if(e.target.id!=='add')return;
   e.preventDefault();
   const ti=$('#f-title'),du=$('#f-due'),title=ti.value.trim();
   if(!title){ti.focus();return}
-  add({title:title.slice(0,140),due:(du&&du.value)||null,done:false,doneAt:0,createdAt:Date.now(),triaged:true});
+  const tm=$('#f-time'),wn=$('#f-wenn'),dueV=(du&&du.value)||null;
+  add({title:title.slice(0,140),due:dueV,time:(dueV&&tm&&tm.value)||'',wenn:(wn?wn.value.trim():'').slice(0,100),steps:[],done:false,doneAt:0,createdAt:Date.now(),triaged:true});
+  if(tm)tm.value='';if(wn)wn.value='';
   ti.value='';if(du)du.value=state.calDay||todayISO();syncChips();ti.focus();
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.editDate){state.editDate=null;renderContent()}});
 
 document.addEventListener('click',e=>{const sv=e.target.closest('[data-variant]');if(sv)setStyle(sv.dataset.variant)});
+setInterval(()=>{document.querySelectorAll('[data-left]').forEach(el=>{const t=find(el.dataset.left);if(t)el.textContent=leftText(t)})},30000);
 window.TK={
   toast:toast,
   doneAt:()=>state.tasks.filter(t=>t.done&&t.doneAt).map(t=>t.doneAt),
   refresh:()=>renderContent(),
-  hero:()=>{const q=focusQueue();return q[0]?{id:q[0].id,title:q[0].title,when:softLabel(q[0])}:null},
+  hero:()=>{const q=focusQueue(),t=q[0];return t?{id:t.id,title:t.title,when:softLabel(t),wenn:t.wenn,time:t.due&&t.time?t.time:'',left:leftText(t),ns:t.steps.length,nd:t.steps.filter(s=>s.done).length}:null},
   summary:()=>({done:doneTodayCount(),goal:3,streak:streakInfo().n,any:state.tasks.length>0}),
   toggle:id=>{const t=find(id);if(!t)return;const nowDone=!t.done;if(nowDone)praise(id);
     state.skipOrder=state.skipOrder.filter(x=>x!==id);if(state.pinned===id)state.pinned=null;
@@ -2296,7 +2360,7 @@ function renderToday(){
   const lv=PTS.level();
   html+=`<div class="td-card"><h2>${PTS.today()} Punkte heute</h2><div class="tk-prog" style="margin:0 0 8px" role="progressbar" aria-label="Weg zum nächsten Level" aria-valuenow="${lv.into}" aria-valuemin="0" aria-valuemax="100"><i style="width:${lv.into}%"></i></div><p class="note" style="margin:0">Level ${lv.n} · noch ${100-lv.into} Punkte bis Level ${lv.n+1}</p></div>`;
   html+=hero
-   ?`<div class="rw-card"><span class="fk-kicker">Nächster Schritt</span><h2 class="fk-task">${escE(hero.title)}</h2><p class="fk-meta">${escE(hero.when)}</p><button type="button" class="rw-go" data-tkdone="${escE(hero.id)}">Geschafft! +10</button><button type="button" class="btn-ghost" data-tabgo="tasks">Alle Aufgaben</button></div>`
+   ?`<div class="rw-card"><span class="fk-kicker">Nächster Schritt</span><h2 class="fk-task">${escE(hero.title)}</h2><p class="fk-meta">${escE(hero.when)}</p>${hero.wenn?`<p class="tk-wd"><b>Wenn</b> ${escE(hero.wenn)}, <b>dann</b> ${escE(hero.title)}</p>`:""}${hero.time?`<p class="tk-time">Um ${hero.time} Uhr · ${escE(hero.left)}</p>`:""}${hero.ns?`<p class="fk-meta">${hero.nd} von ${hero.ns} kleinen Schritten geschafft</p>`:""}<button type="button" class="rw-go" data-tkdone="${escE(hero.id)}">Geschafft! +10</button><button type="button" class="btn-ghost" data-tabgo="tasks">Alle Aufgaben</button></div>`
    :`<div class="rw-card"><span class="fk-kicker">${s.any?"Alles erledigt":"Los geht’s"}</span><h2 class="fk-task">${s.any?"Starker Tag. Gönn dir eine Pause.":"Noch keine Aufgabe."}</h2><p class="fk-meta">${s.any?"Deine Serie bleibt bestehen.":"Schreib die erste Aufgabe auf, ganz klein genügt."}</p><button type="button" class="btn-ghost" data-tabgo="tasks">Zu den Aufgaben</button></div>`;
   const dayPlan=PLAN[dn];
   html+=`<div class="td-card"><h2>Heute essen</h2>`+(dayPlan

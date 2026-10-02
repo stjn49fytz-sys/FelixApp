@@ -3,6 +3,15 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.3.0 vom 2.10.2026
+Aufgaben: kleine Schritte, Wenn-dann und Uhrzeit (nach Studien zu ADHS und Planung).
+- Kleine Schritte: Jede Aufgabe lässt sich in bis zu 12 Schritte teilen. Jeder erledigte Schritt bringt 2 Punkte, die ganze Aufgabe weiterhin 10. Ein zurückgenommener oder gelöschter Schritt nimmt seine Punkte wieder weg.
+- Wenn-dann: Zu jeder Aufgabe kann ein Auslöser stehen, zum Beispiel "Wenn nach dem Frühstück, dann Zahnarzt anrufen".
+- Uhrzeit: Aufgaben mit Tag können eine Uhrzeit haben. Die Karte zeigt, wie lange es noch dauert oder wie lange die Aufgabe schon überfällig ist, und aktualisiert sich alle 30 Sekunden. Innerhalb eines Tages sortiert die Liste nach Uhrzeit.
+- "Details" an jeder Aufgabe holt sie nach oben auf die große Karte, dort lassen sich Schritte, Wenn-dann und Uhrzeit ändern.
+- Auf der Startseite Heute stehen Wenn-dann, Uhrzeit und der Stand der Schritte.
+- Hinweis: Erinnerungen bei geschlossener App kann eine Web-App nicht zuverlässig schicken. Die Uhrzeit erinnert nur, solange die App offen ist.
+
 ## 2.2.1 vom 2.10.2026
 Gegessen abhaken nimmt die Zutaten von der Einkaufsliste.
 - Hakst du ein Essen auf Heute oder im Plan als "Gegessen" an, verschwinden die Zutaten dieses Gerichts aus der Einkaufsliste. Das Gericht steht dann unter "Gerichte der Woche" ohne Haken.
