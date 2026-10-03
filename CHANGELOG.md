@@ -3,6 +3,11 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.7.0 vom 3.10.2026
+Kinder: Neon-Look und PDF-Blätter.
+- Die Kinder-Seite hat jetzt eigene Farben wie eine K-Pop-Bühne: dunkles Violett mit Neon-Pink und Türkis, ein Titelbild mit Wappen und Klang-Balken und einen Rang ("Nachwuchs-Jägerin", "Dämonenjägerin", "Star-Jägerin") nach gesammelten Sternen. Alle Zeichnungen sind selbst entworfen.
+- Neue Karte "PDF-Blätter": Die Übungsblätter für Lotta und die Lösungen für Eltern lassen sich direkt aus der App öffnen (Ordner kinder).
+
 ## 2.6.0 vom 3.10.2026
 Neu unter Mehr: Kinder, mit einem Dashboard pro Kind. Als erstes ist Lotta (8 Jahre, Klasse 2, Sachsen) angelegt, sie übt Zahlen bis 100 für die Arbeit am Dienstag, 6.10.
 - Zwei Tage mit je drei kleinen Blöcken. Jeder Block hat eine App-Übung (ca. 5 Minuten, ein Monster pro Station) und ein PDF-Blatt zum Ausdrucken.

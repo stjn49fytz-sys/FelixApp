@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.6.0">
+<meta name="version" content="2.7.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -676,13 +676,40 @@ input[type=checkbox]:checked::after{font-size:18px}
 #kids .q-fb.good{background:var(--ok-soft)}
 #kids .q-fb.retry{background:var(--hot-soft);color:var(--hot)}
 #kids .q-timer{font-size:56px;font-weight:800;text-align:center;margin-top:12px}
-:root[data-v="punk"] #kids .kd-card{border:3px solid var(--fg);border-radius:0;box-shadow:5px 5px 0 var(--fg)}
-:root[data-v="punk"] #kids :is(.tile,.q-cmp button,.kd-step button,.q-pk,.kd-dot){border-radius:0;border:3px solid var(--fg)}
-:root[data-v="rock"] #kids .kd-card{border:0;border-left:6px solid var(--accent);border-radius:0}
-:root[data-v="rock"] #kids :is(.tile,.q-cmp button,.kd-step button,.q-pk){border-radius:0}
-:root[data-v="rock"] #kids .kd-dot{border-radius:2px}
-:root[data-v="gothic"] #kids .kd-card{border:3px double var(--spot);border-radius:14px}
-:root[data-v="gothic"] #kids .kd-card h2{font-weight:400;font-size:28px}
+/* Kinder: Neon-Bühne im Stil von K-Pop und Dämonenjägerinnen (alle Figuren und Zeichen selbst entworfen) */
+#kids{--bg:#130a2b;--surface:#1f1245;--fg:#f6eeff;--muted:#bfa9e8;--line:#3b2a72;--accent:#ff3d9a;--accent-fg:#1a0630;--accent-soft:#3a1850;--spot:#2de2e6;--spot-fg:#06222a;--ok:#35e0a1;--ok-soft:#10392f;--ok-fg:#04140b;--hot:#ffd23f;--hot-soft:#3b3010;--warn:#ff8a5c;--warn-soft:#40201a;color:var(--fg);color-scheme:dark}
+#kids.active{background:radial-gradient(120% 60% at 15% 0%,#5b1d9a55,transparent 60%),radial-gradient(90% 50% at 100% 12%,#ff3d9a40,transparent 55%),radial-gradient(80% 40% at 0% 100%,#2de2e630,transparent 60%),#130a2b;border-radius:26px;padding:14px 14px 22px;margin-inline:-4px;box-shadow:0 0 0 2px #ff3d9a55,0 0 40px #8b5cf655}
+#kids .kd-hero{position:relative;overflow:hidden;border-radius:22px;padding:18px 16px 16px;margin-bottom:16px;background:linear-gradient(135deg,#ff3d9a 0%,#8b5cf6 55%,#2de2e6 120%);color:#fff;box-shadow:0 0 28px #ff3d9a66}
+#kids .kd-hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 14px,#ffffff14 14px 16px);pointer-events:none}
+#kids .kd-hero>*{position:relative;z-index:1}
+#kids .kd-tag{display:inline-block;font-weight:900;letter-spacing:.16em;font-size:12px;text-transform:uppercase;background:#130a2bcc;color:#2de2e6;border-radius:999px;padding:3px 12px;margin-bottom:6px}
+#kids .kd-hero h1{font-size:clamp(34px,10vw,48px);font-weight:900;font-style:italic;letter-spacing:.02em;line-height:1;text-shadow:0 0 18px #ff3d9a,2px 2px 0 #130a2b}
+#kids .kd-hero .kd-meta{color:#fff;opacity:.92}
+#kids .kd-rank{display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:800}
+#kids .kd-rank .rw-pts{background:#ffd23f;color:#2b1d00;box-shadow:0 0 14px #ffd23f99;font-size:15px}
+#kids .kd-wave{display:flex;align-items:flex-end;gap:3px;height:26px;margin-left:auto}
+#kids .kd-wave i{display:block;width:5px;border-radius:3px;background:#fff;animation:kdw 1.1s ease-in-out infinite}
+#kids .kd-wave i:nth-child(2n){animation-delay:.2s}#kids .kd-wave i:nth-child(3n){animation-delay:.45s}
+@keyframes kdw{0%,100%{height:6px}50%{height:26px}}
+#kids .kd-svg-hero{position:absolute!important;right:6px;top:6px;width:84px;height:84px;opacity:.95;z-index:1;filter:drop-shadow(0 0 8px #130a2b99)}
+#kids .kd-card{background:linear-gradient(180deg,#261656,#1a0f3d);border:2px solid #ff3d9a88;border-radius:20px;box-shadow:0 0 18px #8b5cf633}
+#kids .kd-card.now{border-color:#2de2e6;box-shadow:0 0 22px #2de2e655}
+#kids .kd-card h2{background:linear-gradient(90deg,#ff7ac0,#9ee9ff);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900}
+#kids .kd-block h3{color:#2de2e6}
+#kids .btn-solid,#kids .rw-go{background:linear-gradient(90deg,#ff3d9a,#8b5cf6);color:#fff;border:0;text-shadow:0 1px 0 #1a0630;box-shadow:0 0 16px #ff3d9a77}
+#kids .btn-ghost{border:2px solid #2de2e6;color:#2de2e6;background:transparent}
+#kids .link{color:#bfa9e8}
+#kids .rw-card{background:linear-gradient(180deg,#2a1a63,#1a0f3d);border:2px solid #2de2e6;box-shadow:0 0 24px #2de2e655,0 6px 0 #ff3d9a}
+#kids .fk-kicker{background:#ffd23f;color:#2b1d00}
+#kids .field{background:#130a2b;color:#fff;border-color:#8b5cf6}
+#kids .q-cmp button,#kids .kd-step button{background:#130a2b;color:#fff;border-color:#8b5cf6}
+#kids .tile{background:linear-gradient(135deg,#ffd23f,#ff9ad0);color:#2b1d00;border:0;box-shadow:0 3px 0 #130a2b}
+#kids .q-pk{background:#3a1850;color:#fff}
+#kids .kd-exam{background:#ffd23f;color:#2b1d00}
+#kids .kd-dot{border-color:#bfa9e8}
+#kids .kd-pdf a{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 14px;margin-top:8px;border-radius:14px;border:2px solid #2de2e6;color:#fff;text-decoration:none;font-weight:800;background:#130a2b}
+#kids .kd-pdf a small{display:block;font-weight:600;color:var(--muted)}
+#kids .kd-pdf a i{font-style:normal;font-size:1.6rem}
 @media (prefers-reduced-motion:reduce){#kids *{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -806,7 +833,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.6.0 vom 3.10.2026</footer>
+<footer class="ver">Felix App, Version 2.7.0 vom 3.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -2599,7 +2626,10 @@ const UNITS=[
 const WHEN=['Vormittag','Mittag','Nachmittag'];
 const BREAKS=['10 Hampelmänner','Einmal hüpfend um den Tisch','Wie ein Storch auf einem Bein stehen','Arme und Beine ausschütteln','Wie ein Roboter durchs Zimmer laufen'];
 const CHEERS=['Richtig!','Stark!','Genau!','Treffer!','Super gemacht!'];
-const MONC=['#7C3AED','#DB2777','#0284C7'];
+const MONC=['#a855f7','#ff3d9a','#22d3ee'];
+const EMBLEM=raw('<svg class="kd-svg-hero" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#130a2b" stroke="#fff" stroke-width="3"/><path d="M24 76L68 24M76 76L32 24" stroke="#2de2e6" stroke-width="6" stroke-linecap="round"/><path d="M50 22l5.5 12 13 1.5-9.6 8.8 2.7 12.9L50 50.4 38.4 57.2l2.7-12.9-9.6-8.8 13-1.5z" fill="#ffd23f" stroke="#130a2b" stroke-width="2.5" stroke-linejoin="round"/></svg>');
+const WAVE=raw('<span class="kd-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>');
+const rankOf=n=>n>=40?'Star-Jägerin':n>=15?'Dämonenjägerin':'Nachwuchs-Jägerin';
 const kd={kids:[],sel:null,showList:false,run:null};
 
 function normKid(id,d){
@@ -2787,13 +2817,16 @@ function dashView(k){
   const p=readProg(k),st=topicStats(p),today=todayISO(),weak=weakest(st);
   const days=k.exam?diffDays(k.exam,today):null;
   const examTxt=k.exam?parse(k.exam).toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'})+(days>0?' · noch '+days+(days===1?' Tag':' Tage'):days===0?' · heute':''):'';
-  return html`<div class="kd-top"><div><h1 class="page-h1">${k.name}</h1><p class="kd-meta">${kidMeta(k)}</p></div><span class="rw-pts" aria-label="${p.stars||0} Sterne">★ ${p.stars||0}</span></div>
+  return html`<div class="kd-hero">${EMBLEM}<span class="kd-tag">Dämonen-Training</span><h1>${k.name}</h1><p class="kd-meta">${kidMeta(k)}</p><div class="kd-rank"><span class="rw-pts" aria-label="${p.stars||0} Sterne">★ ${p.stars||0}</span><span>${rankOf(p.stars||0)}</span>${WAVE}</div></div>
     <button type="button" class="link" data-k="list">${kd.kids.length>1?'‹ Alle Kinder':'Kind hinzufügen'}</button>
     <div class="kd-card">${k.exam?html`<span class="kd-exam">Arbeit: ${examTxt}</span>`:''}<h2>Zahlen bis 100 üben</h2>
       <p class="kd-meta">Pro Tag drei kleine Blöcke. Jeder Block: erst die App (ca. 5 Min), dann das PDF-Blatt (ca. 5 Min), danach Pause.</p>
       ${k.note?html`<p class="kd-meta">${k.note}</p>`:''}</div>
     ${UNITS.map(u=>{const us=unitOf(p,u.id),due=unitDue(k,u),n=[0,1,2].filter(i=>blockDone(us,u,i)).length;
       return html`<div class="kd-card${due===today?' now':''}" aria-label="Tag ${u.n}"><div class="kd-meta">${label(due)} · ${n} von 3 Blöcken geschafft</div><h2>Tag ${u.n}</h2>${[0,1,2].map(i=>blockView(k,p,u,i,us))}</div>`})}
+    <div class="kd-card kd-pdf"><h2>PDF-Blätter</h2><p class="kd-meta">Zum Ausdrucken (A4) oder am Tablet öffnen.</p>
+      <a href="kinder/Lotta_Uebungsblaetter_Zahlen_bis_100.pdf" target="_blank" rel="noopener"><i>📄</i><span>Übungsblätter für Lotta<small>2 Seiten · Tag 1 und Tag 2</small></span></a>
+      <a href="kinder/Lotta_Loesungen_fuer_Eltern.pdf" target="_blank" rel="noopener"><i>🔑</i><span>Lösungen und Ablauf für Eltern<small>Nur für dich · Tipps bei ADHS</small></span></a></div>
     <div class="kd-card"><h2>Lernbedarf</h2><p class="kd-meta" style="margin-bottom:12px">Die Auswertung kommt aus der App und aus den Ergebnissen, die du für die PDF-Blätter einträgst.</p>
       <div class="need">${TOPICS.map(t=>{const s=st[t.id],n=need(s),pct=s.t?Math.round(s.r/s.t*100):0;
         return html`<div class="need-row ${n.k}"><span>${t.name}</span><span class="nd">${n.l}</span><span class="need-bar" role="img" aria-label="${s.t?s.r+' von '+s.t+' richtig':'noch keine Daten'}"><i style="width:${pct}%"></i></span></div>`})}</div>
