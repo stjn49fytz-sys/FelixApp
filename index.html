@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.7.0">
+<meta name="version" content="2.7.1">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -707,6 +707,13 @@ input[type=checkbox]:checked::after{font-size:18px}
 #kids .q-pk{background:#3a1850;color:#fff}
 #kids .kd-exam{background:#ffd23f;color:#2b1d00}
 #kids .kd-dot{border-color:#bfa9e8}
+#kids .kd-file{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:12px 0;border-top:1px solid var(--line)}
+#kids .kd-fi{font-size:1.6rem}
+#kids .kd-fn{flex:1 1 160px;font-weight:800}
+#kids .kd-fn small{display:block;font-weight:600;color:var(--muted)}
+#kids .kd-file a,#kids .kd-file button{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:12px;font:inherit;font-weight:800;text-decoration:none;cursor:pointer}
+#kids .kd-file a{border:2px solid #2de2e6;color:#2de2e6;background:transparent}
+#kids .kd-file button{border:0;color:#fff;background:linear-gradient(90deg,#ff3d9a,#8b5cf6)}
 #kids .kd-pdf a{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 14px;margin-top:8px;border-radius:14px;border:2px solid #2de2e6;color:#fff;text-decoration:none;font-weight:800;background:#130a2b}
 #kids .kd-pdf a small{display:block;font-weight:600;color:var(--muted)}
 #kids .kd-pdf a i{font-style:normal;font-size:1.6rem}
@@ -833,7 +840,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.7.0 vom 3.10.2026</footer>
+<footer class="ver">Felix App, Version 2.7.1 vom 3.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -2825,8 +2832,9 @@ function dashView(k){
     ${UNITS.map(u=>{const us=unitOf(p,u.id),due=unitDue(k,u),n=[0,1,2].filter(i=>blockDone(us,u,i)).length;
       return html`<div class="kd-card${due===today?' now':''}" aria-label="Tag ${u.n}"><div class="kd-meta">${label(due)} · ${n} von 3 Blöcken geschafft</div><h2>Tag ${u.n}</h2>${[0,1,2].map(i=>blockView(k,p,u,i,us))}</div>`})}
     <div class="kd-card kd-pdf"><h2>PDF-Blätter</h2><p class="kd-meta">Zum Ausdrucken (A4) oder am Tablet öffnen.</p>
-      <a href="kinder/Lotta_Uebungsblaetter_Zahlen_bis_100.pdf" target="_blank" rel="noopener"><i>📄</i><span>Übungsblätter für Lotta<small>2 Seiten · Tag 1 und Tag 2</small></span></a>
-      <a href="kinder/Lotta_Loesungen_fuer_Eltern.pdf" target="_blank" rel="noopener"><i>🔑</i><span>Lösungen und Ablauf für Eltern<small>Nur für dich · Tipps bei ADHS</small></span></a></div>
+      <div class="kd-file"><span class="kd-fi">📄</span><span class="kd-fn">Übungsblätter für Lotta<small>2 Seiten · Tag 1 und Tag 2</small></span><a href="kinder/Lotta_Uebungsblaetter_Zahlen_bis_100.pdf" target="_blank" rel="noopener">Öffnen</a><button type="button" data-k="print" data-f="kinder/Lotta_Uebungsblaetter_Zahlen_bis_100.pdf">🖨️ Drucken</button></div>
+      <div class="kd-file"><span class="kd-fi">🔑</span><span class="kd-fn">Lösungen und Ablauf für Eltern<small>Nur für dich · Tipps bei ADHS</small></span><a href="kinder/Lotta_Loesungen_fuer_Eltern.pdf" target="_blank" rel="noopener">Öffnen</a><button type="button" data-k="print" data-f="kinder/Lotta_Loesungen_fuer_Eltern.pdf">🖨️ Drucken</button></div>
+      <p class="kd-meta" id="kd-printnote" style="margin-top:10px" hidden></p></div>
     <div class="kd-card"><h2>Lernbedarf</h2><p class="kd-meta" style="margin-bottom:12px">Die Auswertung kommt aus der App und aus den Ergebnissen, die du für die PDF-Blätter einträgst.</p>
       <div class="need">${TOPICS.map(t=>{const s=st[t.id],n=need(s),pct=s.t?Math.round(s.r/s.t*100):0;
         return html`<div class="need-row ${n.k}"><span>${t.name}</span><span class="nd">${n.l}</span><span class="need-bar" role="img" aria-label="${s.t?s.r+' von '+s.t+' richtig':'noch keine Daten'}"><i style="width:${pct}%"></i></span></div>`})}</div>
@@ -2959,6 +2967,16 @@ el.addEventListener('click',e=>{
       saveProg(k,p);
       const i=u.pdf.findIndex(x=>x[0]===tid);if(i>=0)syncBlockTask(k,u,i,p);
       renderKids();break}
+    case 'print':{
+      const f=b.dataset.f,note=$('#kd-printnote',el),ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+      if(ios){window.open(f,'_blank');if(note){note.hidden=false;note.textContent='Das PDF ist geöffnet. Tippe dort auf das Teilen-Symbol und dann auf „Drucken“.'}break}
+      try{
+        const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.src=f;
+        fr.onload=()=>{try{fr.contentWindow.focus();fr.contentWindow.print()}catch(err){window.open(f,'_blank')}setTimeout(()=>fr.remove(),60000)};
+        document.body.appendChild(fr);
+      }catch(err){window.open(f,'_blank')}
+      if(note){note.hidden=false;note.textContent='Falls sich kein Druckfenster öffnet: PDF mit „Öffnen“ aufrufen und dort drucken (Strg+P oder Teilen → Drucken).'}
+      break}
     case 'copy':{
       const ta=$('#rep',el);if(!ta)break;
       ta.focus();ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(err){}

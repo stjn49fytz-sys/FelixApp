@@ -3,6 +3,9 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.7.1 vom 3.10.2026
+Kinder: Bei den PDF-Blättern gibt es jetzt neben "Öffnen" auch einen Knopf "Drucken". Am iPhone und iPad öffnet er das PDF und weist auf Teilen und Drucken hin.
+
 ## 2.7.0 vom 3.10.2026
 Kinder: Neon-Look und PDF-Blätter.
 - Die Kinder-Seite hat jetzt eigene Farben wie eine K-Pop-Bühne: dunkles Violett mit Neon-Pink und Türkis, ein Titelbild mit Wappen und Klang-Balken und einen Rang ("Nachwuchs-Jägerin", "Dämonenjägerin", "Star-Jägerin") nach gesammelten Sternen. Alle Zeichnungen sind selbst entworfen.
