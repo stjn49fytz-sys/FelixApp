@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.5.0">
+<meta name="version" content="2.6.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -615,6 +615,75 @@ input[type=checkbox]:checked::after{font-size:18px}
 .fztx span{display:block;overflow-wrap:anywhere}
 @media(max-width:380px){.fzpic{width:88px}.fzpic.n1 .fzic{width:46px;height:46px}.fzpic.n2 .fzic{width:32px;height:32px}.fzpic.n3 .fzic{width:28px;height:28px}}
 @media print{nav,.days,.bar button,.meal a{display:none}section{display:block!important}body{background:#fff;color:#000}.meal,details.recipe{transform:none!important;break-inside:avoid}}
+/* Kinder (Lotta-Dashboard und Übungsbildschirm) */
+#kids .kd-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 16px;margin-bottom:16px}
+#kids .kd-card{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:18px;margin-bottom:16px}
+#kids .kd-card.now{border-color:var(--accent)}
+#kids .kd-card h2{font-size:22px;line-height:1.25;margin-bottom:4px}
+#kids .kd-card p+p{margin-top:6px}
+#kids .kd-meta{color:var(--muted);font-size:15px}
+#kids .kd-exam{display:inline-block;background:var(--hot-soft);color:var(--hot);font-weight:700;border-radius:999px;padding:2px 12px;font-size:14px;margin-bottom:8px}
+#kids .kd-block{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+#kids .kd-block h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 8px}
+#kids .kd-row{display:flex;align-items:center;gap:10px;min-width:0;margin-bottom:8px}
+#kids .kd-name{flex:1 1 0;min-width:0;overflow-wrap:break-word}
+#kids .kd-dot{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--muted);display:grid;place-items:center}
+#kids .kd-dot.on{background:var(--ok);border-color:var(--ok)}
+#kids .kd-dot svg{width:14px;height:14px;stroke:var(--ok-fg);opacity:0}
+#kids .kd-dot.on svg{opacity:1}
+#kids .kd-step{margin-left:auto;display:flex;align-items:center;gap:6px;flex:none}
+#kids .kd-step button{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--fg);font-weight:800;font-size:20px;padding:0}
+#kids .kd-step output{min-width:48px;text-align:center;font-weight:800}
+#kids .kd-block .btn-solid,#kids .kd-block .btn-ghost{width:100%}
+#kids .kd-block .btn-ghost{min-height:48px;margin-top:6px}
+#kids .btn-solid,#kids .btn-ghost,#kids .rw-go,#kids .tile,#kids .q-cmp button{cursor:pointer;font:inherit;color:inherit}
+#kids .btn-solid,#kids .rw-go{color:var(--accent-fg);font-weight:800}
+#kids .need{display:grid;gap:14px}
+#kids .need-row{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+#kids .need-bar{grid-column:1/-1;height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+#kids .need-bar i{display:block;height:100%;background:var(--ok)}
+#kids .need-row.mid .need-bar i{background:var(--spot)}
+#kids .need-row.low .need-bar i{background:var(--warn)}
+#kids .nd{font-size:12px;font-weight:800;border-radius:999px;padding:2px 10px;background:var(--line);color:var(--fg)}
+#kids .need-row.ok .nd{background:var(--ok-soft);color:var(--ok)}
+#kids .need-row.mid .nd{background:var(--hot-soft);color:var(--hot)}
+#kids .need-row.low .nd{background:var(--warn-soft);color:var(--warn)}
+#kids .kd-rep{width:100%;min-height:150px;border:2px solid var(--line);background:var(--bg);color:var(--fg);border-radius:12px;padding:10px;font:inherit;font-size:15px;margin:8px 0}
+#kids .kd-card details{margin-top:12px}
+#kids .kd-card summary{cursor:pointer;color:var(--muted);font-size:15px;min-height:32px}
+#kids .q-dots{display:flex;gap:8px;margin-top:8px}
+#kids .q-d{width:14px;height:14px;border-radius:50%;background:var(--line)}
+#kids .q-d.on{background:var(--accent)}
+#kids .q-d.cur{outline:2px solid var(--fg);outline-offset:2px}
+#kids .kd-mon{width:92px;height:84px;flex:none}
+#kids .kd-hp{display:flex;gap:4px;font-size:20px;color:var(--accent);justify-content:center}
+#kids .kd-hp .off{color:var(--line)}
+#kids .q-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+#kids .q-prompt{font-size:clamp(24px,6vw,32px);font-weight:800;line-height:1.25;margin:10px 0 14px;overflow-wrap:break-word}
+#kids .q-seq{font-size:clamp(34px,10vw,52px);font-weight:800;letter-spacing:.04em;margin:6px 0 16px}
+#kids .q-in{width:100%;font-size:34px;text-align:center;min-height:72px;color:var(--fg)}
+#kids .q-two{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+#kids .q-mid{font-size:30px;font-weight:800}
+#kids .q-cmp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+#kids .q-cmp button{min-height:84px;border:2px solid var(--line);background:var(--surface);color:var(--fg);border-radius:16px;font-size:38px;font-weight:800;display:grid;place-items:center;padding:6px}
+#kids .q-cmp small{display:block;font-size:13px;font-weight:600;color:var(--muted)}
+#kids .q-tiles{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+#kids .tile{min-width:72px;min-height:72px;font-size:30px;font-weight:800;border:2px solid var(--line);background:var(--spot);color:var(--spot-fg);border-radius:16px;padding:0 10px}
+#kids .q-picked{display:flex;flex-wrap:wrap;gap:8px;min-height:60px;margin-bottom:6px;padding:8px;border:2px dashed var(--line);border-radius:14px}
+#kids .q-pk{min-width:56px;min-height:48px;display:grid;place-items:center;font-size:26px;font-weight:800;background:var(--accent-soft);border-radius:12px}
+#kids .q-line{width:100%;height:auto;color:var(--fg);margin:4px 0 14px}
+#kids .q-fb{border-radius:14px;padding:12px 16px;margin-top:14px;font-weight:700}
+#kids .q-fb.good{background:var(--ok-soft)}
+#kids .q-fb.retry{background:var(--hot-soft);color:var(--hot)}
+#kids .q-timer{font-size:56px;font-weight:800;text-align:center;margin-top:12px}
+:root[data-v="punk"] #kids .kd-card{border:3px solid var(--fg);border-radius:0;box-shadow:5px 5px 0 var(--fg)}
+:root[data-v="punk"] #kids :is(.tile,.q-cmp button,.kd-step button,.q-pk,.kd-dot){border-radius:0;border:3px solid var(--fg)}
+:root[data-v="rock"] #kids .kd-card{border:0;border-left:6px solid var(--accent);border-radius:0}
+:root[data-v="rock"] #kids :is(.tile,.q-cmp button,.kd-step button,.q-pk){border-radius:0}
+:root[data-v="rock"] #kids .kd-dot{border-radius:2px}
+:root[data-v="gothic"] #kids .kd-card{border:3px double var(--spot);border-radius:14px}
+:root[data-v="gothic"] #kids .kd-card h2{font-weight:400;font-size:28px}
+@media (prefers-reduced-motion:reduce){#kids *{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -633,6 +702,7 @@ input[type=checkbox]:checked::after{font-size:18px}
       <button type="button" data-tabgo="cost"><i>💶</i>Kosten<small>Was der Plan kostet</small></button>
       <button type="button" data-tabgo="gifts"><i>🎁</i>Geschenke<small>Ideen und Status</small></button>
       <button type="button" data-tabgo="fun"><i>🎨</i>Freizeit<small>Basteln und Ausflüge</small></button>
+      <button type="button" data-tabgo="kids"><i>🧒</i>Kinder<small>Lotta übt Zahlen bis 100</small></button>
     </div>
     <h3 class="dayh sub">Aussehen</h3>
     <p class="note" style="margin-top:-6px">Der Stil gilt für die ganze App.</p>
@@ -696,6 +766,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     <p class="note">Grobe Schätzwerte, keine tagesaktuellen Preise. Mit Eigenmarken und Wochenangeboten lässt sich bei Rewe etwas sparen. Die Schätzung gilt für den ursprünglichen Plan von Freitag bis Dienstag. Änderungen und Gerichte aus der Auswahl sind nicht eingerechnet.</p>
     <p class="note"><b>Lidl</b> ist unsere Ergänzung: Preislich meist nah an Aldi, mit großer Obst- und Gemüseauswahl und frischem Brot aus der Backstation.</p>
   </section>
+  <section id="kids"><div id="kidsBody"></div></section>
   <section id="fun">
     <div class="season" id="fzDates"></div>
     <div class="group" id="fzWeek"></div>
@@ -735,7 +806,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.5.0 vom 2.10.2026</footer>
+<footer class="ver">Felix App, Version 2.6.0 vom 3.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -1269,6 +1340,7 @@ function openTab(name){
   document.getElementById(name).classList.add("active");
   document.getElementById("backBar").hidden=MAIN_TABS.includes(name);
   if(name==="today"&&window.renderToday)renderToday();
+  if(name==="kids"&&window.renderKids)renderKids();
   window.scrollTo(0,0);
 }
 document.getElementById("backBar").onclick=()=>openTab(prevTab&&prevTab!==curTab?prevTab:"more");
@@ -2289,6 +2361,8 @@ window.TK={
   toast:toast,
   doneAt:()=>state.tasks.filter(t=>t.done&&t.doneAt).map(t=>t.doneAt),
   refresh:()=>renderContent(),
+  addTask:(title,due,ca)=>{if(!state.tasks.some(t=>t.title===title))add({title:title,due:due,time:'',wenn:'',steps:[],done:false,doneAt:0,createdAt:ca||Date.now(),triaged:false})},
+  setDoneByTitle:(title,done)=>{const t=state.tasks.find(x=>x.title===title);if(t&&t.done!==done)patch(t.id,{done:done,doneAt:done?Date.now():0})},
   hero:()=>{const q=focusQueue(),t=q[0];return t?{id:t.id,title:t.title,when:softLabel(t),wenn:t.wenn,time:t.due&&t.time?t.time:'',left:leftText(t),ns:t.steps.length,nd:t.steps.filter(s=>s.done).length}:null},
   summary:()=>({done:doneTodayCount(),goal:3,streak:streakInfo().n,any:state.tasks.length>0}),
   toggle:id=>{const t=find(id);if(!t)return;const nowDone=!t.done;if(nowDone)praise(id);
@@ -2477,6 +2551,411 @@ PTS.sync();
 TK.refresh();
 showDay(curDay);
 renderToday();
+</script>
+<script>
+/* ---------- Kinder: Dashboard pro Kind, Übungen, Lernbedarf ----------
+   Speicher: localStorage "felixKinder" (Liste von Kindern, Lernstand als JSON-Text in "prog").
+   Jeder Tag hat drei kleine Blöcke (App-Station + PDF-Station). Die Blöcke stehen auch in der Aufgabenliste. */
+(function(){
+const lsG=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const lsS=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const LS_KIDS='felixKinder';
+const el=document.getElementById('kidsBody');
+if(!el)return;
+const RAW='__raw';
+const raw=s=>({[RAW]:1,s:s});
+const cv=x=>{if(x==null||x===false)return '';if(Array.isArray(x))return x.map(cv).join('');if(typeof x==='object'&&x[RAW])return x.s;return escE(x).replace(/'/g,'&#39;')};
+const html=(st,...v)=>raw(st.reduce((o,s,i)=>o+s+(i<v.length?cv(v[i]):''),''));
+const markup=x=>cv(x);
+const $=(s,r)=>(r||document).querySelector(s);
+const CHECK=raw('<svg viewBox="0 0 24 24" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>');
+/* Datum */
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const todayISO=()=>iso(new Date());
+const ymd=s=>{const p=s.split('-').map(Number);return [p[0],p[1]-1,p[2]]};
+const parse=s=>{const p=ymd(s);return new Date(p[0],p[1],p[2])};
+const addDays=(s,n)=>{const p=ymd(s);return iso(new Date(p[0],p[1],p[2]+n))};
+const diffDays=(a,b)=>Math.round((Date.UTC.apply(null,ymd(a))-Date.UTC.apply(null,ymd(b)))/864e5);
+const WDS=['So','Mo','Di','Mi','Do','Fr','Sa'],MONTHS=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+function label(due){
+  const n=diffDays(due,todayISO()),d=parse(due),s=WDS[d.getDay()]+', '+d.getDate()+'. '+MONTHS[d.getMonth()];
+  return n===0?'Heute, '+s:n===1?'Morgen, '+s:n===-1?'Gestern, '+s:s;
+}
+const TITLE_MAX=200,NAME_MAX=40;
+const TOPICS=[
+  {id:'vn',name:'Vorgänger und Nachfolger'},
+  {id:'nz',name:'Nachbarzehner'},
+  {id:'zs',name:'Zahlenstrahl'},
+  {id:'st',name:'Zehner- und Fünferschritte'},
+  {id:'cmp',name:'Größer, kleiner, gleich'},
+  {id:'ord',name:'Zahlen ordnen'}
+];
+const TOPIC={};TOPICS.forEach(t=>{TOPIC[t.id]=t});
+const UNITS=[
+  {id:'u1',n:1,app:['vn','st','cmp'],pdf:[['nz',4],['zs',4],['ord',2]]},
+  {id:'u2',n:2,app:['nz','zs','ord'],pdf:[['vn',4],['st',5],['cmp',8]]}
+];
+const WHEN=['Vormittag','Mittag','Nachmittag'];
+const BREAKS=['10 Hampelmänner','Einmal hüpfend um den Tisch','Wie ein Storch auf einem Bein stehen','Arme und Beine ausschütteln','Wie ein Roboter durchs Zimmer laufen'];
+const CHEERS=['Richtig!','Stark!','Genau!','Treffer!','Super gemacht!'];
+const MONC=['#7C3AED','#DB2777','#0284C7'];
+const kd={kids:[],sel:null,showList:false,run:null};
+
+function normKid(id,d){
+  if(id==null||!d||typeof d!=='object')return null;
+  const start=typeof d.start==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d.start)?d.start:todayISO();
+  const exam=typeof d.exam==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d.exam)?d.exam:'';
+  return {id:String(id),name:String(d.name||'').slice(0,NAME_MAX),age:+d.age||0,klasse:+d.klasse||0,land:String(d.land||'').slice(0,NAME_MAX),
+    note:String(d.note||'').slice(0,240),start:start,exam:exam,prog:String(d.prog||'').slice(0,12000),createdAt:+d.createdAt||0};
+}
+const kidById=id=>kd.kids.find(k=>k.id===id);
+function saveKids(){lsS(LS_KIDS,JSON.stringify(kd.kids))}
+function kidAdd(kid){
+  const k=Object.assign({id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)},kid);
+  kd.kids.push(k);saveKids();return k;
+}
+function kidSave(k,data){Object.assign(k,data);saveKids()}
+const emptyProg=()=>({app:{},units:{},stars:0});
+function readProg(k){
+  try{const p=JSON.parse(k.prog||'');if(p&&typeof p==='object')return Object.assign(emptyProg(),p)}catch(e){}
+  return emptyProg();
+}
+function unitOf(p,uid){
+  const u=p.units[uid]||(p.units[uid]={st:[false,false,false],sc:{}});
+  if(!Array.isArray(u.st))u.st=[false,false,false];
+  if(!u.sc||typeof u.sc!=='object')u.sc={};
+  return u;
+}
+function saveProg(k,p){kidSave(k,{prog:JSON.stringify(p)})}
+function topicStats(p){
+  const out={};TOPICS.forEach(t=>{out[t.id]={r:0,t:0}});
+  Object.keys(p.app||{}).forEach(id=>{if(out[id]){out[id].r+=+p.app[id].r||0;out[id].t+=+p.app[id].t||0}});
+  UNITS.forEach(u=>{
+    const sc=((p.units||{})[u.id]||{}).sc||{};
+    u.pdf.forEach(x=>{const v=sc[x[0]];if(v!=null&&out[x[0]]){out[x[0]].r+=Math.max(0,Math.min(+v||0,x[1]));out[x[0]].t+=x[1]}});
+  });
+  return out;
+}
+function need(s){
+  if(!s.t)return {k:'open',l:'Noch offen'};
+  const q=s.r/s.t;
+  return q>=.8?{k:'ok',l:'Sitzt'}:q>=.5?{k:'mid',l:'Üben'}:{k:'low',l:'Wichtig'};
+}
+function weakest(st){
+  let best=null,bq=2;
+  TOPICS.forEach(t=>{const s=st[t.id];if(s.t){const q=s.r/s.t;if(q<bq){bq=q;best=t.id}}});
+  return best;
+}
+function report(k,st){
+  const lines=[k.name+': Lernstand Zahlen bis 100 (Stand '+todayISO()+')'];
+  TOPICS.forEach(t=>{const s=st[t.id];lines.push(t.name+': '+(s.t?s.r+' von '+s.t+' richtig':'noch offen')+' ('+need(s).l+')')});
+  lines.push('Nächste Übungen bitte auf die Themen mit „Wichtig“ und „Üben“ ausrichten.');
+  return lines.join('\n');
+}
+const unitDue=(k,u)=>addDays(k.start,u.n-1);
+const blockTitle=(k,u,i)=>(k.name+': Tag '+u.n+', Block '+(i+1)+' · App: '+TOPIC[u.app[i]].name+', PDF: '+TOPIC[u.pdf[i][0]].name).slice(0,TITLE_MAX);
+const blockDone=(us,u,i)=>!!us.st[i]&&us.sc[u.pdf[i][0]]!=null;
+function syncBlockTask(k,u,i,p){
+  if(window.TK)TK.setDoneByTitle(blockTitle(k,u,i),blockDone(unitOf(p,u.id),u,i));
+}
+function kidMeta(k){return [k.klasse?'Klasse '+k.klasse:'',k.land,k.age?k.age+' Jahre':''].filter(Boolean).join(' · ')}
+
+const FIXED={
+  u1:{
+    vn:[['n',59],['v',70],['n',83],['v',41]],
+    st:[[28,38,48],[94,84,74],[64,69,74],[47,42,37]],
+    cmp:[[38,83],[55,54],[100,87],[76,76]]
+  },
+  u2:{
+    nz:[53,38,71,96],
+    zs:[[30,40,36],[70,80,74],[10,20,19],[60,70,61]],
+    ord:[[[63,36,81,18,45],'asc'],[[57,75,52,70,25],'desc'],[[100,9,90,19],'asc'],[[34,43,33,44],'desc']]
+  }
+};
+function qVN(kind,x){
+  const n=kind==='n';
+  return {t:'vn',type:'num',prompt:n?'Welche Zahl kommt direkt NACH '+x+'?':'Welche Zahl kommt direkt VOR '+x+'?',ans:n?x+1:x-1,
+    hint:n?'Ein Schritt nach rechts auf dem Zahlenstrahl. Wo landest du von '+x+' aus?':'Ein Schritt nach links auf dem Zahlenstrahl. Wo landest du von '+x+' aus?'};
+}
+function qST(seq){
+  const d=seq[1]-seq[0];
+  return {t:'st',type:'num',prompt:'Zähle weiter. Welche Zahl kommt als Nächstes?',seq:seq.join(', ')+', ?',ans:seq[2]+d,
+    hint:'Der Schritt ist '+Math.abs(d)+' '+(d>0?'vorwärts':'rückwärts')+'.'};
+}
+function qCMP(a,b){
+  return {t:'cmp',type:'cmp',prompt:'Welches Zeichen passt?',seq:a+'  ?  '+b,ans:a<b?'<':(a>b?'>':'='),hint:'Schau zuerst auf die Zehner, dann auf die Einer.'};
+}
+function qNZ(x){
+  const lo=Math.floor(x/10)*10;
+  return {t:'nz',type:'two',z:x,prompt:'Welche Zehnerzahlen liegen links und rechts neben '+x+'?',ans:[lo,lo+10],hint:'Der volle Zehner davor und der volle Zehner danach.'};
+}
+function qZS(lo,hi,v){
+  return {t:'zs',type:'line',lo:lo,hi:hi,prompt:'Welche Zahl ist markiert?',ans:v,hint:'Zähle die Striche vom linken Zehner aus: '+lo+', dann einen Strich weiter.'};
+}
+function qORD(items,dir){
+  const asc=dir==='asc',sorted=items.slice().sort((a,b)=>asc?a-b:b-a);
+  return {t:'ord',type:'sort',items:items,dir:dir,prompt:asc?'Tippe die Zahlen an. Fang mit der KLEINSTEN an.':'Tippe die Zahlen an. Fang mit der GRÖSSTEN an.',ans:sorted,hint:asc?'Finde zuerst die kleinste Zahl.':'Finde zuerst die größte Zahl.'};
+}
+function mk(tid,s){
+  switch(tid){
+    case 'vn':return qVN(s[0],s[1]);
+    case 'st':return qST(s);
+    case 'cmp':return qCMP(s[0],s[1]);
+    case 'nz':return qNZ(s);
+    case 'zs':return qZS(s[0],s[1],s[2]);
+    default:return qORD(s[0],s[1]);
+  }
+}
+function rngOf(seed){
+  let a=0;for(let i=0;i<seed.length;i++)a=(a*31+seed.charCodeAt(i))>>>0;
+  return ()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296};
+}
+const ri=(r,a,b)=>a+Math.floor(r()*(b-a+1));
+function genSpecs(tid,r){
+  const out=[];
+  if(tid==='vn'){
+    for(let i=0;i<4;i++){const n=r()<.5;out.push([n?'n':'v',n?(i<2?ri(r,1,9)*10+9:ri(r,10,98)):(i<2?ri(r,2,10)*10:ri(r,11,99))])}
+  }else if(tid==='st'){
+    for(let i=0;i<4;i++){
+      const step=r()<.5?10:5,dir=r()<.5?1:-1;
+      const s=dir>0?ri(r,0,100-3*step):ri(r,3*step,100);
+      out.push([s,s+dir*step,s+2*dir*step]);
+    }
+  }else if(tid==='cmp'){
+    const p=ri(r,1,4),q=ri(r,5,9),a=ri(r,20,90);
+    out.push([p*10+q,q*10+p],[a,a],[a+1,a],[100,ri(r,60,99)]);
+  }else if(tid==='nz'){
+    for(let i=0;i<4;i++){let x=ri(r,11,99);if(x%10===0)x++;out.push(x)}
+  }else if(tid==='zs'){
+    for(let i=0;i<4;i++){const lo=ri(r,0,9)*10;out.push([lo,lo+10,lo+ri(r,1,9)])}
+  }else{
+    for(let i=0;i<3;i++){
+      const set=new Set();while(set.size<(i<2?5:4))set.add(ri(r,2,99));
+      out.push([Array.from(set),i%2?'desc':'asc']);
+    }
+  }
+  return out;
+}
+function build(uid,tid){
+  const f=(FIXED[uid]||{})[tid];
+  return (f||genSpecs(tid,rngOf(uid+tid))).map(s=>mk(tid,s));
+}
+function checkQ(q,val){
+  if(q.type==='num'||q.type==='line')return parseInt(val,10)===q.ans;
+  if(q.type==='two')return val[0]===q.ans[0]&&val[1]===q.ans[1];
+  if(q.type==='cmp')return val===q.ans;
+  return val.join()===q.ans.join();
+}
+function answerText(q){
+  if(q.type==='two')return q.ans[0]+' und '+q.ans[1];
+  if(q.type==='sort')return q.ans.join(', ');
+  return String(q.ans);
+}
+function monster(i,hp){
+  const c=MONC[i%3],dead=hp<=0;
+  const eyes=dead?'<path d="M36 52q6 6 12 0M72 52q6 6 12 0" stroke="#111" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+    :'<circle cx="42" cy="50" r="9" fill="#fff"/><circle cx="78" cy="50" r="9" fill="#fff"/><circle cx="44" cy="52" r="4.5" fill="#111"/><circle cx="76" cy="52" r="4.5" fill="#111"/>';
+  const mouth=dead?'<path d="M46 72q14 12 28 0" stroke="#111" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+    :'<path d="M44 72q16 -8 32 0v6q-16 10 -32 0z" fill="#111"/><path d="M50 73l4 8l4 -8zM62 73l4 8l4 -8z" fill="#fff"/>';
+  const star=dead?'<path d="M60 4l3.5 8 8.5 .8-6.5 5.6 2 8.4L60 22.5l-7.5 4.3 2-8.4-6.5-5.6 8.5-.8z" fill="#FFD43B"/>':'';
+  return raw('<svg class="kd-mon" viewBox="0 0 120 100" aria-hidden="true"><path d="M26 30l-8-24 24 14zM94 30l8-24-24 14z" fill="'+c+'"/><path d="M18 88Q8 40 36 24Q60 10 84 24Q112 40 102 88Q60 100 18 88z" fill="'+c+'"/>'+eyes+mouth+star+'</svg>');
+}
+function lineSvg(lo,hi,v){
+  const x0=24,x1=296,dx=(x1-x0)/10,mx=x0+(v-lo)*dx;
+  let t='';
+  for(let k=0;k<=10;k++){const x=(x0+k*dx).toFixed(1),big=k===0||k===10||k===5;t+='<line x1="'+x+'" x2="'+x+'" y1="'+(big?50:58)+'" y2="72"/>'}
+  return raw('<svg class="q-line" viewBox="0 0 320 112" role="img" aria-label="Zahlenstrahl von '+lo+' bis '+hi+' mit einer markierten Stelle"><g stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="'+x0+'" x2="'+x1+'" y1="72" y2="72"/>'+t+'</g><path d="M'+(mx-10).toFixed(1)+' 16h20L'+mx.toFixed(1)+' 44z" fill="var(--accent)"/><text x="'+mx.toFixed(1)+'" y="12" text-anchor="middle" font-size="16" font-weight="800" fill="currentColor">?</text><text x="'+x0+'" y="100" text-anchor="middle" font-size="18" font-weight="700" fill="currentColor">'+lo+'</text><text x="'+x1+'" y="100" text-anchor="middle" font-size="18" font-weight="700" fill="currentColor">'+hi+'</text></svg>');
+}
+/* Ansichten */
+function listView(){
+  return html`<div class="kd-top"><div><h1 class="page-h1">Kinder</h1><p class="kd-meta">Ein Dashboard pro Kind</p></div></div>
+    ${kd.kids.map(k=>html`<div class="kd-card"><h2>${k.name}</h2><p class="kd-meta">${kidMeta(k)}</p><button type="button" class="btn-solid" style="margin-top:12px" data-k="open" data-id="${k.id}">Dashboard öffnen</button></div>`)}
+    <form class="kd-card" id="kid-add" autocomplete="off"><h2>Kind hinzufügen</h2>
+      <div class="ln-row" style="margin-top:8px"><input class="field text" id="kn" type="text" placeholder="Name" aria-label="Name" maxlength="${NAME_MAX}"><input class="field" id="ka" type="number" min="5" max="12" placeholder="Alter" aria-label="Alter" style="width:96px"></div>
+      <div class="ln-row" style="margin-top:8px"><input class="field" id="kk" type="number" min="1" max="4" value="2" aria-label="Klasse" style="width:96px"><input class="field text" id="kl" type="text" value="Sachsen" aria-label="Bundesland" maxlength="${NAME_MAX}"><button type="submit" class="btn-solid">Hinzufügen</button></div></form>`;
+}
+function blockView(k,p,u,i,us){
+  const tid=u.app[i],pt=u.pdf[i],pid=pt[0],v=us.sc[pid],done=blockDone(us,u,i);
+  return html`<div class="kd-block"><h3>Block ${i+1} · ${WHEN[i]}${done?' · geschafft':''}</h3>
+    <div class="kd-row"><span class="kd-dot${us.st[i]?' on':''}">${CHECK}</span><span class="kd-name"><b>App:</b> ${TOPIC[tid].name}</span></div>
+    <button type="button" class="${us.st[i]?'btn-ghost':'btn-solid'}" data-k="start" data-u="${u.id}" data-i="${i}">${us.st[i]?'Noch einmal üben':'App starten · ca. 5 Min'}</button>
+    <div class="kd-row" style="margin-top:12px"><span class="kd-dot${v!=null?' on':''}">${CHECK}</span><span class="kd-name"><b>PDF:</b> ${TOPIC[pid].name}</span>
+      <span class="kd-step"><button type="button" data-k="sc" data-u="${u.id}" data-t="${pid}" data-d="-1" aria-label="Eine richtige weniger: ${TOPIC[pid].name}">−</button><output aria-label="Richtig von ${pt[1]}">${v==null?'–':v}/${pt[1]}</output><button type="button" data-k="sc" data-u="${u.id}" data-t="${pid}" data-d="1" aria-label="Eine richtige mehr: ${TOPIC[pid].name}">+</button></span></div></div>`;
+}
+function dashView(k){
+  const p=readProg(k),st=topicStats(p),today=todayISO(),weak=weakest(st);
+  const days=k.exam?diffDays(k.exam,today):null;
+  const examTxt=k.exam?parse(k.exam).toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'})+(days>0?' · noch '+days+(days===1?' Tag':' Tage'):days===0?' · heute':''):'';
+  return html`<div class="kd-top"><div><h1 class="page-h1">${k.name}</h1><p class="kd-meta">${kidMeta(k)}</p></div><span class="rw-pts" aria-label="${p.stars||0} Sterne">★ ${p.stars||0}</span></div>
+    <button type="button" class="link" data-k="list">${kd.kids.length>1?'‹ Alle Kinder':'Kind hinzufügen'}</button>
+    <div class="kd-card">${k.exam?html`<span class="kd-exam">Arbeit: ${examTxt}</span>`:''}<h2>Zahlen bis 100 üben</h2>
+      <p class="kd-meta">Pro Tag drei kleine Blöcke. Jeder Block: erst die App (ca. 5 Min), dann das PDF-Blatt (ca. 5 Min), danach Pause.</p>
+      ${k.note?html`<p class="kd-meta">${k.note}</p>`:''}</div>
+    ${UNITS.map(u=>{const us=unitOf(p,u.id),due=unitDue(k,u),n=[0,1,2].filter(i=>blockDone(us,u,i)).length;
+      return html`<div class="kd-card${due===today?' now':''}" aria-label="Tag ${u.n}"><div class="kd-meta">${label(due)} · ${n} von 3 Blöcken geschafft</div><h2>Tag ${u.n}</h2>${[0,1,2].map(i=>blockView(k,p,u,i,us))}</div>`})}
+    <div class="kd-card"><h2>Lernbedarf</h2><p class="kd-meta" style="margin-bottom:12px">Die Auswertung kommt aus der App und aus den Ergebnissen, die du für die PDF-Blätter einträgst.</p>
+      <div class="need">${TOPICS.map(t=>{const s=st[t.id],n=need(s),pct=s.t?Math.round(s.r/s.t*100):0;
+        return html`<div class="need-row ${n.k}"><span>${t.name}</span><span class="nd">${n.l}</span><span class="need-bar" role="img" aria-label="${s.t?s.r+' von '+s.t+' richtig':'noch keine Daten'}"><i style="width:${pct}%"></i></span></div>`})}</div>
+      ${weak?html`<button type="button" class="btn-solid" style="margin-top:16px;width:100%" data-k="extra" data-t="${weak}">Extra-Runde: ${TOPIC[weak].name}</button>`:''}
+      <details><summary>Auswertung für neue Übungsblätter</summary><textarea class="kd-rep" id="rep" readonly>${report(k,st)}</textarea><button type="button" class="btn-ghost" data-k="copy">Text kopieren</button></details></div>`;
+}
+function dots(r){return html`<div class="q-dots" role="img" aria-label="Aufgabe ${r.q+1} von ${r.qs.length}">${r.qs.map((_,i)=>html`<span class="q-d${i<r.q||(i===r.q&&r.phase==='fb')?' on':''}${i===r.q?' cur':''}"></span>`)}</div>`}
+function hpOf(r){return r.qs.length-(r.q+(r.phase==='fb'?1:0))}
+function questionBody(r,q){
+  if(r.phase==='fb')return html`<button type="button" class="rw-go" data-k="next" id="q-next">Weiter</button>`;
+  if(q.type==='cmp')return html`<div class="q-cmp">${['<','=','>'].map((s,i)=>html`<button type="button" data-k="cmp" data-v="${s}">${s}<small>${['kleiner','gleich','größer'][i]}</small></button>`)}</div>`;
+  if(q.type==='sort'){
+    const left=q.items.filter(n=>r.sel.indexOf(n)<0);
+    return html`<div class="q-picked" aria-label="Schon angetippt">${r.sel.map(n=>html`<span class="q-pk">${n}</span>`)}</div>
+      <div class="q-tiles">${left.map(n=>html`<button type="button" class="tile" data-k="pick" data-v="${n}">${n}</button>`)}</div>
+      ${r.sel.length?html`<button type="button" class="link" data-k="unpick">Letzte Zahl zurücknehmen</button>`:''}`;
+  }
+  if(q.type==='two')return html`<form id="q-form" autocomplete="off"><div class="q-two"><input class="field q-in" id="q-a" type="text" inputmode="numeric" maxlength="3" aria-label="Zehner davor"><span class="q-mid" aria-hidden="true">&lt; ${q.z} &lt;</span><input class="field q-in" id="q-b" type="text" inputmode="numeric" maxlength="3" aria-label="Zehner danach"></div><button type="submit" class="rw-go">Prüfen</button></form>`;
+  return html`<form id="q-form" autocomplete="off">${q.type==='line'?lineSvg(q.lo,q.hi,q.ans):''}<input class="field q-in" id="q-a" type="text" inputmode="numeric" maxlength="3" aria-label="Deine Antwort"><button type="submit" class="rw-go">Prüfen</button></form>`;
+}
+function runView(){
+  const r=kd.run;
+  if(r.phase==='break')return html`<div class="rw-card"><span class="fk-kicker">Bewegungspause</span><h2 class="fk-task">${BREAKS[r.brk%BREAKS.length]}</h2><p class="fk-meta">Mach das 20 Sekunden lang. Danach geht es weiter.</p><p class="q-timer" id="brk-t">20</p><button type="button" class="rw-go" data-k="go">Weiter</button></div>`;
+  if(r.phase==='done'){
+    return html`<div class="rw-card" style="text-align:center"><span class="fk-kicker">Geschafft</span>${monster(r.mi,0)}<h2 class="fk-task">Monster besiegt!</h2><p class="fk-meta">Du hast ${r.gain} ${r.gain===1?'Stern':'Sterne'} gesammelt. ${r.extra?'Die Extra-Runde ist fertig.':'Als Nächstes wartet das PDF-Blatt.'}</p><button type="button" class="rw-go" data-k="back">Zurück zur Übersicht</button></div>`;
+  }
+  const q=r.qs[r.q],hp=hpOf(r);
+  return html`<div class="q-head"><div><p class="kd-meta">${r.extra?'Extra-Runde':'Block '+(r.idx+1)+' von 3'} · ${TOPIC[r.topic].name}</p>${dots(r)}</div><button type="button" class="link" data-k="stop">Später weitermachen</button></div>
+    <div class="rw-card"><div style="display:flex;align-items:center;gap:14px;justify-content:space-between"><div class="kd-hp" role="img" aria-label="Monster-Energie: ${hp} von ${r.qs.length}">${r.qs.map((_,i)=>html`<span class="${i<hp?'':'off'}" aria-hidden="true">♥</span>`)}</div>${monster(r.mi,hp)}</div>
+      <p class="q-prompt">${q.prompt}</p>${q.seq?html`<p class="q-seq">${q.seq}</p>`:''}${questionBody(r,q)}
+      ${r.phase==='fb'?(r.fb.ok?html`<p class="q-fb good" role="status">${CHEERS[r.q%CHEERS.length]} ${r.fb.first?'+2 Sterne':'+1 Stern'}</p>`:html`<p class="q-fb retry" role="status">Die richtige Antwort ist ${answerText(q)}. Das üben wir weiter.</p>`):(r.msg?html`<p class="q-fb retry" role="status">${r.msg}</p>`:'')}</div>`;
+}
+let brkT=null;
+function stopBreak(){clearInterval(brkT);brkT=null}
+function startBreak(){
+  stopBreak();let n=20;
+  brkT=setInterval(()=>{n--;const e=$('#brk-t');if(!e){stopBreak();return}e.textContent=n>0?n:'Los!';if(n<=0)stopBreak()},1000);
+}
+function renderKids(){
+  if(!kd.sel&&kd.kids.length>=1&&!kd.showList)kd.sel=kd.kids[0].id;
+  let body;
+  if(kd.run)body=runView();
+  else if(kd.sel&&kidById(kd.sel))body=dashView(kidById(kd.sel));
+  else body=listView();
+  el.innerHTML=markup(html`<div class="v-rw">${body}</div>`);
+  if(kd.run&&kd.run.phase==='break'){if(!brkT)startBreak()}else stopBreak();
+  const i=$('.q-in',el);if(i)i.focus();
+  else if(kd.run&&kd.run.phase==='fb'){const n=$('#q-next',el);if(n)n.focus()}
+}
+window.renderKids=renderKids;
+function newStation(r){
+  const u=UNITS.find(x=>x.id===r.unit);
+  r.topic=u.app[r.idx];r.qs=build(u.id,r.topic);r.mi=r.idx;r.brk=r.idx;
+  r.q=0;r.tries=0;r.msg='';r.sel=[];r.fb=null;r.phase='q';
+}
+function startRun(k,uid,idx){kd.run={kid:k.id,unit:uid,idx:idx,extra:false,gain:0};newStation(kd.run);renderKids()}
+function startExtra(k,tid){
+  kd.run={kid:k.id,unit:null,idx:0,extra:true,gain:0,topic:tid,mi:Math.floor(Math.random()*3),brk:0,qs:genSpecs(tid,rngOf('x'+Date.now())).map(s=>mk(tid,s)),q:0,tries:0,msg:'',sel:[],fb:null,phase:'q'};
+  renderKids();
+}
+function recordQ(first,ok){
+  const r=kd.run,k=kidById(r.kid),p=readProg(k),t=r.qs[r.q].t;
+  const a=p.app[t]||(p.app[t]={r:0,t:0});
+  a.t+=1;if(ok&&first)a.r+=1;
+  if(ok){const s=first?2:1;p.stars=(p.stars||0)+s;r.gain+=s}
+  saveProg(k,p);
+}
+function answer(val){
+  const r=kd.run;if(!r||r.phase!=='q')return;
+  const q=r.qs[r.q];
+  if(checkQ(q,val)){recordQ(r.tries===0,true);r.phase='fb';r.fb={ok:true,first:r.tries===0};r.msg=''}
+  else if(r.tries===0){r.tries=1;r.msg='Fast! Schau noch einmal genau hin. Tipp: '+q.hint;r.sel=[]}
+  else{recordQ(false,false);r.phase='fb';r.fb={ok:false};r.msg=''}
+  renderKids();
+}
+function nextQ(){
+  const r=kd.run;
+  r.q++;r.tries=0;r.msg='';r.sel=[];r.fb=null;
+  if(r.q<r.qs.length){r.phase='q';renderKids();return}
+  const k=kidById(r.kid);
+  if(!r.extra){
+    const u=UNITS.find(x=>x.id===r.unit),p=readProg(k);
+    unitOf(p,u.id).st[r.idx]=true;saveProg(k,p);syncBlockTask(k,u,r.idx,p);
+  }
+  r.phase='done';r.q=r.qs.length-1;
+  renderKids();
+}
+function leaveRun(){kd.run=null;stopBreak();renderKids()}
+function ensureTasks(k){
+  if(!window.TK)return;
+  UNITS.forEach(u=>{for(let i=0;i<3;i++)TK.addTask(blockTitle(k,u,i),addDays(k.start,u.n-1),Date.now()+u.n*10+i)});
+}
+function createKid(name,age,klasse,land,note,exam,start){
+  const k=kidAdd({name:name,age:age,klasse:klasse,land:land,note:note,start:start||todayISO(),exam:exam,prog:JSON.stringify(emptyProg()),createdAt:Date.now()});
+  ensureTasks(k);return k;
+}
+function load(){
+  let list=null;
+  try{const r=lsG(LS_KIDS);list=r?JSON.parse(r):null}catch(e){}
+  kd.kids=Array.isArray(list)?list.map(x=>x?normKid(x.id,x):null).filter(Boolean):[];
+  if(!Array.isArray(list)&&!lsG('felixKinderInit')){
+    lsS('felixKinderInit','1');
+    createKid('Lotta',8,2,'Sachsen','Kurze Blöcke mit Bewegungspausen. Thema Monster-Jagd: Jede Station ist ein Monster, das mit richtigen Antworten besiegt wird.','2026-10-06','2026-10-03');
+  }
+}
+el.addEventListener('click',e=>{
+  const b=e.target.closest('[data-k]');if(!b)return;
+  const a=b.dataset.k,k=kd.run?kidById(kd.run.kid):kidById(kd.sel);
+  switch(a){
+    case 'open':kd.sel=b.dataset.id;kd.showList=false;renderKids();break;
+    case 'list':kd.sel=null;kd.showList=true;renderKids();break;
+    case 'start':{if(k)startRun(k,b.dataset.u,+b.dataset.i);break}
+    case 'extra':{if(k&&TOPIC[b.dataset.t])startExtra(k,b.dataset.t);break}
+    case 'stop':case 'back':leaveRun();break;
+    case 'next':nextQ();break;
+    case 'go':{const r=kd.run;if(r){r.idx++;newStation(r);renderKids()}break}
+    case 'cmp':answer(b.dataset.v);break;
+    case 'pick':{
+      const r=kd.run;if(!r||r.phase!=='q')break;
+      const q=r.qs[r.q];r.sel.push(+b.dataset.v);
+      if(r.sel.length===q.items.length)answer(r.sel.slice());else renderKids();
+      break}
+    case 'unpick':{const r=kd.run;if(r){r.sel.pop();renderKids()}break}
+    case 'sc':{
+      if(!k)break;
+      const u=UNITS.find(x=>x.id===b.dataset.u),tid=b.dataset.t,d=+b.dataset.d,item=u&&u.pdf.find(x=>x[0]===tid);
+      if(!item)break;
+      const p=readProg(k),us=unitOf(p,u.id),cur=us.sc[tid];
+      us.sc[tid]=cur==null?(d>0?1:0):Math.max(0,Math.min(item[1],cur+d));
+      saveProg(k,p);
+      const i=u.pdf.findIndex(x=>x[0]===tid);if(i>=0)syncBlockTask(k,u,i,p);
+      renderKids();break}
+    case 'copy':{
+      const ta=$('#rep',el);if(!ta)break;
+      ta.focus();ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(err){}
+      if(window.TK&&TK.toast)TK.toast(ok?'Auswertung kopiert':'Markiere den Text und kopiere ihn von Hand');break}
+  }
+});
+el.addEventListener('input',e=>{if(e.target.classList.contains('q-in'))e.target.value=e.target.value.replace(/\D/g,'')});
+el.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(e.target.id==='q-form'){
+    const r=kd.run;if(!r)return;
+    const q=r.qs[r.q],a=$('#q-a',el),b=$('#q-b',el);
+    if(q.type==='two'){
+      if(!a.value){a.focus();return}
+      if(!b.value){b.focus();return}
+      answer([parseInt(a.value,10),parseInt(b.value,10)]);
+    }else{
+      if(!a.value){a.focus();return}
+      answer(a.value);
+    }
+  }else if(e.target.id==='kid-add'){
+    const name=$('#kn',el).value.trim().slice(0,NAME_MAX);
+    if(!name){$('#kn',el).focus();return}
+    const k=createKid(name,+$('#ka',el).value||0,+$('#kk',el).value||0,$('#kl',el).value.trim().slice(0,NAME_MAX),'Kurze Blöcke mit Bewegungspausen.','');
+    kd.showList=false;kd.sel=k.id;renderKids();
+  }
+});
+load();
+renderKids();
+})();
 </script>
 </body>
 </html>

@@ -3,6 +3,14 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.6.0 vom 3.10.2026
+Neu unter Mehr: Kinder, mit einem Dashboard pro Kind. Als erstes ist Lotta (8 Jahre, Klasse 2, Sachsen) angelegt, sie übt Zahlen bis 100 für die Arbeit am Dienstag, 6.10.
+- Zwei Tage mit je drei kleinen Blöcken. Jeder Block hat eine App-Übung (ca. 5 Minuten, ein Monster pro Station) und ein PDF-Blatt zum Ausdrucken.
+- Themen: Vorgänger und Nachfolger, Nachbarzehner, Zahlenstrahl, Zehner- und Fünferschritte, Größer-kleiner-gleich, Zahlen ordnen. Zwei Versuche pro Aufgabe, Sterne, Tipps.
+- Lernbedarf: Aus der App und den eingetragenen PDF-Ergebnissen entsteht je Thema "Sitzt", "Üben" oder "Wichtig". Dazu eine Extra-Runde für das schwächste Thema und ein Text für neue Übungsblätter.
+- Die sechs Blöcke stehen auch in der Aufgabenliste und werden dort abgehakt, wenn App und PDF eines Blocks erledigt sind.
+- Weitere Kinder lassen sich anlegen. Der Stand bleibt auf diesem Gerät.
+
 ## 2.5.0 vom 2.10.2026
 Freizeit: ausführliche Anleitungen mit Bildern.
 - Alle 26 Ideen haben jetzt Schritt für Schritt eine Anleitung. Basteln: "So geht's", Unternehmungen: "So läuft der Tag", je 4 bis 6 Schritte mit Überschrift und kurzer Erklärung.
