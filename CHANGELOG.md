@@ -3,6 +3,12 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.11.0 vom 5.10.2026
+Malvorlagen: eigenes Bild zeigen, Vorlagen passen sich an.
+- Am Ende jeder Vorlage: "Foto machen oder auswählen". Das Foto wird verkleinert und auf diesem Gerät gespeichert (die letzten 6 Bilder unter "Deine Bilder").
+- Mit "Text kopieren" geht das Foto zusammen mit der Vorlage an Claude in einem Chat. Claudes Antwort wird hier eingefügt und übernommen.
+- Danach passen sich die Vorlagen an: empfohlene Stufe (passende Vorlagen sind markiert), ein persönlicher Tipp bei jedem Schritt und eine Extra-Aufgabe als zusätzlicher letzter Schritt.
+
 ## 2.10.0 vom 5.10.2026
 Kinder: Malvorlagen als Belohnung für Fleiß.
 - 8 Schritt-für-Schritt-Anleitungen zum Selbstzeichnen, je 2 zu den Themen Neon-Bühne und Heldinnen, Monster und Gespenster, Ponys und Fabelwesen, Tiere und Herbst. Drei Stufen von leicht bis Profi. Alle Figuren sind selbst entworfen.
