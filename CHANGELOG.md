@@ -3,6 +3,12 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.10.0 vom 5.10.2026
+Kinder: Malvorlagen als Belohnung für Fleiß.
+- 8 Schritt-für-Schritt-Anleitungen zum Selbstzeichnen, je 2 zu den Themen Neon-Bühne und Heldinnen, Monster und Gespenster, Ponys und Fabelwesen, Tiere und Herbst. Drei Stufen von leicht bis Profi. Alle Figuren sind selbst entworfen.
+- Jeder Schritt zeigt neue Linien in Pink, alles von vorher bleibt dunkel. Die Profi-Vorlagen beginnen mit gestrichelten Hilfslinien und üben Proportionen, Strähnen und Schraffur. Am Ende gibt es Farbvorschläge.
+- Eine Vorlage ist zum Start frei. Jeder geschaffte Block (App und PDF-Blatt) schaltet eine weitere frei, egal wie viele Fehler. Neue Vorlagen werden mit einer Meldung angezeigt.
+
 ## 2.9.0 vom 5.10.2026
 Kinder: Tag 3 "Wiederholung" nach Seite 21 im Arbeitsheft.
 - Drei neue Blöcke für heute: Zahlen zerlegen und Zahlwörter lesen ("einundsechzig" ist 61), Zahlenstrahl, Nachbarzehner auch für 4 und 99. Das PDF-Blatt hat Zahlen zerlegen, Uhrzeiten (volle Stunden, vormittags und nachmittags) und Vorgänger/Nachfolger. Das PDF und die Lösungen für Eltern sind erweitert.
