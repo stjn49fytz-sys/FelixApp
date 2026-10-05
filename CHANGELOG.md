@@ -3,6 +3,12 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.9.0 vom 5.10.2026
+Kinder: Tag 3 "Wiederholung" nach Seite 21 im Arbeitsheft.
+- Drei neue Blöcke für heute: Zahlen zerlegen und Zahlwörter lesen ("einundsechzig" ist 61), Zahlenstrahl, Nachbarzehner auch für 4 und 99. Das PDF-Blatt hat Zahlen zerlegen, Uhrzeiten (volle Stunden, vormittags und nachmittags) und Vorgänger/Nachfolger. Das PDF und die Lösungen für Eltern sind erweitert.
+- Neue Themen im Lernbedarf: "Zahlen zerlegen und lesen" und "Uhrzeiten". Die Extra-Runde nimmt nur Themen, die es in der App gibt.
+- Die drei neuen Aufgaben stehen für heute in der Aufgabenliste (bei bestehenden Kindern werden sie einmal nachgetragen).
+
 ## 2.8.0 vom 5.10.2026
 Kinder: Neue Karte "Prompt für neue Übungen". Der Text mit dem aktuellen Lernbedarf lässt sich mit einem Knopf kopieren. Mit Fotos der Arbeitsblätter in einem Chat angehängt, passt Claude daraus Plan, Aufgaben und PDF-Blatt an.
 

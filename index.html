@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.8.0">
+<meta name="version" content="2.9.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -840,7 +840,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.8.0 vom 5.10.2026</footer>
+<footer class="ver">Felix App, Version 2.9.0 vom 5.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -2623,12 +2623,15 @@ const TOPICS=[
   {id:'zs',name:'Zahlenstrahl'},
   {id:'st',name:'Zehner- und Fünferschritte'},
   {id:'cmp',name:'Größer, kleiner, gleich'},
-  {id:'ord',name:'Zahlen ordnen'}
+  {id:'ord',name:'Zahlen ordnen'},
+  {id:'zl',name:'Zahlen zerlegen und lesen'},
+  {id:'uhr',name:'Uhrzeiten',app:false}
 ];
 const TOPIC={};TOPICS.forEach(t=>{TOPIC[t.id]=t});
 const UNITS=[
   {id:'u1',n:1,app:['vn','st','cmp'],pdf:[['nz',4],['zs',4],['ord',2]]},
-  {id:'u2',n:2,app:['nz','zs','ord'],pdf:[['vn',4],['st',5],['cmp',8]]}
+  {id:'u2',n:2,app:['nz','zs','ord'],pdf:[['vn',4],['st',5],['cmp',8]]},
+  {id:'u3',n:3,app:['zl','zs','nz'],pdf:[['zl',4],['uhr',3],['vn',6]]}
 ];
 const WHEN=['Vormittag','Mittag','Nachmittag'];
 const BREAKS=['10 Hampelmänner','Einmal hüpfend um den Tisch','Wie ein Storch auf einem Bein stehen','Arme und Beine ausschütteln','Wie ein Roboter durchs Zimmer laufen'];
@@ -2681,7 +2684,7 @@ function need(s){
 }
 function weakest(st){
   let best=null,bq=2;
-  TOPICS.forEach(t=>{const s=st[t.id];if(s.t){const q=s.r/s.t;if(q<bq){bq=q;best=t.id}}});
+  TOPICS.forEach(t=>{const s=st[t.id];if(t.app!==false&&s.t){const q=s.r/s.t;if(q<bq){bq=q;best=t.id}}});
   return best;
 }
 function report(k,st){
@@ -2708,6 +2711,11 @@ const FIXED={
     nz:[53,38,71,96],
     zs:[[30,40,36],[70,80,74],[10,20,19],[60,70,61]],
     ord:[[[63,36,81,18,45],'asc'],[[57,75,52,70,25],'desc'],[[100,9,90,19],'asc'],[[34,43,33,44],'desc']]
+  },
+  u3:{
+    zl:[['ze',3,5],['sp','dreiundvierzig',43],['zr',58,50],['sp','sechsundsiebzig',76]],
+    zs:[[10,20,17],[30,40,38],[50,60,54],[80,90,82]],
+    nz:[4,99,58,83]
   }
 };
 function qVN(kind,x){
@@ -2734,8 +2742,16 @@ function qORD(items,dir){
   const asc=dir==='asc',sorted=items.slice().sort((a,b)=>asc?a-b:b-a);
   return {t:'ord',type:'sort',items:items,dir:dir,prompt:asc?'Tippe die Zahlen an. Fang mit der KLEINSTEN an.':'Tippe die Zahlen an. Fang mit der GRÖSSTEN an.',ans:sorted,hint:asc?'Finde zuerst die kleinste Zahl.':'Finde zuerst die größte Zahl.'};
 }
+const ONES=['','ein','zwei','drei','vier','fünf','sechs','sieben','acht','neun'],TENS=['','','zwanzig','dreißig','vierzig','fünfzig','sechzig','siebzig','achtzig','neunzig'];
+const numWord=n=>ONES[n%10]+'und'+TENS[Math.floor(n/10)];
+function qZL(s){
+  if(s[0]==='ze')return {t:'zl',type:'num',prompt:'Z = '+s[1]+' Zehner und E = '+s[2]+' Einer. Welche Zahl ist das?',ans:s[1]*10+s[2],hint:'Erst die Zehner: '+s[1]*10+'. Dann die '+s[2]+' Einer dazu.'};
+  if(s[0]==='sp')return {t:'zl',type:'num',prompt:'Schreibe als Zahl:',seq:s[1],ans:s[2],hint:'Bei dem Wort hörst du zuerst die Einer. Geschrieben wird die Zehnerzahl vorne: '+Math.floor(s[2]/10)+' Zehner und '+s[2]%10+' Einer.'};
+  return {t:'zl',type:'num',prompt:'Ergänze: '+s[1]+' = '+s[2]+' + ?',ans:s[1]-s[2],hint:'Wie viele Einer kommen zu '+s[2]+' dazu, bis du bei '+s[1]+' bist?'};
+}
 function mk(tid,s){
   switch(tid){
+    case 'zl':return qZL(s);
     case 'vn':return qVN(s[0],s[1]);
     case 'st':return qST(s);
     case 'cmp':return qCMP(s[0],s[1]);
@@ -2762,6 +2778,9 @@ function genSpecs(tid,r){
   }else if(tid==='cmp'){
     const p=ri(r,1,4),q=ri(r,5,9),a=ri(r,20,90);
     out.push([p*10+q,q*10+p],[a,a],[a+1,a],[100,ri(r,60,99)]);
+  }else if(tid==='zl'){
+    const a=ri(r,2,9),b=ri(r,1,9),c=ri(r,2,9),d=ri(r,1,9),e=ri(r,2,9),f=ri(r,1,9),g=ri(r,2,9),h=ri(r,1,9);
+    out.push(['ze',a,b],['sp',numWord(c*10+d),c*10+d],['zr',e*10+f,e*10],['sp',numWord(g*10+h),g*10+h]);
   }else if(tid==='nz'){
     for(let i=0;i<4;i++){let x=ri(r,11,99);if(x%10===0)x++;out.push(x)}
   }else if(tid==='zs'){
@@ -2827,7 +2846,7 @@ function dashView(k){
   return html`<div class="kd-hero">${EMBLEM}<span class="kd-tag">Dämonen-Training</span><h1>${k.name}</h1><p class="kd-meta">${kidMeta(k)}</p><div class="kd-rank"><span class="rw-pts" aria-label="${p.stars||0} Sterne">★ ${p.stars||0}</span><span>${rankOf(p.stars||0)}</span>${WAVE}</div></div>
     <button type="button" class="link" data-k="list">${kd.kids.length>1?'‹ Alle Kinder':'Kind hinzufügen'}</button>
     <div class="kd-card">${k.exam?html`<span class="kd-exam">Arbeit: ${examTxt}</span>`:''}<h2>Zahlen bis 100 üben</h2>
-      <p class="kd-meta">Pro Tag drei kleine Blöcke. Jeder Block: erst die App (ca. 5 Min), dann das PDF-Blatt (ca. 5 Min), danach Pause.</p>
+      <p class="kd-meta">Pro Tag drei kleine Blöcke (Tag 3 ist die Wiederholung). Jeder Block: erst die App (ca. 5 Min), dann das PDF-Blatt (ca. 5 Min), danach Pause.</p>
       ${k.note?html`<p class="kd-meta">${k.note}</p>`:''}</div>
     ${UNITS.map(u=>{const us=unitOf(p,u.id),due=unitDue(k,u),n=[0,1,2].filter(i=>blockDone(us,u,i)).length;
       return html`<div class="kd-card${due===today?' now':''}" aria-label="Tag ${u.n}"><div class="kd-meta">${label(due)} · ${n} von 3 Blöcken geschafft</div><h2>Tag ${u.n}</h2>${[0,1,2].map(i=>blockView(k,p,u,i,us))}</div>`})}
@@ -2849,7 +2868,7 @@ function promptText(k){
 
 SO FUNKTIONIERT DAS ÜBEN
 - Pro Tag 3 kleine Blöcke. Jeder Block: eine App-Station (ca. 5 Min, 4 Aufgaben) plus ein PDF-Blatt (ca. 5 Min), danach eine kurze Bewegungspause.
-- Themen: Vorgänger/Nachfolger, Nachbarzehner, Zahlenstrahl, Zehner- und Fünferschritte (auch rückwärts), Größer/kleiner/gleich, Zahlen ordnen.
+- Themen: Vorgänger/Nachfolger, Nachbarzehner (auch 4 und 99), Zahlenstrahl, Zehner- und Fünferschritte (auch rückwärts), Größer/kleiner/gleich, Zahlen ordnen, Zahlen zerlegen und Zahlwörter lesen, Uhrzeiten (volle Stunden, 12- und 24-Stunden-Zeit).
 - Typische Fehlerquellen: Zehnerübergänge, Nachbarzehner, Zehnerschritte rückwärts, Zählen über 100.
 - Lernbedarf je Thema: ab 80 % richtig „Sitzt“, ab 50 % „Üben“, darunter „Wichtig“.
 
@@ -2963,18 +2982,20 @@ function nextQ(){
   renderKids();
 }
 function leaveRun(){kd.run=null;stopBreak();renderKids()}
-function ensureTasks(k){
+function ensureTasks(k,only){
   if(!window.TK)return;
-  UNITS.forEach(u=>{for(let i=0;i<3;i++)TK.addTask(blockTitle(k,u,i),addDays(k.start,u.n-1),Date.now()+u.n*10+i)});
+  UNITS.filter(u=>!only||u.id===only).forEach(u=>{for(let i=0;i<3;i++)TK.addTask(blockTitle(k,u,i),addDays(k.start,u.n-1),Date.now()+u.n*10+i)});
 }
 function createKid(name,age,klasse,land,note,exam,start){
-  const k=kidAdd({name:name,age:age,klasse:klasse,land:land,note:note,start:start||todayISO(),exam:exam,prog:JSON.stringify(emptyProg()),createdAt:Date.now()});
+  const k=kidAdd({name:name,age:age,klasse:klasse,land:land,note:note,start:start||todayISO(),exam:exam,prog:JSON.stringify(Object.assign(emptyProg(),{added:['u3']})),createdAt:Date.now()});
   ensureTasks(k);return k;
 }
 function load(){
   let list=null;
   try{const r=lsG(LS_KIDS);list=r?JSON.parse(r):null}catch(e){}
   kd.kids=Array.isArray(list)?list.map(x=>x?normKid(x.id,x):null).filter(Boolean):[];
+  /* Neuer Tag 3 (Wiederholung): Aufgaben für bestehende Kinder einmalig nachtragen */
+  kd.kids.forEach(k=>{const p=readProg(k);if((p.added||[]).indexOf('u3')<0){p.added=(p.added||[]).concat('u3');saveProg(k,p);ensureTasks(k,'u3')}});
   if(!Array.isArray(list)&&!lsG('felixKinderInit')){
     lsS('felixKinderInit','1');
     createKid('Lotta',8,2,'Sachsen','Kurze Blöcke mit Bewegungspausen. Thema Monster-Jagd: Jede Station ist ein Monster, das mit richtigen Antworten besiegt wird.','2026-10-06','2026-10-03');
