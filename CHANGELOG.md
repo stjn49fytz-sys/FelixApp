@@ -3,6 +3,9 @@
 Jede Änderung bekommt eine neue Versionsnummer. Die Version steht unten in der App.
 Schema: Hauptversion.Neue Funktion.Korrektur (zum Beispiel 1.1.0 für eine neue Funktion, 1.0.1 für eine Korrektur).
 
+## 2.8.0 vom 5.10.2026
+Kinder: Neue Karte "Prompt für neue Übungen". Der Text mit dem aktuellen Lernbedarf lässt sich mit einem Knopf kopieren. Mit Fotos der Arbeitsblätter in einem Chat angehängt, passt Claude daraus Plan, Aufgaben und PDF-Blatt an.
+
 ## 2.7.1 vom 3.10.2026
 Kinder: Bei den PDF-Blättern gibt es jetzt neben "Öffnen" auch einen Knopf "Drucken". Am iPhone und iPad öffnet er das PDF und weist auf Teilen und Drucken hin.
 

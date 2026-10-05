@@ -5,7 +5,7 @@
 <script>try{var _v=localStorage.getItem("aufgabenStil");if(["reward","punk","rock","gothic"].indexOf(_v)>=0)document.documentElement.dataset.v=_v}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Felix App</title>
-<meta name="version" content="2.7.1">
+<meta name="version" content="2.8.0">
 <meta name="application-name" content="Felix App">
 <meta name="apple-mobile-web-app-title" content="Felix App">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -840,7 +840,7 @@ input[type=checkbox]:checked::after{font-size:18px}
     </div>
   </section>
 </main>
-<footer class="ver">Felix App, Version 2.7.1 vom 3.10.2026</footer>
+<footer class="ver">Felix App, Version 2.8.0 vom 5.10.2026</footer>
 <div id="tk-toast" role="status" aria-live="polite" hidden></div>
 <script>
 
@@ -2839,7 +2839,47 @@ function dashView(k){
       <div class="need">${TOPICS.map(t=>{const s=st[t.id],n=need(s),pct=s.t?Math.round(s.r/s.t*100):0;
         return html`<div class="need-row ${n.k}"><span>${t.name}</span><span class="nd">${n.l}</span><span class="need-bar" role="img" aria-label="${s.t?s.r+' von '+s.t+' richtig':'noch keine Daten'}"><i style="width:${pct}%"></i></span></div>`})}</div>
       ${weak?html`<button type="button" class="btn-solid" style="margin-top:16px;width:100%" data-k="extra" data-t="${weak}">Extra-Runde: ${TOPIC[weak].name}</button>`:''}
-      <details><summary>Auswertung für neue Übungsblätter</summary><textarea class="kd-rep" id="rep" readonly>${report(k,st)}</textarea><button type="button" class="btn-ghost" data-k="copy">Text kopieren</button></details></div>`;
+      <details><summary>Auswertung für neue Übungsblätter</summary><textarea class="kd-rep" id="rep" readonly>${report(k,st)}</textarea><button type="button" class="btn-ghost" data-k="copy">Text kopieren</button></details></div>
+    <div class="kd-card"><h2>Prompt für neue Übungen</h2><p class="kd-meta">Kopiere den Text, füge ihn in einen Chat mit Claude ein und hänge Fotos von den Arbeitsblättern an. Die aktuelle Auswertung steht schon darin. Claude passt dann den Plan an und erstellt neue Aufgaben und ein neues PDF-Blatt.</p>
+      <textarea class="kd-rep" id="pmt" readonly style="min-height:200px">${promptText(k)}</textarea><button type="button" class="btn-solid" style="width:100%;margin-top:6px" data-k="copy" data-for="pmt">Prompt kopieren</button></div>`;
+}
+function promptText(k){
+  const ex=k.exam?parse(k.exam).toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'}):'';
+  return `Du bist Lern-Coach für ${k.name}${k.age?' ('+k.age+' Jahre':' ('}${k.klasse?', Klasse '+k.klasse:''}${k.land?', '+k.land:''}, ADHS). ${k.name} schreibt${ex?' am '+ex:''} eine Mathe-Arbeit zu „Zahlen bis 100“. Das Üben läuft in der Felix App (Mehr → Kinder), mit Neon-Look im K-Pop-Dämonenjäger-Stil. Verwende nur selbst erfundene Figuren, keine Namen oder Charaktere aus Filmen, Serien oder Marken.
+
+SO FUNKTIONIERT DAS ÜBEN
+- Pro Tag 3 kleine Blöcke. Jeder Block: eine App-Station (ca. 5 Min, 4 Aufgaben) plus ein PDF-Blatt (ca. 5 Min), danach eine kurze Bewegungspause.
+- Themen: Vorgänger/Nachfolger, Nachbarzehner, Zahlenstrahl, Zehner- und Fünferschritte (auch rückwärts), Größer/kleiner/gleich, Zahlen ordnen.
+- Typische Fehlerquellen: Zehnerübergänge, Nachbarzehner, Zehnerschritte rückwärts, Zählen über 100.
+- Lernbedarf je Thema: ab 80 % richtig „Sitzt“, ab 50 % „Üben“, darunter „Wichtig“.
+
+WAS DU TUN SOLLST
+1. Lies alle Fotos und die Auswertung aus der App. Ermittle je Thema: Was wurde richtig oder falsch gemacht? Welche Zahlen oder Aufgabentypen machen Fehler (zum Beispiel immer bei Zehnerübergängen)?
+2. Nenne in 3 bis 5 Sätzen, was gut sitzt und wo ${k.name} noch Hilfe braucht. Ermutigend und ohne Druck.
+3. Passe den Plan an: Weniger Zeit für Themen mit „Sitzt“, mehr für „Wichtig“ und „Üben“. Behalte pro Block 4 App-Aufgaben und ein kurzes PDF-Blatt bei, höchstens 3 kleine Blöcke pro Tag.
+4. Schreibe die neuen Aufgaben so, dass ich sie direkt eintragen kann:
+   a) App-Aufgaben pro Thema im Format der App:
+      - Vorgänger/Nachfolger: [['n',59],['v',70]]  (n = Nachfolger, v = Vorgänger)
+      - Zehner-/Fünferschritte: [[28,38,48],[94,84,74]]  (3 Zahlen, die 4. wird gesucht)
+      - Größer/kleiner/gleich: [[38,83],[55,54]]
+      - Nachbarzehner: [53,38,71,96]
+      - Zahlenstrahl: [[30,40,36],[70,80,74]]  (von, bis, markierte Zahl)
+      - Zahlen ordnen: [[[63,36,81,18,45],'asc'],[[57,75,52,70,25],'desc']]
+   b) Ein druckfertiges A4-PDF-Blatt in großer Schrift, mit Kästchen zum Ausfüllen und kleinem „Fertig?“-Feld pro Aufgabe. Dazu ein Lösungsblatt für Eltern.
+5. Gib am Ende eine Liste „Das mache ich heute“ mit Uhrzeit-Vorschlägen (Vormittag, Mittag, Nachmittag) und je einer Bewegungspause.
+
+REGELN FÜR DIE AUFGABEN
+- Alle Zahlen zwischen 0 und 100. Höchstens 4 bis 5 Aufgaben pro Thema und Block.
+- Schwierigkeit: erst ein leichtes Beispiel, dann steigern. Jede Station endet mit einer Aufgabe, die ${k.name} schafft (Erfolgserlebnis).
+- Fehlerschwerpunkte gezielt wiederholen, zum Beispiel 59 → 60, 70 → 69, 100 → 99.
+- Kurze, klare Sätze in der Aufgabenstellung. Kein Fließtext über mehrere Zeilen.
+- Wenn ein Foto unleserlich ist, sag es und frag nach, statt zu raten.
+
+ANTWORTFORMAT
+Überschrift „${k.name}s Stand“, dann „Anpassung des Plans“, dann „Neue App-Aufgaben“ (Code-Block), dann „PDF-Blatt“ (als Datei), dann „Heute“.
+
+AUSWERTUNG AUS DER APP
+${report(k,topicStats(readProg(k)))}`;
 }
 function dots(r){return html`<div class="q-dots" role="img" aria-label="Aufgabe ${r.q+1} von ${r.qs.length}">${r.qs.map((_,i)=>html`<span class="q-d${i<r.q||(i===r.q&&r.phase==='fb')?' on':''}${i===r.q?' cur':''}"></span>`)}</div>`}
 function hpOf(r){return r.qs.length-(r.q+(r.phase==='fb'?1:0))}
@@ -2978,9 +3018,9 @@ el.addEventListener('click',e=>{
       if(note){note.hidden=false;note.textContent='Falls sich kein Druckfenster öffnet: PDF mit „Öffnen“ aufrufen und dort drucken (Strg+P oder Teilen → Drucken).'}
       break}
     case 'copy':{
-      const ta=$('#rep',el);if(!ta)break;
+      const ta=$('#'+(b.dataset.for||'rep'),el);if(!ta)break;
       ta.focus();ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(err){}
-      if(window.TK&&TK.toast)TK.toast(ok?'Auswertung kopiert':'Markiere den Text und kopiere ihn von Hand');break}
+      if(window.TK&&TK.toast)TK.toast(ok?(b.dataset.for?'Prompt kopiert':'Auswertung kopiert'):'Markiere den Text und kopiere ihn von Hand');break}
   }
 });
 el.addEventListener('input',e=>{if(e.target.classList.contains('q-in'))e.target.value=e.target.value.replace(/\D/g,'')});
